@@ -20,5 +20,7 @@ public interface VehicleService {
 
     List<VehicleInfo> getAllVehicleInfo();
 
+    VehicleInfo getVehicleInfoByIdAndTime(int id, Timestamp begin, Timestamp end);
+
     Map<VehicleInfo,Integer> getVehicleInfoByTime(Timestamp begin, Timestamp end);
 }

@@ -5,21 +5,24 @@ package com.mycar.model;
  */
 public class VehicleInfo {
 
-    private int id;
+    private Long id;
     private String name;  // 车系
     private String brand; // 品牌
     private Double displacement; // 排量
     private String gearbox; // 变速箱
-    private int manned; // 乘员量
+    private String boxes; // 几厢车
+    private Integer manned; // 乘员量
     private String description;
-    private Double day_cost;
-    private Double min_cost;
+    private Double day_cost; // 日租赁费
+    private Double base_insurance; // 基础保险费
+    private Double free_insurance; // 免赔保险费
+    private Double total_cost;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -55,11 +58,19 @@ public class VehicleInfo {
         this.gearbox = gearbox;
     }
 
-    public int getManned() {
+    public String getBoxes() {
+        return boxes;
+    }
+
+    public void setBoxes(String boxes) {
+        this.boxes = boxes;
+    }
+
+    public Integer getManned() {
         return manned;
     }
 
-    public void setManned(int manned) {
+    public void setManned(Integer manned) {
         this.manned = manned;
     }
 
@@ -79,12 +90,28 @@ public class VehicleInfo {
         this.day_cost = day_cost;
     }
 
-    public Double getMin_cost() {
-        return min_cost;
+    public Double getBase_insurance() {
+        return base_insurance;
     }
 
-    public void setMin_cost(Double min_cost) {
-        this.min_cost = min_cost;
+    public void setBase_insurance(Double base_insurance) {
+        this.base_insurance = base_insurance;
+    }
+
+    public Double getFree_insurance() {
+        return free_insurance;
+    }
+
+    public void setFree_insurance(Double free_insurance) {
+        this.free_insurance = free_insurance;
+    }
+
+    public Double getTotal_cost() {
+        return total_cost;
+    }
+
+    public void setTotal_cost(Double total_cost) {
+        this.total_cost = total_cost;
     }
 
     @Override
@@ -95,10 +122,13 @@ public class VehicleInfo {
                 ", brand='" + brand + '\'' +
                 ", displacement=" + displacement +
                 ", gearbox='" + gearbox + '\'' +
+                ", boxes='" + boxes + '\'' +
                 ", manned=" + manned +
                 ", description='" + description + '\'' +
                 ", day_cost=" + day_cost +
-                ", min_cost=" + min_cost +
+                ", base_insurance=" + base_insurance +
+                ", free_insurance=" + free_insurance +
+                ", total_cost=" + total_cost +
                 '}';
     }
 }

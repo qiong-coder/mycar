@@ -1,12 +1,13 @@
 package com.mycar.service.impl;
 
+import com.mycar.logic.VehicleCost;
 import com.mycar.mapper.VehicleInfoMapper;
 import com.mycar.mapper.VehicleMapper;
 import com.mycar.model.Vehicle;
 import com.mycar.model.VehicleInfo;
 import com.mycar.service.VehicleService;
+import com.mycar.utils.TimeUtils;
 import com.mycar.utils.VehicleStatus;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class VehicleServiceImpl implements VehicleService {
     private VehicleMapper vehicleMapper;
     @Autowired
     private VehicleInfoMapper vehicleInfoMapper;
-
+// TODO: 更精准的时间上控制
     @Override
     public Vehicle getVehicleById(int id) {
         return vehicleMapper.getById(id);
@@ -47,6 +48,16 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
+    public VehicleInfo getVehicleInfoByIdAndTime(int id, Timestamp begin, Timestamp end) {
+        VehicleInfo vehicleInfo = getVehicleInfoById(id);
+        if ( vehicleInfo != null ) vehicleInfo.setTotal_cost(VehicleCost.GetTotalCost(vehicleInfo.getDay_cost(),
+                vehicleInfo.getBase_insurance(),
+                vehicleInfo.getFree_insurance(),
+                TimeUtils.TimeDiff(begin,end)));
+        return vehicleInfo;
+    }
+
+    @Override
     public Map<VehicleInfo,Integer> getVehicleInfoByTime(Timestamp begin, Timestamp end) {
         List<Vehicle> vehicles = getAllVehicle();
 
@@ -55,25 +66,34 @@ public class VehicleServiceImpl implements VehicleService {
         Map<Integer, Integer> infoStatic = new HashMap<>();
         for ( Vehicle vehicle : vehicles )
         {
-            int iid = vehicle.getVinfo();
+            int iid = vehicle.getIid();
             VehicleStatus status = VehicleStatus.values()[vehicle.getStatus()];
-            switch ( VehicleStatus.values()[vehicle.getStatus()] )
+            switch ( status )
             {
                 case OK: infoStatic.put(iid, infoStatic.getOrDefault(iid,0)); break;
-                // TODO: 更精准的时间上控制
                 case FIXING:
                 case RENTING:
+                    if ( !TimeUtils.TimeInteraction(begin,end,vehicle.getBegin(),vehicle.getEnd()) )
+                        infoStatic.put(iid, infoStatic.getOrDefault(iid,0)); break;
                 case VALIDATE: break;
             }
         }
 
+        // TODO: 未来的订单影响
+
         if ( infoStatic.isEmpty() ) return null;
+
+        long days = TimeUtils.TimeDiff(end,begin);
 
         Map<VehicleInfo,Integer> vehicleInfoIntegerMap = new HashMap<>();
         for ( Map.Entry<Integer,Integer> entry : infoStatic.entrySet() )
         {
             VehicleInfo vehicleInfo = getVehicleInfoById(entry.getKey());
-            //if ( vehicleInfo == null ) continue;
+            vehicleInfo.setTotal_cost(
+                    VehicleCost.GetTotalCost(vehicleInfo.getDay_cost(),
+                            vehicleInfo.getBase_insurance(),
+                            vehicleInfo.getFree_insurance(),
+                            TimeUtils.TimeDiff(begin,end)));
             vehicleInfoIntegerMap.put(vehicleInfo,entry.getValue());
         }
 

@@ -51,4 +51,17 @@ public class VehicleAction {
         if ( vehicleInfos == null ) logger.warn("there is no vehicle to rent - {}:{}", begin,end);
         return new HttpResponse(vehicleInfos);
     }
+
+    @RequestMapping(value = "/vehicle/info/{id}/{begin}/{end}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public HttpResponse getInfoByIdAndCost(HttpServletRequest request,
+                                           HttpServletResponse response,
+                                           @PathVariable("id") int id,
+                                           @PathVariable("begin") Timestamp begin,
+                                           @PathVariable("end") Timestamp end)
+    {
+        VehicleInfo vehicleInfo = vehicleService.getVehicleInfoByIdAndTime(id,begin,end);
+        if ( vehicleInfo == null ) logger.warn("failure to get the vehicle info - id:{} begin:{} end:{}");
+        return new HttpResponse(vehicleInfo);
+    }
 }
