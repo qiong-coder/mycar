@@ -12,15 +12,15 @@ import java.util.Map;
  */
 public interface VehicleService {
 
-    Vehicle getVehicleById(int id);
+    Vehicle getVehicleById(long id);
 
-    VehicleInfo getVehicleInfoById(int id);
+    VehicleInfo getVehicleInfoById(long id);
 
     List<Vehicle> getAllVehicle();
 
     List<VehicleInfo> getAllVehicleInfo();
 
-    VehicleInfo getVehicleInfoByIdAndTime(int id, Timestamp begin, Timestamp end);
+    VehicleInfo getVehicleInfoByIdAndTime(long id, Timestamp begin, Timestamp end);
 
-    Map<VehicleInfo,Integer> getVehicleInfoByTime(Timestamp begin, Timestamp end);
+    List<VehicleInfo> getVehicleInfoByTime(Timestamp begin, Timestamp end);
 }

@@ -11,22 +11,25 @@ public class Order {
     private Long vid; // 车辆ID
     private Timestamp begin; // 借车时间
     private Timestamp end; // 还车时间
-    private Timestamp real_end; // 实际还车时间
     private String rent_address;  // 借车地址
     private String return_address; // 还车地址
     private String name; // 租车人名字
-    private Integer id_type; // 证件类型
     private String identity; // 证件号码
     private String phone; // 手机号码
     private String bill; // 发票
-    private Double cost; // 最终的租车费用
+    private Double day_cost;
     private Double base_insurance; // 最终的保险费
     private Double free_insurance; //
+    private Double paid; // 总共付了多少钱
+    private String paid_info; // 具体付款明细
+    private Timestamp rbegin; // 实际还车时间
+    private Timestamp rend;
     private Double distance; // 人工填写里程
-    private Double oil_cost; // 人工填写油价差
-    private Double total_cost; // 最终的费用，人工填写
-    private String decription;
+    private Double cost; // 最终需要扣除多少钱
+    private String cost_info; // 扣钱密西
     private Integer status; // 交易状态
+    private String operator; // 操作员
+    private Timestamp create_time;
 
     public Long getId() {
         return id;
@@ -60,14 +63,6 @@ public class Order {
         this.end = end;
     }
 
-    public Timestamp getReal_end() {
-        return real_end;
-    }
-
-    public void setReal_end(Timestamp real_end) {
-        this.real_end = real_end;
-    }
-
     public String getRent_address() {
         return rent_address;
     }
@@ -90,14 +85,6 @@ public class Order {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Integer getId_type() {
-        return id_type;
-    }
-
-    public void setId_type(Integer id_type) {
-        this.id_type = id_type;
     }
 
     public String getIdentity() {
@@ -124,12 +111,12 @@ public class Order {
         this.bill = bill;
     }
 
-    public Double getCost() {
-        return cost;
+    public Double getDay_cost() {
+        return day_cost;
     }
 
-    public void setCost(Double cost) {
-        this.cost = cost;
+    public void setDay_cost(Double day_cost) {
+        this.day_cost = day_cost;
     }
 
     public Double getBase_insurance() {
@@ -148,6 +135,38 @@ public class Order {
         this.free_insurance = free_insurance;
     }
 
+    public Double getPaid() {
+        return paid;
+    }
+
+    public void setPaid(Double paid) {
+        this.paid = paid;
+    }
+
+    public String getPaid_info() {
+        return paid_info;
+    }
+
+    public void setPaid_info(String paid_info) {
+        this.paid_info = paid_info;
+    }
+
+    public Timestamp getRbegin() {
+        return rbegin;
+    }
+
+    public void setRbegin(Timestamp rbegin) {
+        this.rbegin = rbegin;
+    }
+
+    public Timestamp getRend() {
+        return rend;
+    }
+
+    public void setRend(Timestamp rend) {
+        this.rend = rend;
+    }
+
     public Double getDistance() {
         return distance;
     }
@@ -156,28 +175,20 @@ public class Order {
         this.distance = distance;
     }
 
-    public Double getOil_cost() {
-        return oil_cost;
+    public Double getCost() {
+        return cost;
     }
 
-    public void setOil_cost(Double oil_cost) {
-        this.oil_cost = oil_cost;
+    public void setCost(Double cost) {
+        this.cost = cost;
     }
 
-    public Double getTotal_cost() {
-        return total_cost;
+    public String getCost_info() {
+        return cost_info;
     }
 
-    public void setTotal_cost(Double total_cost) {
-        this.total_cost = total_cost;
-    }
-
-    public String getDecription() {
-        return decription;
-    }
-
-    public void setDecription(String decription) {
-        this.decription = decription;
+    public void setCost_info(String cost_info) {
+        this.cost_info = cost_info;
     }
 
     public Integer getStatus() {
@@ -188,6 +199,22 @@ public class Order {
         this.status = status;
     }
 
+    public String getOperator() {
+        return operator;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
+
+    public Timestamp getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(Timestamp create_time) {
+        this.create_time = create_time;
+    }
+
     @Override
     public String toString() {
         return "Order{" +
@@ -195,22 +222,25 @@ public class Order {
                 ", vid=" + vid +
                 ", begin=" + begin +
                 ", end=" + end +
-                ", real_end=" + real_end +
                 ", rent_address='" + rent_address + '\'' +
                 ", return_address='" + return_address + '\'' +
                 ", name='" + name + '\'' +
-                ", id_type=" + id_type +
                 ", identity='" + identity + '\'' +
                 ", phone='" + phone + '\'' +
                 ", bill='" + bill + '\'' +
-                ", cost=" + cost +
+                ", day_cost=" + day_cost +
                 ", base_insurance=" + base_insurance +
                 ", free_insurance=" + free_insurance +
+                ", paid=" + paid +
+                ", paid_info='" + paid_info + '\'' +
+                ", rbegin=" + rbegin +
+                ", rend=" + rend +
                 ", distance=" + distance +
-                ", oil_cost=" + oil_cost +
-                ", total_cost=" + total_cost +
-                ", decription='" + decription + '\'' +
+                ", cost=" + cost +
+                ", cost_info='" + cost_info + '\'' +
                 ", status=" + status +
+                ", operator='" + operator + '\'' +
+                ", create_time=" + create_time +
                 '}';
     }
 }

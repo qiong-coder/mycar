@@ -28,4 +28,6 @@ public class TimeUtils {
         return Math.round(Math.ceil((end.getTime() - begin.getTime()) / 3600*24.0));
     }
 
+    public final static long MILLIS_PER_SECOND = 1000L;
+
 }

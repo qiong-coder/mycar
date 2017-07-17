@@ -12,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by stupid-coder on 7/15/17.
@@ -28,12 +26,12 @@ public class VehicleServiceImpl implements VehicleService {
     private VehicleInfoMapper vehicleInfoMapper;
 // TODO: 更精准的时间上控制
     @Override
-    public Vehicle getVehicleById(int id) {
+    public Vehicle getVehicleById(long id) {
         return vehicleMapper.getById(id);
     }
 
     @Override
-    public VehicleInfo getVehicleInfoById(int id) {
+    public VehicleInfo getVehicleInfoById(long id) {
         return vehicleInfoMapper.getById(id);
     }
 
@@ -48,7 +46,7 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public VehicleInfo getVehicleInfoByIdAndTime(int id, Timestamp begin, Timestamp end) {
+    public VehicleInfo getVehicleInfoByIdAndTime(long id, Timestamp begin, Timestamp end) {
         VehicleInfo vehicleInfo = getVehicleInfoById(id);
         if ( vehicleInfo != null ) vehicleInfo.setTotal_cost(VehicleCost.GetTotalCost(vehicleInfo.getDay_cost(),
                 vehicleInfo.getBase_insurance(),
@@ -58,46 +56,46 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public Map<VehicleInfo,Integer> getVehicleInfoByTime(Timestamp begin, Timestamp end) {
+    public List<VehicleInfo> getVehicleInfoByTime(Timestamp begin, Timestamp end) {
         List<Vehicle> vehicles = getAllVehicle();
 
         if ( vehicles == null || vehicles.isEmpty() ) return null;
 
-        Map<Integer, Integer> infoStatic = new HashMap<>();
+        Set<Long> vidSet = new HashSet<>();
         for ( Vehicle vehicle : vehicles )
         {
-            int iid = vehicle.getIid();
+            long iid = vehicle.getIid();
             VehicleStatus status = VehicleStatus.values()[vehicle.getStatus()];
             switch ( status )
             {
-                case OK: infoStatic.put(iid, infoStatic.getOrDefault(iid,0)); break;
+                case OK: vidSet.add(iid); break;
                 case FIXING:
                 case RENTING:
                     if ( !TimeUtils.TimeInteraction(begin,end,vehicle.getBegin(),vehicle.getEnd()) )
-                        infoStatic.put(iid, infoStatic.getOrDefault(iid,0)); break;
+                        vidSet.add(iid); break;
                 case VALIDATE: break;
             }
         }
 
         // TODO: 未来的订单影响
 
-        if ( infoStatic.isEmpty() ) return null;
+        if ( vidSet.isEmpty() ) return null;
 
         long days = TimeUtils.TimeDiff(end,begin);
 
-        Map<VehicleInfo,Integer> vehicleInfoIntegerMap = new HashMap<>();
-        for ( Map.Entry<Integer,Integer> entry : infoStatic.entrySet() )
+        List<VehicleInfo> vehicleInfos = new ArrayList<>();
+        for ( Long vid : vidSet )
         {
-            VehicleInfo vehicleInfo = getVehicleInfoById(entry.getKey());
+            VehicleInfo vehicleInfo = getVehicleInfoById(vid);
             vehicleInfo.setTotal_cost(
                     VehicleCost.GetTotalCost(vehicleInfo.getDay_cost(),
                             vehicleInfo.getBase_insurance(),
                             vehicleInfo.getFree_insurance(),
-                            TimeUtils.TimeDiff(begin,end)));
-            vehicleInfoIntegerMap.put(vehicleInfo,entry.getValue());
+                            days));
+            vehicleInfos.add(vehicleInfo);
         }
 
         //if ( vehicleInfoIntegerMap.isEmpty() ) return null;
-        return vehicleInfoIntegerMap;
+        return vehicleInfos;
     }
 }

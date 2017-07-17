@@ -9,7 +9,7 @@ public enum VehicleStatus {
 
     private int status;
 
-    private VehicleStatus(int status) {
+    VehicleStatus(int status) {
         this.status = status;
     }
 

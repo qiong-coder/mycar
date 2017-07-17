@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface VehicleMapper {
 
-    Vehicle getById(int id);
+    Vehicle getById(long id);
 
     List<Vehicle> getAll();
 

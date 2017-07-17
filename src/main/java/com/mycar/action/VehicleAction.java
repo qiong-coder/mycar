@@ -5,6 +5,7 @@ import com.mycar.model.Vehicle;
 import com.mycar.model.VehicleInfo;
 import com.mycar.service.VehicleService;
 import com.mycar.utils.HttpResponse;
+import com.mycar.utils.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -33,7 +34,7 @@ public class VehicleAction {
     @ResponseBody
     public HttpResponse getInfoById(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    @PathVariable("id") int id)
+                                    @PathVariable("id") long id)
     {
         VehicleInfo info = vehicleService.getVehicleInfoById(id);
         if ( info == null ) logger.warn("failure to get the vehicle info - {}", id);
@@ -44,10 +45,12 @@ public class VehicleAction {
     @ResponseBody
     public HttpResponse getAllInfos(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    @PathVariable("begin") Timestamp begin,
-                                    @PathVariable("end")Timestamp end)
+                                    @PathVariable("begin") long begin_s,
+                                    @PathVariable("end") long end_s)
     {
-        Map<VehicleInfo,Integer> vehicleInfos = vehicleService.getVehicleInfoByTime(begin,end);
+        Timestamp begin = new Timestamp(begin_s * TimeUtils.MILLIS_PER_SECOND);
+        Timestamp end = new Timestamp(end_s * TimeUtils.MILLIS_PER_SECOND);
+        List<VehicleInfo> vehicleInfos = vehicleService.getVehicleInfoByTime(begin,end);
         if ( vehicleInfos == null ) logger.warn("there is no vehicle to rent - {}:{}", begin,end);
         return new HttpResponse(vehicleInfos);
     }
@@ -56,12 +59,14 @@ public class VehicleAction {
     @ResponseBody
     public HttpResponse getInfoByIdAndCost(HttpServletRequest request,
                                            HttpServletResponse response,
-                                           @PathVariable("id") int id,
-                                           @PathVariable("begin") Timestamp begin,
-                                           @PathVariable("end") Timestamp end)
+                                           @PathVariable("id") long id,
+                                           @PathVariable("begin") long begin_s,
+                                           @PathVariable("end") long end_s)
     {
+        Timestamp begin = new Timestamp(begin_s * TimeUtils.MILLIS_PER_SECOND);
+        Timestamp end = new Timestamp( end_s * TimeUtils.MILLIS_PER_SECOND);
         VehicleInfo vehicleInfo = vehicleService.getVehicleInfoByIdAndTime(id,begin,end);
-        if ( vehicleInfo == null ) logger.warn("failure to get the vehicle info - id:{} begin:{} end:{}");
+        if ( vehicleInfo == null ) logger.warn("failure to get the vehicle info - id:{} begin:{} end:{}",id,begin,end);
         return new HttpResponse(vehicleInfo);
     }
 }
