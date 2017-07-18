@@ -7,8 +7,8 @@ public interface MessageService {
 
     String getCode(String phone);
 
-    int checkTimeout(String phone);
+    boolean checkTimeout(String phone);
 
-    int checkCode(String phone, String code);
+    boolean checkCode(String phone, String code);
 
 }

@@ -42,11 +42,31 @@ public class CacheUtilsImpl implements CacheUtils {
         if ( jedis == null ) return;
 
         jedis.set(key,value);
-        jedis.
+        jedis.expire(key,timeout);
+        returnClient(jedis);
     }
 
     @Override
     public String get(String key) {
-        return null;
+        ShardedJedis jedis = getResource();
+
+        if ( jedis == null ) return null;
+
+        String value = jedis.get(key);
+
+        returnClient(jedis);
+
+        return value;
+    }
+
+    @Override
+    public void delete(String key) {
+        ShardedJedis jedis = getResource();
+
+        if ( jedis == null ) return;
+
+        jedis.del(key);
+
+        returnClient(jedis);
     }
 }

@@ -9,4 +9,6 @@ public interface CacheUtils {
 
     String get(String key);
 
+    void delete(String key);
+
 }
