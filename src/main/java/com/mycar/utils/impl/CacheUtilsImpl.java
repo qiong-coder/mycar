@@ -3,8 +3,8 @@ package com.mycar.utils.impl;
 import com.mycar.utils.CacheUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import redis.clients.jedis.ShardedJedis;
-import redis.clients.jedis.ShardedJedisPool;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import javax.annotation.Resource;
 
@@ -18,55 +18,55 @@ public class CacheUtilsImpl implements CacheUtils {
 
 
     @Resource
-    ShardedJedisPool shardedJedisPool;
+    JedisPool jedisPool;
 
-    public ShardedJedis getResource()
+    public Jedis getResource()
     {
         try {
-            ShardedJedis jedis = shardedJedisPool.getResource();
-            return jedis;
+            Jedis client = jedisPool.getResource();
+            return client;
         } catch( Exception e ) {
             logger.warn("failure to get the jedis client - {}", e);
             return null;
         }
     }
 
-    public void returnClient(ShardedJedis jedis)
+    public void returnClient(Jedis client)
     {
-        jedis.close();
+        client.close();
     }
 
     @Override
     public void put(String key, String value, int timeout) {
-        ShardedJedis jedis = getResource();
-        if ( jedis == null ) return;
+        Jedis client = getResource();
+        if ( client == null ) return;
 
-        jedis.set(key,value);
-        jedis.expire(key,timeout);
-        returnClient(jedis);
+        client.set(key,value);
+        client.expire(key,timeout);
+        returnClient(client);
     }
 
     @Override
     public String get(String key) {
-        ShardedJedis jedis = getResource();
+        Jedis client = getResource();
 
-        if ( jedis == null ) return null;
+        if ( client == null ) return null;
 
-        String value = jedis.get(key);
+        String value = client.get(key);
 
-        returnClient(jedis);
+        returnClient(client);
 
         return value;
     }
 
     @Override
     public void delete(String key) {
-        ShardedJedis jedis = getResource();
+        Jedis client = getResource();
 
-        if ( jedis == null ) return;
+        if ( client == null ) return;
 
-        jedis.del(key);
+        client.del(key);
 
-        returnClient(jedis);
+        returnClient(client);
     }
 }

@@ -24,9 +24,9 @@ import org.slf4j.LoggerFactory;
  */
 public class TelVerificationUtil {
     static Logger logger = LoggerFactory.getLogger(TelVerificationUtil.class);
-    static String appKey = "4d6420f2045bd02744519d941d8b74dd";
-    static String appSecret = "411e15699a4e";
-    static String templateId = "3052052";
+    static String appKey = "";
+    static String appSecret = "";
+    static String templateId = "";
 
     public static String HttpClient(String url, Map<String,String> entitys) throws Exception {
         DefaultHttpClient httpClient = new DefaultHttpClient();
