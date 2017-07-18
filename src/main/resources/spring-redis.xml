@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans">
+
+    <!-- 使用redis缓存 -->
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxTotal" value="${redis.maxTotal}" />
+        <property name="maxIdle" value="${redis.maxIdle}" />
+        <property name="minIdle" value="${redis.minIdle}" />
+        <property name="maxWaitMillis" value="${redis.maxWaitMillis}"/>
+        <property name="testOnBorrow" value="${redis.testOnBorrow}" />
+    </bean>
+
+    <bean id="shardedJedisPool" class="redis.clients.jedis.ShardedJedisPool"  scope="singleton">
+        <constructor-arg index="0" ref="jedisPoolConfig" />
+        <constructor-arg index="1">
+            <list>
+                <bean class="redis.clients.jedis.JedisShardInfo">
+                    <constructor-arg name="host" value="${redis.host}" />
+                    <constructor-arg name="port" value="${redis.port}" />
+                    <constructor-arg name="timeout" value="${redis.timeout}" />
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+</beans>

@@ -5,6 +5,7 @@ import com.mycar.model.Vehicle;
 import com.mycar.model.VehicleInfo;
 import com.mycar.service.VehicleService;
 import com.mycar.utils.HttpResponse;
+import com.mycar.utils.HttpStatus;
 import com.mycar.utils.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,15 +31,18 @@ public class VehicleAction {
     @Resource
     private VehicleService vehicleService;
 
-    @RequestMapping(value = "/vehicle/info/{id}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/vehicle/info/{viid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public HttpResponse getInfoById(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    @PathVariable("id") long id)
+                                    @PathVariable("viid") long id)
     {
         VehicleInfo info = vehicleService.getVehicleInfoById(id);
-        if ( info == null ) logger.warn("failure to get the vehicle info - {}", id);
-        return new HttpResponse(info);
+        if ( info == null )
+        {
+            logger.warn("failure to get the vehicle info - {}", id);
+            return new HttpResponse(HttpStatus.NO_VEHICLE_INFO);
+        } else return new HttpResponse(info);
     }
 
     @RequestMapping(value = "/vehicle/info/{begin}/{end}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -50,23 +54,28 @@ public class VehicleAction {
     {
         Timestamp begin = new Timestamp(begin_s * TimeUtils.MILLIS_PER_SECOND);
         Timestamp end = new Timestamp(end_s * TimeUtils.MILLIS_PER_SECOND);
-        List<VehicleInfo> vehicleInfos = vehicleService.getVehicleInfoByTime(begin,end);
+
+        List<VehicleInfo> vehicleInfos = vehicleService.getVehicleInfosByTime(begin,end);
         if ( vehicleInfos == null ) logger.warn("there is no vehicle to rent - {}:{}", begin,end);
         return new HttpResponse(vehicleInfos);
     }
 
-    @RequestMapping(value = "/vehicle/info/{id}/{begin}/{end}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/vehicle/info/{viid}/{begin}/{end}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public HttpResponse getInfoByIdAndCost(HttpServletRequest request,
                                            HttpServletResponse response,
-                                           @PathVariable("id") long id,
+                                           @PathVariable("viid") long id,
                                            @PathVariable("begin") long begin_s,
                                            @PathVariable("end") long end_s)
     {
         Timestamp begin = new Timestamp(begin_s * TimeUtils.MILLIS_PER_SECOND);
         Timestamp end = new Timestamp( end_s * TimeUtils.MILLIS_PER_SECOND);
+
         VehicleInfo vehicleInfo = vehicleService.getVehicleInfoByIdAndTime(id,begin,end);
-        if ( vehicleInfo == null ) logger.warn("failure to get the vehicle info - id:{} begin:{} end:{}",id,begin,end);
-        return new HttpResponse(vehicleInfo);
+        if ( vehicleInfo == null )
+        {
+            logger.warn("failure to get the vehicle info - id:{} begin:{} end:{}",id,begin,end);
+            return new HttpResponse(HttpStatus.NO_VEHICLE_INFO);
+        } else return new HttpResponse(vehicleInfo);
     }
 }

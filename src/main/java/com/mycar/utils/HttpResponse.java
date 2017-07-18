@@ -6,17 +6,24 @@ package com.mycar.utils;
 public class HttpResponse {
 
     private int status;
+    private String info;
     private Object data;
 
     public HttpResponse(Object data)
     {
         if ( data != null ) {
-            this.status = 0;
-            this.data = data;
+            this.status = HttpStatus.OK;
         } else {
-            this.status = -1;
-            this.data = data;
+            this.status = HttpStatus.ERROR;
         }
+        this.info = HttpStatus.getInfo(this.status);
+        this.data = data;
+    }
+
+    public HttpResponse(int status)
+    {
+        this.status = status;
+        this.info = HttpStatus.getInfo(status);
     }
 
     public int getStatus() {
@@ -35,4 +42,20 @@ public class HttpResponse {
         this.data = data;
     }
 
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    @Override
+    public String toString() {
+        return "HttpResponse{" +
+                "status=" + status +
+                ", info='" + info + '\'' +
+                ", data=" + data +
+                '}';
+    }
 }

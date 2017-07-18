@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 public class Order {
 
     private Long id;  // 订单ID
+    private Long viid;
     private Long vid; // 车辆ID
     private Timestamp begin; // 借车时间
     private Timestamp end; // 还车时间
@@ -20,15 +21,12 @@ public class Order {
     private Double day_cost;
     private Double base_insurance; // 最终的保险费
     private Double free_insurance; //
-    private Double paid; // 总共付了多少钱
-    private String paid_info; // 具体付款明细
+    private String pay_info; // 用户付钱明细
     private Timestamp rbegin; // 实际还车时间
     private Timestamp rend;
     private Double distance; // 人工填写里程
-    private Double cost; // 最终需要扣除多少钱
-    private String cost_info; // 扣钱密西
+    private String cost_info; // 扣钱明细
     private Integer status; // 交易状态
-    private String operator; // 操作员
     private Timestamp create_time;
 
     public Long getId() {
@@ -135,22 +133,6 @@ public class Order {
         this.free_insurance = free_insurance;
     }
 
-    public Double getPaid() {
-        return paid;
-    }
-
-    public void setPaid(Double paid) {
-        this.paid = paid;
-    }
-
-    public String getPaid_info() {
-        return paid_info;
-    }
-
-    public void setPaid_info(String paid_info) {
-        this.paid_info = paid_info;
-    }
-
     public Timestamp getRbegin() {
         return rbegin;
     }
@@ -175,12 +157,20 @@ public class Order {
         this.distance = distance;
     }
 
-    public Double getCost() {
-        return cost;
+    public Long getViid() {
+        return viid;
     }
 
-    public void setCost(Double cost) {
-        this.cost = cost;
+    public void setViid(Long viid) {
+        this.viid = viid;
+    }
+
+    public String getPay_info() {
+        return pay_info;
+    }
+
+    public void setPay_info(String pay_info) {
+        this.pay_info = pay_info;
     }
 
     public String getCost_info() {
@@ -199,14 +189,6 @@ public class Order {
         this.status = status;
     }
 
-    public String getOperator() {
-        return operator;
-    }
-
-    public void setOperator(String operator) {
-        this.operator = operator;
-    }
-
     public Timestamp getCreate_time() {
         return create_time;
     }
@@ -219,6 +201,7 @@ public class Order {
     public String toString() {
         return "Order{" +
                 "id=" + id +
+                ", viid=" + viid +
                 ", vid=" + vid +
                 ", begin=" + begin +
                 ", end=" + end +
@@ -231,15 +214,12 @@ public class Order {
                 ", day_cost=" + day_cost +
                 ", base_insurance=" + base_insurance +
                 ", free_insurance=" + free_insurance +
-                ", paid=" + paid +
-                ", paid_info='" + paid_info + '\'' +
+                ", pay_info='" + pay_info + '\'' +
                 ", rbegin=" + rbegin +
                 ", rend=" + rend +
                 ", distance=" + distance +
-                ", cost=" + cost +
                 ", cost_info='" + cost_info + '\'' +
                 ", status=" + status +
-                ", operator='" + operator + '\'' +
                 ", create_time=" + create_time +
                 '}';
     }

@@ -11,17 +11,21 @@ import java.util.List;
  */
 public interface OrderService {
 
-    int insertOrder(Order order); // 用户第一次提交订单
+    Order getOrderById(long id);
 
-    int checkOrder(Long id); // 检测用户的订单是否已经交钱
+    List<Order> getOrdersByStatus(int status);
 
-    int rentOrder(Long id, String vehicle_number); // 用户提车
+    int insertOrder(long viid, Order order); // 用户第一次提交订单
 
-    int finishedOrder(Order order); // 最终完成订单
+    int checkOrder(long id); // 检测用户的订单是否已经交钱
 
-    int cancleOrder(Long id); // 取消订单
+    int rentOrder(long id, Order order, String number); // 用户提车
 
-    Order getOrderById(Long id);
+    int drawBackOrder(long id, Order order); // 用车完成，退款状态
 
-    List<Order> getOrderByStatus(OrderStatus status);
+    int finishedOrder(long id, Order order); // 最终完成订单
+
+    int cancleOrder(long id); // 取消订单
+
+
 }

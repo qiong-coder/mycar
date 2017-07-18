@@ -24,10 +24,15 @@ public class VehicleServiceImpl implements VehicleService {
     private VehicleMapper vehicleMapper;
     @Autowired
     private VehicleInfoMapper vehicleInfoMapper;
-// TODO: 更精准的时间上控制
+
     @Override
     public Vehicle getVehicleById(long id) {
         return vehicleMapper.getById(id);
+    }
+
+    @Override
+    public Vehicle getVehicleByNumber(String number) {
+        return  vehicleMapper.getByNumber(number);
     }
 
     @Override
@@ -36,19 +41,19 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public List<Vehicle> getAllVehicle() {
+    public List<Vehicle> getAllVehicles() {
         return vehicleMapper.getAll();
     }
 
     @Override
-    public List<VehicleInfo> getAllVehicleInfo() {
+    public List<VehicleInfo> getAllVehicleInfos() {
         return vehicleInfoMapper.getAll();
     }
 
     @Override
     public VehicleInfo getVehicleInfoByIdAndTime(long id, Timestamp begin, Timestamp end) {
         VehicleInfo vehicleInfo = getVehicleInfoById(id);
-        if ( vehicleInfo != null ) vehicleInfo.setTotal_cost(VehicleCost.GetTotalCost(vehicleInfo.getDay_cost(),
+        if ( vehicleInfo != null ) vehicleInfo.setTotal_cost(VehicleCost.getTotalCost(vehicleInfo.getDay_cost(),
                 vehicleInfo.getBase_insurance(),
                 vehicleInfo.getFree_insurance(),
                 TimeUtils.TimeDiff(begin,end)));
@@ -56,8 +61,8 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public List<VehicleInfo> getVehicleInfoByTime(Timestamp begin, Timestamp end) {
-        List<Vehicle> vehicles = getAllVehicle();
+    public List<VehicleInfo> getVehicleInfosByTime(Timestamp begin, Timestamp end) {
+        List<Vehicle> vehicles = getAllVehicles();
 
         if ( vehicles == null || vehicles.isEmpty() ) return null;
 
@@ -88,7 +93,7 @@ public class VehicleServiceImpl implements VehicleService {
         {
             VehicleInfo vehicleInfo = getVehicleInfoById(vid);
             vehicleInfo.setTotal_cost(
-                    VehicleCost.GetTotalCost(vehicleInfo.getDay_cost(),
+                    VehicleCost.getTotalCost(vehicleInfo.getDay_cost(),
                             vehicleInfo.getBase_insurance(),
                             vehicleInfo.getFree_insurance(),
                             days));

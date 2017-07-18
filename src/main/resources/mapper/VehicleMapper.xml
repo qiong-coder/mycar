@@ -10,4 +10,8 @@
     <select id="getAll" resultType="com.mycar.model.Vehicle">
         SELECT * FROM Vehicle
     </select>
+
+    <select id="getByNumber" parameterType="string" resultType="com.mycar.model.Vehicle">
+        SELECT * FROM Vehicle WHERE number=#{number}
+    </select>
 </mapper>

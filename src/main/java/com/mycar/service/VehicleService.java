@@ -14,13 +14,15 @@ public interface VehicleService {
 
     Vehicle getVehicleById(long id);
 
+    Vehicle getVehicleByNumber(String number);
+
     VehicleInfo getVehicleInfoById(long id);
 
-    List<Vehicle> getAllVehicle();
+    List<Vehicle> getAllVehicles();
 
-    List<VehicleInfo> getAllVehicleInfo();
+    List<VehicleInfo> getAllVehicleInfos();
 
     VehicleInfo getVehicleInfoByIdAndTime(long id, Timestamp begin, Timestamp end);
 
-    List<VehicleInfo> getVehicleInfoByTime(Timestamp begin, Timestamp end);
+    List<VehicleInfo> getVehicleInfosByTime(Timestamp begin, Timestamp end);
 }

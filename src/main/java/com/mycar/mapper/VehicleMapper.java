@@ -11,6 +11,8 @@ public interface VehicleMapper {
 
     Vehicle getById(long id);
 
+    Vehicle getByNumber(String number);
+
     List<Vehicle> getAll();
 
 }
