@@ -47,7 +47,7 @@ public class OrderAction {
         return new HttpResponse(orderService.insertOrder(id,order));
     }
 
-    @RequestMapping(value = "/order/check/{oid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/order/check/{oid}/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public HttpResponse check(HttpServletRequest request,
                               HttpServletResponse response,

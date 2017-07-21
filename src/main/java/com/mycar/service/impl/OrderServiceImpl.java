@@ -108,7 +108,9 @@ public class OrderServiceImpl implements OrderService {
 
         o.setStatus(OrderStatus.RENTING.getStatus());
 
-        return HttpStatus.OK;
+        if ( orderMapper.updateCostAndStatus(order) == 1 )
+            return HttpStatus.OK;
+        else return HttpStatus.ERROR;
     }
 
     @Override

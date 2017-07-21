@@ -5,3 +5,118 @@
   + 在途
   + 还车后，需要退款的车
   + 完成的订单
+
+* 数据结构
+  GET或者POST的数据结构，JSON类型的对应的Key-Value都由结构体规范。
+** Order 数据结构
+   | 字段           | 类型      | 说明                                             |
+   |----------------+-----------+--------------------------------------------------|
+   | id             | Integer   | 订单的ID                                         |
+   | viid           | Integer   | 车辆信息ID                                       |
+   | vid            | Integer   | 车辆ID                                           |
+   | begin          | Timestamp | 借车预期开始时间                                 |
+   | end            | Timestamp | 借车预期结束时间                                 |
+   | rent_address   | String    | 借车地址                                         |
+   | return_adress  | String    | 还车地址                                         |
+   | name           | String    | 租车人名字                                       |
+   | identity       | String    | 身份证                                           |
+   | phone          | String    | 手机号                                           |
+   | bill           | String    | 发票信息                                         |
+   | day_cost       | Double    | 日均租车花费（根据汽车信息内部关联）             |
+   | base_insurance | Double    | 基础保险费                                       |
+   | free_insurance | Double    | 免赔保险费                                       |
+   | pay_info       | String    | 用户支付信息，json串，需要打印出来给用户签字确认 |
+   | rbegin         | Timestamp | 实际的借车时间                                   |
+   | rend           | Timestamp | 实际的还车时间                                   |
+   | distance       | Double    | 人工填写的里程数                                 |
+   | cost_info      | String    | 扣钱明细，需要每次工作人员填写，提交             |
+   | status         | Integer   | 订单状态                                         |
+   | create_time    | Timestamp | 订单的创建时间                                   |
+
+** 订单状态说明
+   | 订单状态 | 对应值 | 说明                               |
+   | UNPAID   |      0 | 表示用户提交了订单，但是还没有付款 |
+   | PENDING  |      1 | 用户付款后，等待提车状态           |
+   | RENTING  |      2 | 用户提车了，车辆正在租期中         |
+   | DRAWBACK |      3 | 用户还车后，在处理退款中           |
+   | FINISHED |      4 | 退款完成                           |
+   | CANCLED  |      5 | 取消的订单                         |
+
+
+* 订单获取接口
+  该接口用于后端管理页面根据订单状态获取当前订单的接口
+** 接口说明
+   URI: http://ip:port/mycar/order/{status}/
+   METHOD: GET
+** 请求参数说明
+   {status} 为订单状态，具体值参考[[*订单状态说明][订单状态说明]]
+** 返回结构
+   返回的结构体是一个List<Order>对象，具体字段参考:[[*Order 数据结构][Order 数据结构]]。
+
+* 提交订单
+  该接口为用户添加订单的接口
+** 接口说明
+   URI: http://ip:port/mycar/order/{viid}/
+   METHOD: POST
+** 请求参数说明
+   {viid} 为用户在选车页面选择的想要租用的车系ID
+
+*** 请求的POST的结构体
+    请求的结构体就是结构体[[*Order 数据结构][Order]]中的一些字段：begin, end, rent_address, return_address, name, identity, phone, bill。
+** 返回结构
+   status=0，data保存的是当前订单的ID。后续用户检测是否支付成功。
+
+* 订单支付信息检测接口
+  该接口用于在用户支付后点击【完成支付】，需要服务器去支付渠道查询支付是否完成。（后续根据支付调研，可能会改动）
+** 接口说明  
+   URI：http://ip:port/mycar/order/check/{oid}/
+   METHOD: PUT
+** 请求参数说明
+   {oid} 为用户订单的ID
+** 返回结构
+   status=0表示支付成功
+
+* 提车接口
+  该接口为后端管理人员调用的接口，用于在用户现场提车，提交定金信息，车辆一些信息。
+** 接口说明
+   URI: http://ip:port/mycar/order/renting/{oid}/{number}/
+   METHOD: PUT
+** 请求参数说明
+   {oid} 表示订单ID
+   {number} 为车辆的车牌号
+
+*** 请求结构体
+    结构体为Order中的一些字段：pay_info, cost_info。
+    这两个字段为字符串类型，所以可以是任意类型的json字符串，现规定为json的数组，每个元素结构体{"reason":"对应扣款和支付的原因","value":1000.0,"operator":"对应操作的人姓名"}。
+    其中operator可选，因为数组，每次最后一个具有操作人都向前负责。
+    例如：
+    #+BEGIN_SRC java
+    [
+    {"reason":"修车","value":1000},
+    {"reason":"违规","value":20,"operator":"A"},
+    ]
+    #+END_SRC
+    A要对第一和第二条负责。
+
+* 还车接口
+  该接口为后端管理人员调用的接口，用于用户还车时调用。
+** 接口说明
+   URI: http://ip:port/mycar/order/drawback/{oid}/
+   METHOD: PUT
+*** 请求结构体
+    Order中的一些字段：rbegin,rend,pay_info,cost_info,distance
+    
+* 完成接口
+  该接口为后端管理人员调用的接口，用于退款后调用
+** 接口说明
+   URI: http://ip:port/mycar/order/finished/{oid}/
+   METHOD: PUT
+*** 请求结构体
+    Order中的一些字段：pay_info,cost_info
+
+* 取消接口
+  用户取消用户订单
+** 接口说明
+   URI: http://ip:port/mycar/order/cancled/{oid}/
+   METHOD: PUT
+
