@@ -1,6 +1,8 @@
 package com.mycar.utils;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by stupid-coder on 7/16/17.
@@ -30,4 +32,11 @@ public class TimeUtils {
 
     public final static long MILLIS_PER_SECOND = 1000L;
 
+    private static SimpleDateFormat outFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+
+    public static String GetSampleTime(Long expire)
+    {
+        Date now  = new Date(System.currentTimeMillis()+expire*MILLIS_PER_SECOND);
+        return outFormat.format(now);
+    }
 }
