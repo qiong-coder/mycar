@@ -15,11 +15,11 @@ public class WeiXinPayConfig implements WXPayConfig {
     private byte[] certData;
 
     public WeiXinPayConfig(String certPath) throws Exception {
-        File file = new File(certPath);
-        InputStream certStream = new FileInputStream(file);
-        this.certData = new byte[(int) file.length()];
-        certStream.read(this.certData);
-        certStream.close();
+//        File file = new File(certPath);
+//        InputStream certStream = new FileInputStream(file);
+//        this.certData = new byte[(int) file.length()];
+//        certStream.read(this.certData);
+//        certStream.close();
     }
 
     public String getAppID() {
