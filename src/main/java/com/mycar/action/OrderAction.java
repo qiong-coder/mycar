@@ -33,7 +33,7 @@ public class OrderAction {
                                @PathVariable("status") int status)
     {
         List<Order> orderList = orderService.getOrdersByStatus(status);
-        if ( orderList == null ) logger.warn("failure to get the orders by status - status:{}", status);
+        if ( orderList == null ) logger.error("failure to get the orders by status - status:{}", status);
         return new HttpResponse(orderList);
     }
 
@@ -41,19 +41,26 @@ public class OrderAction {
     @ResponseBody
     public HttpResponse insert(HttpServletRequest request,
                                HttpServletResponse response,
-                               @PathVariable("viid") long id,
+                               @PathVariable("viid") long viid,
                                @RequestBody Order order)
     {
-        return new HttpResponse(orderService.insertOrder(id,order));
+        int status = orderService.insertOrder(viid,order);
+        if ( status < 0 ) {
+            logger.error("failure to insert the order - viid:{}\torder:{}",viid, order);
+            return new HttpResponse(status);
+        } else {
+            logger.info("[insert][order:{}]",order);
+            return new HttpResponse(order.getId());
+        }
     }
 
     @RequestMapping(value = "/order/check/{oid}/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public HttpResponse check(HttpServletRequest request,
                               HttpServletResponse response,
-                              @PathVariable("oid") long id)
+                              @PathVariable("oid") long oid)
     {
-        return new HttpResponse(orderService.checkOrder(id));
+        return new HttpResponse(orderService.checkOrder(oid));
     }
 
     @RequestMapping(value = "/order/renting/{oid}/{number}/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

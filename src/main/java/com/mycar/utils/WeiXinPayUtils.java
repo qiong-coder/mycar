@@ -34,10 +34,10 @@ public class WeiXinPayUtils {
 
         data.put("body",              "mycar - 租车服务");
         data.put("out_trade_no",      oid.getId().toString());
-        data.put("detail",            oid.getCost_info());
+        data.put("detail",            cost_detail);
         data.put("total_fee",         total_cost);
         data.put("spbill_create_ip",  client_ip);
-        data.put("notify_url",        "");
+        data.put("notify_url",        ""); // TODO: notify url
         data.put("trade_type",        "NATIVE");
         data.put("time_start",        TimeUtils.GetSampleTime(0L));
         data.put("time_expire",       TimeUtils.GetSampleTime(1200L)); // 20分钟
@@ -58,12 +58,12 @@ public class WeiXinPayUtils {
         return resp.get("code_url");
     }
 
-    public boolean checkPay(Long oid)
+    public boolean checkPay(long oid)
     {
         WXPay pay = new WXPay(weiXinPayConfig);
 
         Map<String,String> data = new HashMap<>();
-        data.put("out_trade_no", oid.toString());
+        data.put("out_trade_no", Long.toString(oid));
 
         Map<String,String> resp;
         try {

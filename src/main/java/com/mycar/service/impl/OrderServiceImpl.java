@@ -9,13 +9,17 @@ import com.mycar.model.Vehicle;
 import com.mycar.model.VehicleInfo;
 import com.mycar.service.OrderService;
 import com.mycar.service.VehicleService;
+import com.mycar.service.WeiXinPayService;
 import com.mycar.utils.HttpStatus;
 import com.mycar.utils.OrderStatus;
+import com.mycar.utils.TimeUtils;
+import com.mycar.utils.WeiXinPayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.ws.spi.WebServiceFeatureAnnotation;
 import java.util.List;
 
 /**
@@ -28,6 +32,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private VehicleService vehicleService;
+
+    @Autowired
+    private WeiXinPayService weiXinPayService;
 
     @Autowired
     private OrderMapper orderMapper;
@@ -66,23 +73,36 @@ public class OrderServiceImpl implements OrderService {
         order.setBase_insurance(vehicleInfo.getBase_insurance());
         order.setFree_insurance(vehicleInfo.getFree_insurance());
 
-        // TODO: 计算付款价格，启动对应的付款
-        if ( orderMapper.insertOrder(order) == 1 )
-            return HttpStatus.OK;
-        else return HttpStatus.ERROR;
+        order.setPay_info(
+                VehicleCost.getPayCostInfo(VehicleCost.getTotalCost(order.getDay_cost(),order.getBase_insurance(),order.getFree_insurance(),
+                TimeUtils.TimeDiff(order.getBegin(),order.getEnd())),
+                        order.getName()));
+        order.setCost_info("[]");
+        if ( orderMapper.insertOrder(order) != 1 ) return HttpStatus.ERROR;
+
+        return HttpStatus.OK;
     }
 
     @Override
-    public int checkOrder(long id) {
-        Order order = getOrderById(id);
+    public int checkOrder(long oid) {
+        Order order = getOrderById(oid);
         if ( order == null ) return HttpStatus.NO_ORDER;
 
         OrderStatus status = OrderStatus.values()[order.getStatus()];
 
         if ( status.compareTo(OrderStatus.PENDING) == 0 ) return HttpStatus.OK;
 
-        //TODO: 结算判断
-        return HttpStatus.OK;
+        if ( weiXinPayService.checkPay(oid) ) {
+            order.setStatus(OrderStatus.PENDING.getStatus());
+            if ( orderMapper.updateStatus(order) == 1 ) return HttpStatus.OK;
+            else {
+                logger.error("failure to update the status to PENDING");
+                return HttpStatus.ERROR;
+            }
+        } else {
+            logger.error("failure to check the order's pay status - {}",order);
+            return HttpStatus.ERROR;
+        }
     }
 
     @Override
@@ -131,7 +151,7 @@ public class OrderServiceImpl implements OrderService {
 
         if ( orderMapper.updateCostAndStatus(o) == 1 ) return HttpStatus.OK;
         else return HttpStatus.ERROR;
-        // 单独的线程进行退款操作
+        //TODO: 退款线程
     }
 
     @Override

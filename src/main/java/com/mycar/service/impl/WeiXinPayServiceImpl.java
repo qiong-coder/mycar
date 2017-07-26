@@ -22,7 +22,7 @@ public class WeiXinPayServiceImpl implements WeiXinPayService {
     OrderService orderService;
 
     @Override
-    public String getPayUrl(Long oid, String client_ip) {
+    public String getPayUrl(long oid, String client_ip) {
 
         Order order = orderService.getOrderById(oid);
         if ( order == null ) {
@@ -33,11 +33,11 @@ public class WeiXinPayServiceImpl implements WeiXinPayService {
         Double total_cost = VehicleCost.getTotalCost(order.getDay_cost(),order.getBase_insurance(),order.getFree_insurance(),
                 TimeUtils.TimeDiff(order.getBegin(),order.getEnd()));
 
-        return weiXinPayUtils.getPayUrl(order,new Integer(total_cost.intValue()).toString(),"",client_ip);
+        return weiXinPayUtils.getPayUrl(order,new Integer(total_cost.intValue()*100).toString(),"",client_ip);
     }
 
     @Override
-    public boolean checkPay(Long oid) {
+    public boolean checkPay(long oid) {
         return weiXinPayUtils.checkPay(oid);
     }
 }

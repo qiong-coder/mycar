@@ -5,23 +5,23 @@
 <mapper namespace="com.mycar.mapper.OrderMapper">
 
     <select id="getOrderById" parameterType="int" resultType="com.mycar.model.Order">
-        SELECT * FROM Order WHERE id=#{id}
+        SELECT * FROM `Order` WHERE id=#{id}
     </select>
 
     <select id="getOrdersByStatus" parameterType="int" resultType="com.mycar.model.Order">
-        SELECT * FROM Order WHERE status=#{status}
+        SELECT * FROM `Order` WHERE status=#{status}
     </select>
 
     <insert id="insertOrder" parameterType="com.mycar.model.Order" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO Order (viid, begin, end, rent_address, return_address, name, identity, phone, bill, day_cost, base_insurance, free_insurance, pay_info)
-        VALUES (#{viid}, #{begin}, #{end}, #{rent_address}, #{return_address}, #{name}, #{identity}, #{phone}, #{bill},#{day_cost}, ${base_insurance}, ${free_insurance}, ${pay_info})
+        INSERT INTO `Order` (`viid`, `begin`, `end`, `rent_address`, `return_address`, `name`, `identity`, `phone`, `bill`, `day_cost`, `base_insurance`, `free_insurance`, `pay_info`, `cost_info`)
+        VALUES (#{viid}, #{begin}, #{end}, #{rent_address}, #{return_address}, #{name}, #{identity}, #{phone}, #{bill},#{day_cost}, #{base_insurance}, #{free_insurance}, #{pay_info}, #{cost_info})
     </insert>
 
     <update id="updateStatus" parameterType="com.mycar.model.Order">
-        UPDATE Order SET status=#{status} WHERE id=#{id}
+        UPDATE `Order` SET status=#{status} WHERE id=#{id}
     </update>
 
     <update id="updateInfoAndStatus" parameterType="com.mycar.model.Order">
-        UPDATE Order SET pay_info=#{pay_info}, cost_info=#{cost_info}, status=#{status} WHERE id=#{id}
+        UPDATE `Order` SET pay_info=#{pay_info}, cost_info=#{cost_info}, status=#{status} WHERE id=#{id}
     </update>
 </mapper>

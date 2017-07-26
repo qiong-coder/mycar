@@ -5,8 +5,8 @@ package com.mycar.service;
  */
 public interface WeiXinPayService {
 
-    String getPayUrl(Long oid, String client_ip);
+    String getPayUrl(long oid, String client_ip);
 
-    boolean checkPay(Long oid);
+    boolean checkPay(long oid);
 
 }

@@ -18,11 +18,11 @@ CREATE TABLE `Order` (
   `day_cost`        DOUBLE NOT NULL COMMENT '日均花费',
   `base_insurance`  DOUBLE NOT NULL COMMENT '基础保险',
   `free_insurance`  DOUBLE NOT NULL COMMENT '免陪保险',
-  `pay_info`        TEXT NOT NULL DEFAULT "[]" NULL COMMENT '用户交钱的具体信息',
+  `pay_info`        TEXT COMMENT '用户交钱的具体信息',
   `rbegin`          DATETIME DEFAULT NULL COMMENT '实际租车时间',
   `rend`            DATETIME DEFAULT NULL COMMENT '实际还车时间',
   `distance`        DOUBLE NOT NULL DEFAULT 0.0 COMMENT '租车行驶里程',
-  `cost_info`       TEXT NOT NULL DEFAULT "[]" COMMENT '租车的最终花费的具体信息',
+  `cost_info`       TEXT COMMENT '租车的最终花费的具体信息',
   `status`          INT(10) NOT NULL DEFAULT 0,
   `create_time`     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)

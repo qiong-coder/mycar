@@ -11,18 +11,20 @@ import com.mycar.utils.TimeUtils;
  */
 public class VehicleCost {
 
-    public static Double getTotalCost(Double day_cost, Double base_insurance, Double free_insurance, Long days)
+    public static String getPayCostInfo(Double total_pay, String username)
     {
-        return (day_cost+base_insurance+free_insurance) * days;
+        JSONArray infos = new JSONArray();
+        JSONObject info = new JSONObject();
+        info.put("reason","租车预付");
+        info.put("value", total_pay);
+        info.put("operator", username);
+        infos.add(info);
+        return infos.toJSONString();
     }
 
-    public static String getCostDetail(Order order)
+    public static Double getTotalCost(Double day_cost, Double base_insurance, Double free_insurance, long days)
     {
-        Long days = TimeUtils.TimeDiff(order.getBegin(),order.getEnd());
-        Double day_cost = order.getDay_cost();
-        Double base_insurance = order.getBase_insurance();
-        Double free_insurance = order.getFree_insurance();
-        return null;
+        return (day_cost+base_insurance+free_insurance) * days;
     }
 
     public static String mergeInfo(String sinfo, String ninfo)

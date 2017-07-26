@@ -2,6 +2,7 @@ package com.mycar.action;
 
 import com.mycar.service.WeiXinPayService;
 import com.mycar.utils.HttpResponse;
+import com.mycar.utils.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -29,7 +30,9 @@ public class WeiXinPayAction {
                                   HttpServletResponse response,
                                   @PathVariable("oid") Long oid)
     {
-        return new HttpResponse(weiXinPayService.getPayUrl(oid,request.getRemoteAddr()));
+        String pay_url = weiXinPayService.getPayUrl(oid,request.getRemoteAddr());
+        if ( pay_url == null ) return new HttpResponse(HttpStatus.ERROR);
+        return new HttpResponse(pay_url);
     }
 
     @RequestMapping(value="check/{oid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
