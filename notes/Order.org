@@ -22,7 +22,7 @@
    | identity       | String    | 身份证                                           |
    | phone          | String    | 手机号                                           |
    | bill           | String    | 发票信息                                         |
-   | day_cost       | Double    | 日均租车花费（根据汽车信息内部关联）             |
+   | day_cost       | Double    | 日均租车花费（分为单位）（根据汽车信息内部关联）            |
    | base_insurance | Double    | 基础保险费                                       |
    | free_insurance | Double    | 免赔保险费                                       |
    | pay_info       | String    | 用户支付信息，json串，需要打印出来给用户签字确认 |

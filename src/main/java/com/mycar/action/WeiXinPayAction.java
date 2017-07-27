@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  * Created by stupid-coder on 7/23/17.
  */
 
-@RestController("/pay/weixin/")
+@RestController
 public class WeiXinPayAction {
 
     private static Logger logger = LoggerFactory.getLogger(WeiXinPayAction.class);
@@ -24,22 +24,22 @@ public class WeiXinPayAction {
     @Resource
     WeiXinPayService weiXinPayService;
 
-    @RequestMapping(value="get/{oid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/pay/weixin/get/{oid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public HttpResponse getPayUrl(HttpServletRequest request,
                                   HttpServletResponse response,
-                                  @PathVariable("oid") Long oid)
+                                  @PathVariable("oid") long oid)
     {
         String pay_url = weiXinPayService.getPayUrl(oid,request.getRemoteAddr());
         if ( pay_url == null ) return new HttpResponse(HttpStatus.ERROR);
         return new HttpResponse(pay_url);
     }
 
-    @RequestMapping(value="check/{oid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/pay/weixin/check/{oid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public HttpResponse check(HttpServletRequest request,
                               HttpServletResponse response,
-                              @PathVariable("oid") Long oid)
+                              @PathVariable("oid") long oid)
     {
         return new HttpResponse(weiXinPayService.checkPay(oid));
     }

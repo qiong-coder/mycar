@@ -53,10 +53,6 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public VehicleInfo getVehicleInfoByIdAndTime(long id, Timestamp begin, Timestamp end) {
         VehicleInfo vehicleInfo = getVehicleInfoById(id);
-        if ( vehicleInfo != null ) vehicleInfo.setTotal_cost(VehicleCost.getTotalCost(vehicleInfo.getDay_cost(),
-                vehicleInfo.getBase_insurance(),
-                vehicleInfo.getFree_insurance(),
-                TimeUtils.TimeDiff(begin,end)));
         return vehicleInfo;
     }
 
@@ -92,11 +88,6 @@ public class VehicleServiceImpl implements VehicleService {
         for ( Long vid : vidSet )
         {
             VehicleInfo vehicleInfo = getVehicleInfoById(vid);
-            vehicleInfo.setTotal_cost(
-                    VehicleCost.getTotalCost(vehicleInfo.getDay_cost(),
-                            vehicleInfo.getBase_insurance(),
-                            vehicleInfo.getFree_insurance(),
-                            days));
             vehicleInfos.add(vehicleInfo);
         }
 

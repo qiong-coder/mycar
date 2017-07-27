@@ -13,10 +13,9 @@ public class VehicleInfo {
     private String boxes; // 几厢车
     private Integer manned; // 乘员量
     private String description;
-    private Double day_cost; // 日租赁费
-    private Double base_insurance; // 基础保险费
-    private Double free_insurance; // 免赔保险费
-    private Double total_cost;
+    private Integer day_cost; // 日租赁费
+    private Integer base_insurance; // 基础保险费
+    private Integer free_insurance; // 免赔保险费
 
     public Long getId() {
         return id;
@@ -82,37 +81,31 @@ public class VehicleInfo {
         this.description = description;
     }
 
-    public Double getDay_cost() {
+    public Integer getDay_cost() {
         return day_cost;
     }
 
-    public void setDay_cost(Double day_cost) {
+    public void setDay_cost(Integer day_cost) {
         this.day_cost = day_cost;
     }
 
-    public Double getBase_insurance() {
+    public Integer getBase_insurance() {
         return base_insurance;
     }
 
-    public void setBase_insurance(Double base_insurance) {
+    public void setBase_insurance(Integer base_insurance) {
         this.base_insurance = base_insurance;
     }
 
-    public Double getFree_insurance() {
+    public Integer getFree_insurance() {
         return free_insurance;
     }
 
-    public void setFree_insurance(Double free_insurance) {
+    public void setFree_insurance(Integer free_insurance) {
         this.free_insurance = free_insurance;
     }
 
-    public Double getTotal_cost() {
-        return total_cost;
-    }
 
-    public void setTotal_cost(Double total_cost) {
-        this.total_cost = total_cost;
-    }
 
     @Override
     public String toString() {
@@ -128,7 +121,6 @@ public class VehicleInfo {
                 ", day_cost=" + day_cost +
                 ", base_insurance=" + base_insurance +
                 ", free_insurance=" + free_insurance +
-                ", total_cost=" + total_cost +
                 '}';
     }
 }

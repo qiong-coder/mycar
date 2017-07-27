@@ -73,10 +73,9 @@ public class OrderServiceImpl implements OrderService {
         order.setBase_insurance(vehicleInfo.getBase_insurance());
         order.setFree_insurance(vehicleInfo.getFree_insurance());
 
-        order.setPay_info(
-                VehicleCost.getPayCostInfo(VehicleCost.getTotalCost(order.getDay_cost(),order.getBase_insurance(),order.getFree_insurance(),
-                TimeUtils.TimeDiff(order.getBegin(),order.getEnd())),
-                        order.getName()));
+        int days = TimeUtils.TimeDiff(order.getBegin(),order.getEnd());
+        int cost = VehicleCost.getTotalCost(order.getDay_cost(),order.getBase_insurance(),order.getFree_insurance(), days);
+        order.setPay_info( VehicleCost.getPayCostInfo(cost,order.getName()) );
         order.setCost_info("[]");
         if ( orderMapper.insertOrder(order) != 1 ) return HttpStatus.ERROR;
 
@@ -92,7 +91,10 @@ public class OrderServiceImpl implements OrderService {
 
         if ( status.compareTo(OrderStatus.PENDING) == 0 ) return HttpStatus.OK;
 
-        if ( weiXinPayService.checkPay(oid) ) {
+        if ( status.compareTo(OrderStatus.UNPAID) != 0 ) {
+            logger.error("order's status is not unpaid - {}", order);
+            return HttpStatus.ORDER_STATUS_ERROR;
+        } else if (  weiXinPayService.checkPay(oid) ) {
             order.setStatus(OrderStatus.PENDING.getStatus());
             if ( orderMapper.updateStatus(order) == 1 ) return HttpStatus.OK;
             else {

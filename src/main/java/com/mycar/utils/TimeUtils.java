@@ -25,9 +25,9 @@ public class TimeUtils {
         }
     }
 
-    public static long TimeDiff(Timestamp begin, Timestamp end)
+    public static int TimeDiff(Timestamp begin, Timestamp end)
     {
-        return Math.round(Math.ceil((end.getTime() - begin.getTime()) / 3600*24.0));
+        return new Long(Math.round(Math.ceil((end.getTime() - begin.getTime()) / (3600*MILLIS_PER_SECOND*24.0)))).intValue();
     }
 
     public final static long MILLIS_PER_SECOND = 1000L;

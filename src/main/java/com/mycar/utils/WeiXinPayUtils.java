@@ -1,6 +1,7 @@
 package com.mycar.utils;
 
 import com.github.wxpay.sdk.WXPay;
+import com.github.wxpay.sdk.WXPayConstants;
 import com.mycar.model.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,14 +27,14 @@ public class WeiXinPayUtils {
                 resp.containsKey("result_code") && resp.get("result_code").compareTo("SUCCESS") == 0;
     }
 
-    public String getPayUrl(Order oid, String total_cost, String cost_detail, String client_ip)
+    public String getPayUrl(Order order, String total_cost, String cost_detail, String client_ip)
     {
-        WXPay pay = new WXPay(weiXinPayConfig);
+        WXPay pay = new WXPay(weiXinPayConfig, WXPayConstants.SignType.MD5, true);
 
         Map<String,String> data = new HashMap<String,String>();
 
         data.put("body",              "mycar - 租车服务");
-        data.put("out_trade_no",      oid.getId().toString());
+        data.put("out_trade_no",      order.getId().toString());
         data.put("detail",            cost_detail);
         data.put("total_fee",         total_cost);
         data.put("spbill_create_ip",  client_ip);

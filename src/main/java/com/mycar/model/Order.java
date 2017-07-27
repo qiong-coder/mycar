@@ -18,9 +18,9 @@ public class Order {
     private String identity; // 证件号码
     private String phone; // 手机号码
     private String bill; // 发票
-    private Double day_cost;
-    private Double base_insurance; // 最终的保险费
-    private Double free_insurance; //
+    private Integer day_cost;
+    private Integer base_insurance; // 最终的保险费
+    private Integer free_insurance; //
     private String pay_info; // 用户付钱明细
     private Timestamp rbegin; // 实际还车时间
     private Timestamp rend;
@@ -109,27 +109,27 @@ public class Order {
         this.bill = bill;
     }
 
-    public Double getDay_cost() {
+    public Integer getDay_cost() {
         return day_cost;
     }
 
-    public void setDay_cost(Double day_cost) {
+    public void setDay_cost(Integer day_cost) {
         this.day_cost = day_cost;
     }
 
-    public Double getBase_insurance() {
+    public Integer getBase_insurance() {
         return base_insurance;
     }
 
-    public void setBase_insurance(Double base_insurance) {
+    public void setBase_insurance(Integer base_insurance) {
         this.base_insurance = base_insurance;
     }
 
-    public Double getFree_insurance() {
+    public Integer getFree_insurance() {
         return free_insurance;
     }
 
-    public void setFree_insurance(Double free_insurance) {
+    public void setFree_insurance(Integer free_insurance) {
         this.free_insurance = free_insurance;
     }
 

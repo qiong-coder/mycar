@@ -11,7 +11,7 @@ import com.mycar.utils.TimeUtils;
  */
 public class VehicleCost {
 
-    public static String getPayCostInfo(Double total_pay, String username)
+    public static String getPayCostInfo(int total_pay, String username)
     {
         JSONArray infos = new JSONArray();
         JSONObject info = new JSONObject();
@@ -22,7 +22,7 @@ public class VehicleCost {
         return infos.toJSONString();
     }
 
-    public static Double getTotalCost(Double day_cost, Double base_insurance, Double free_insurance, long days)
+    public static int getTotalCost(int day_cost, int base_insurance, int free_insurance, int days)
     {
         return (day_cost+base_insurance+free_insurance) * days;
     }

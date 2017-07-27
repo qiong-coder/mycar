@@ -12,9 +12,9 @@ CREATE TABLE `VehicleInfo` (
   `boxes`           VARCHAR(50) NOT NULL,
   `manned`          INT(10) NOT NULL,
   `description`     TEXT NOT NULL,
-  `day_cost`        DOUBLE NOT NULL,
-  `base_insurance`  DOUBLE NOT NULL,
-  `free_insurance`  DOUBLE NOT NULL,
+  `day_cost`        INT(10) NOT NULL,
+  `base_insurance`  INT(10) NOT NULL,
+  `free_insurance`  INT(10) NOT NULL,
   `create_time`     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;

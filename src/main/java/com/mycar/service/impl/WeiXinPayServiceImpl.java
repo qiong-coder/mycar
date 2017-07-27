@@ -30,14 +30,16 @@ public class WeiXinPayServiceImpl implements WeiXinPayService {
             return null;
         }
 
-        Double total_cost = VehicleCost.getTotalCost(order.getDay_cost(),order.getBase_insurance(),order.getFree_insurance(),
-                TimeUtils.TimeDiff(order.getBegin(),order.getEnd()));
+        int days = TimeUtils.TimeDiff(order.getBegin(),order.getEnd());
+        Integer total_cost = VehicleCost.getTotalCost(order.getDay_cost(),order.getBase_insurance(),order.getFree_insurance(), days);
 
-        return weiXinPayUtils.getPayUrl(order,new Integer(total_cost.intValue()*100).toString(),"",client_ip);
+        //return weiXinPayUtils.getPayUrl(order,total_cost.toString(),"",client_ip);
+        return "http://weixin.pay/test";
     }
 
     @Override
     public boolean checkPay(long oid) {
-        return weiXinPayUtils.checkPay(oid);
+        return true;
+        //return weiXinPayUtils.checkPay(oid);
     }
 }
