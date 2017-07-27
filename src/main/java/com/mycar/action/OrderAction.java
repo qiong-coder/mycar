@@ -63,6 +63,17 @@ public class OrderAction {
         }
     }
 
+    @RequestMapping(value = "/order/{oid}/", method = RequestMethod.GET, consumes =  MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public HttpResponse getOrderById(HttpServletRequest request,
+                                     HttpServletResponse response,
+                                     @PathVariable("oid") long oid)
+    {
+        Order order = orderService.getOrderById(oid);
+        if ( order == null ) return new HttpResponse(HttpStatus.NO_ORDER);
+        else return new HttpResponse(order);
+    }
+
     @RequestMapping(value = "/order/{viid}/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public HttpResponse insert(HttpServletRequest request,
