@@ -31,6 +31,20 @@ public class VehicleAction {
     @Resource
     private VehicleService vehicleService;
 
+    @RequestMapping(value = "/vehicle/{vid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public HttpResponse getVehicleById(HttpServletRequest request,
+                                       HttpServletResponse response,
+                                       @PathVariable("vid") long vid)
+    {
+        Vehicle vehicle = vehicleService.getVehicleById(vid);
+        if ( vehicle == null ) {
+            logger.error("failure to get the vehicle - {}", vid);
+            return new HttpResponse(HttpStatus.NO_VEHICLE);
+        } else return new HttpResponse(vehicle);
+    }
+
+
     @RequestMapping(value = "/vehicle/info/{viid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public HttpResponse getInfoById(HttpServletRequest request,

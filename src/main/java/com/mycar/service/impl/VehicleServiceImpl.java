@@ -8,6 +8,8 @@ import com.mycar.model.VehicleInfo;
 import com.mycar.service.VehicleService;
 import com.mycar.utils.TimeUtils;
 import com.mycar.utils.VehicleStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,8 @@ import java.util.*;
 @Service("VehicleService")
 public class VehicleServiceImpl implements VehicleService {
 
+    private static Logger logger = LoggerFactory.getLogger(VehicleService.class);
+
     @Autowired
     private VehicleMapper vehicleMapper;
     @Autowired
@@ -27,27 +31,37 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public Vehicle getVehicleById(long id) {
-        return vehicleMapper.getById(id);
+        Vehicle vehicle = vehicleMapper.getById(id);
+        if ( vehicle == null ) logger.error("fialure to get the vehicle - {}", id);
+        return vehicle;
     }
 
     @Override
     public Vehicle getVehicleByNumber(String number) {
-        return  vehicleMapper.getByNumber(number);
+        Vehicle vehicle = vehicleMapper.getByNumber(number);
+        if ( vehicle == null ) logger.error("fialure to get the vehicle - {}", number);
+        return vehicle;
     }
 
     @Override
     public VehicleInfo getVehicleInfoById(long id) {
-        return vehicleInfoMapper.getById(id);
+        VehicleInfo vehicleInfo = vehicleInfoMapper.getById(id);
+        if ( vehicleInfo == null ) logger.error("failure to get the vehicle info - {}", id);
+        return vehicleInfo;
     }
 
     @Override
     public List<Vehicle> getAllVehicles() {
-        return vehicleMapper.getAll();
+        List<Vehicle> vehicles = vehicleMapper.getAll();
+        if ( vehicles == null || vehicles.size() == 0 ) logger.error("failure to get the all vehicles");
+        return vehicles;
     }
 
     @Override
     public List<VehicleInfo> getAllVehicleInfos() {
-        return vehicleInfoMapper.getAll();
+        List<VehicleInfo> vehicleInfos = vehicleInfoMapper.getAll();
+        if ( vehicleInfos == null || vehicleInfos.size() == 0 ) logger.error("failure to get the all vehicle infos");
+        return vehicleInfos;
     }
 
     @Override
