@@ -1,5 +1,6 @@
 package com.mycar.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.mycar.model.Order;
 import com.mycar.model.Vehicle;
 import com.mycar.utils.OrderStatus;
@@ -14,6 +15,14 @@ public interface OrderService {
     Order getOrderById(long id);
 
     List<Order> getOrdersByStatus(int status);
+
+    List<Order> getOrdersByIdentityAndPhone(String identity, String phone);
+
+    JSONObject getOrdersAndVehicleInfosByStatus(int stauts);
+
+    JSONObject getOrdersAndVechileInfosByIdentityAndPhone(String identity, String phone);
+
+    JSONObject getOrderAndVehicleInfoByOrderId(long id);
 
     int insertOrder(long viid, Order order); // 用户第一次提交订单
 

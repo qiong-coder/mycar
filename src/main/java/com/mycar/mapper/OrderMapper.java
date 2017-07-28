@@ -1,6 +1,7 @@
 package com.mycar.mapper;
 
 import com.mycar.model.Order;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,5 +19,7 @@ public interface OrderMapper {
     int updateStatus(Order order);
 
     int updateCostAndStatus(Order order);
+
+    List<Order> getOrdersByIdentityAndPhone(@Param("identity") String identity, @Param("phone") String phone);
 
 }

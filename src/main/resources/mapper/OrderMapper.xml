@@ -24,4 +24,8 @@
     <update id="updateInfoAndStatus" parameterType="com.mycar.model.Order">
         UPDATE `Order` SET pay_info=#{pay_info}, cost_info=#{cost_info}, status=#{status} WHERE id=#{id}
     </update>
+
+    <select id="getOrdersByIdentityAndPhone" resultType="com.mycar.model.Order">
+        SELECT * FROM `Order` WHERE `identity`=#{identity} and phone=#{phone}
+    </select>
 </mapper>

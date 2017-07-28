@@ -1,0 +1,9 @@
+* 获取用户租车信息接口
+  该接口用于用户获取自己租车的信息接口
+** 接口说明
+    URI： http://ip:port/mycar/user/orders/{identity}/{phone}/
+    METHOD：GET
+** 请求参数说明
+   + {identity} :: 用户身份证
+   + {phone} :: 用户的手机号
+

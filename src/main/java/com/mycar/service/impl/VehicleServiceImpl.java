@@ -3,6 +3,7 @@ package com.mycar.service.impl;
 import com.mycar.logic.VehicleCost;
 import com.mycar.mapper.VehicleInfoMapper;
 import com.mycar.mapper.VehicleMapper;
+import com.mycar.model.Order;
 import com.mycar.model.Vehicle;
 import com.mycar.model.VehicleInfo;
 import com.mycar.service.VehicleService;
@@ -106,6 +107,22 @@ public class VehicleServiceImpl implements VehicleService {
         }
 
         //if ( vehicleInfoIntegerMap.isEmpty() ) return null;
+        return vehicleInfos;
+    }
+
+    @Override
+    public Map<Long, VehicleInfo> getVehicleInfoByOrders(List<Order> orders) {
+
+        Map<Long, VehicleInfo> vehicleInfos =  new HashMap();
+        for ( Order order : orders ) {
+            long viid = order.getViid();
+            if ( vehicleInfos.containsKey(viid) ) continue;
+            else {
+                VehicleInfo vehicleInfo = getVehicleInfoById(viid);
+                if ( vehicleInfo == null ) continue;
+                vehicleInfos.put(viid, vehicleInfo);
+            }
+        }
         return vehicleInfos;
     }
 }

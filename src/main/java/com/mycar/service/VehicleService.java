@@ -1,5 +1,6 @@
 package com.mycar.service;
 
+import com.mycar.model.Order;
 import com.mycar.model.Vehicle;
 import com.mycar.model.VehicleInfo;
 
@@ -25,4 +26,6 @@ public interface VehicleService {
     VehicleInfo getVehicleInfoByIdAndTime(long id, Timestamp begin, Timestamp end);
 
     List<VehicleInfo> getVehicleInfosByTime(Timestamp begin, Timestamp end);
+
+    Map<Long, VehicleInfo> getVehicleInfoByOrders(List<Order> orders);
 }

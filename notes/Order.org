@@ -45,7 +45,7 @@
 * 订单获取接口
   该接口用于后端管理页面根据订单状态获取当前订单的接口
 ** 接口说明
-   URI: http://ip:port/mycar/order/{status}/
+   URI: http://ip:port/mycar/orders/{status}/
    METHOD: GET
 ** 请求参数说明
    {status} 为订单状态，具体值参考[[*订单状态说明][订单状态说明]]

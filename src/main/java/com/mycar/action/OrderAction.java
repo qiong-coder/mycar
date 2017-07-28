@@ -34,44 +34,26 @@ public class OrderAction {
     @Resource
     VehicleService vehicleService;
 
-    @RequestMapping(value = "/order/{status}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/orders/{status}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public HttpResponse select(HttpServletRequest request,
                                HttpServletResponse response,
                                @PathVariable("status") int status)
     {
-        JSONObject ret = new JSONObject();
-        List<Order> orderList = orderService.getOrdersByStatus(status);
-
-        if ( orderList == null ) {
-            return new HttpResponse(HttpStatus.NO_ORDER);
-        }
-        else {
-            Map<Long, VehicleInfo> vehicleInfos =  new HashMap();
-            for ( Order order : orderList ) {
-                long viid = order.getViid();
-                if ( vehicleInfos.containsKey(viid) ) continue;
-                else {
-                    VehicleInfo vehicleInfo = vehicleService.getVehicleInfoById(viid);
-                    if ( vehicleInfo == null ) continue;
-                    vehicleInfos.put(viid, vehicleInfo);
-                }
-            }
-            ret.put("vehicleInfos",vehicleInfos);
-            ret.put("orders", orderList);
-            return new HttpResponse(ret);
-        }
+        JSONObject ret = orderService.getOrdersAndVehicleInfosByStatus(status);
+        if ( ret == null ) return new HttpResponse(HttpStatus.NO_ORDER);
+        else return new HttpResponse(ret);
     }
 
-    @RequestMapping(value = "/order/{oid}/", method = RequestMethod.GET, consumes =  MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/order/{oid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public HttpResponse getOrderById(HttpServletRequest request,
                                      HttpServletResponse response,
                                      @PathVariable("oid") long oid)
     {
-        Order order = orderService.getOrderById(oid);
-        if ( order == null ) return new HttpResponse(HttpStatus.NO_ORDER);
-        else return new HttpResponse(order);
+        JSONObject ret = orderService.getOrderAndVehicleInfoByOrderId(oid);
+        if ( ret == null ) return new HttpResponse(HttpStatus.NO_ORDER);
+        else return new HttpResponse(ret);
     }
 
     @RequestMapping(value = "/order/{viid}/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -132,7 +114,7 @@ public class OrderAction {
         return new HttpResponse(orderService.finishedOrder(id,order));
     }
 
-    @RequestMapping(value = "/order/cancle/{oid}/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/order/cancle/{oid}/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public HttpResponse cancle(HttpServletRequest request,
                                HttpServletResponse response,
