@@ -61,4 +61,5 @@
 
     <import resource="spring-redis.xml"/>
     <import resource="spring-weixin.xml"/>
+    <import resource="spring-security.xml"/>
 </beans>

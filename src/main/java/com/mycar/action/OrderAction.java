@@ -2,7 +2,6 @@ package com.mycar.action;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mycar.model.Order;
-import com.mycar.model.VehicleInfo;
 import com.mycar.service.OrderService;
 import com.mycar.service.VehicleService;
 import com.mycar.utils.HttpResponse;
@@ -15,9 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by stupid-coder on 7/17/17.

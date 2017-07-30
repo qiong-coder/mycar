@@ -5,6 +5,7 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `Order`;
 CREATE TABLE `Order` (
   `id`              INT(10) NOT NULL AUTO_INCREMENT,
+  `oid`             VARCHAR(20) NOT NULL COMMENT '订单ID',
   `viid`            INT(10) NOT NULL COMMENT '下单时的车系ID',
   `vid`             INT(10) DEFAULT NULL COMMENT '租车时关联的车ID',
   `begin`           DATETIME DEFAULT NULL,

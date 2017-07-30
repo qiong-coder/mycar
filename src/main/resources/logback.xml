@@ -65,4 +65,5 @@
         <appender-ref ref="info"/>
         <appender-ref ref="warn"/>
     </root>
+
 </configuration>

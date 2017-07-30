@@ -6,14 +6,14 @@ import java.sql.Timestamp;
  * Created by stupid-coder on 7/16/17.
  */
 public class Order {
-
-    private Long id;  // 订单ID
+    private Long id;  // 订单Mysql-ID
+    private String oid; // 订单ID
     private Long viid;
     private Long vid; // 车辆ID
     private Timestamp begin; // 借车时间
     private Timestamp end; // 还车时间
-    private String rent_address;  // 借车地址
-    private String return_address; // 还车地址
+    private Long rent_store; // 借车门店编号
+    private Long return_store; // 还车门店
     private String name; // 租车人名字
     private String identity; // 证件号码
     private String phone; // 手机号码
@@ -24,6 +24,8 @@ public class Order {
     private String pay_info; // 用户付钱明细
     private Timestamp rbegin; // 实际还车时间
     private Timestamp rend;
+    private Long rrent_store; // 实际借车门店
+    private Long rreturn_store; // 实际还车门店
     private Double distance; // 人工填写里程
     private String cost_info; // 扣钱明细
     private Integer status; // 交易状态
@@ -61,20 +63,36 @@ public class Order {
         this.end = end;
     }
 
-    public String getRent_address() {
-        return rent_address;
+    public Long getRent_store() {
+        return rent_store;
     }
 
-    public void setRent_address(String rent_address) {
-        this.rent_address = rent_address;
+    public void setRent_store(Long rent_store) {
+        this.rent_store = rent_store;
     }
 
-    public String getReturn_address() {
-        return return_address;
+    public Long getReturn_store() {
+        return return_store;
     }
 
-    public void setReturn_address(String return_address) {
-        this.return_address = return_address;
+    public void setReturn_store(Long return_store) {
+        this.return_store = return_store;
+    }
+
+    public Long getRrent_store() {
+        return rrent_store;
+    }
+
+    public void setRrent_store(Long rrent_store) {
+        this.rrent_store = rrent_store;
+    }
+
+    public Long getRreturn_store() {
+        return rreturn_store;
+    }
+
+    public void setRreturn_store(Long rreturn_store) {
+        this.rreturn_store = rreturn_store;
     }
 
     public String getName() {
@@ -197,16 +215,25 @@ public class Order {
         this.create_time = create_time;
     }
 
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
+
     @Override
     public String toString() {
         return "Order{" +
                 "id=" + id +
+                ", oid='" + oid + '\'' +
                 ", viid=" + viid +
                 ", vid=" + vid +
                 ", begin=" + begin +
                 ", end=" + end +
-                ", rent_address='" + rent_address + '\'' +
-                ", return_address='" + return_address + '\'' +
+                ", rent_store=" + rent_store +
+                ", return_store=" + return_store +
                 ", name='" + name + '\'' +
                 ", identity='" + identity + '\'' +
                 ", phone='" + phone + '\'' +
@@ -217,6 +244,8 @@ public class Order {
                 ", pay_info='" + pay_info + '\'' +
                 ", rbegin=" + rbegin +
                 ", rend=" + rend +
+                ", rrent_store=" + rrent_store +
+                ", rreturn_store=" + rreturn_store +
                 ", distance=" + distance +
                 ", cost_info='" + cost_info + '\'' +
                 ", status=" + status +
