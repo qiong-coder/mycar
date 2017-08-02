@@ -1,5 +1,7 @@
 package com.mycar.model;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.sql.Timestamp;
 
 /**
@@ -12,24 +14,20 @@ public class Order {
     private Long vid; // 车辆ID
     private Timestamp begin; // 借车时间
     private Timestamp end; // 还车时间
-    private Long rent_store; // 借车门店编号
-    private Long return_store; // 还车门店
+    private Long rent_sid; // 借车门店编号
+    private Long return_sid; // 还车门店
     private String name; // 租车人名字
     private String identity; // 证件号码
     private String phone; // 手机号码
     private String bill; // 发票
-    private Integer day_cost;
-    private Integer base_insurance; // 最终的保险费
-    private Integer free_insurance; //
+    private String pre_cost; // 租车的基本价格信息
     private String pay_info; // 用户付钱明细
     private Timestamp rbegin; // 实际还车时间
     private Timestamp rend;
-    private Long rrent_store; // 实际借车门店
-    private Long rreturn_store; // 实际还车门店
-    private Double distance; // 人工填写里程
+    private Long rrent_sid; // 实际借车门店
+    private Long rreturn_sid; // 实际还车门店
     private String cost_info; // 扣钱明细
     private Integer status; // 交易状态
-    private Timestamp create_time;
 
     public Long getId() {
         return id;
@@ -63,36 +61,36 @@ public class Order {
         this.end = end;
     }
 
-    public Long getRent_store() {
-        return rent_store;
+    public Long getRent_sid() {
+        return rent_sid;
     }
 
-    public void setRent_store(Long rent_store) {
-        this.rent_store = rent_store;
+    public void setRent_sid(Long rent_sid) {
+        this.rent_sid = rent_sid;
     }
 
-    public Long getReturn_store() {
-        return return_store;
+    public Long getReturn_sid() {
+        return return_sid;
     }
 
-    public void setReturn_store(Long return_store) {
-        this.return_store = return_store;
+    public void setReturn_sid(Long return_sid) {
+        this.return_sid = return_sid;
     }
 
-    public Long getRrent_store() {
-        return rrent_store;
+    public Long getRrent_sid() {
+        return rrent_sid;
     }
 
-    public void setRrent_store(Long rrent_store) {
-        this.rrent_store = rrent_store;
+    public void setRrent_sid(Long rrent_sid) {
+        this.rrent_sid = rrent_sid;
     }
 
-    public Long getRreturn_store() {
-        return rreturn_store;
+    public Long getRreturn_sid() {
+        return rreturn_sid;
     }
 
-    public void setRreturn_store(Long rreturn_store) {
-        this.rreturn_store = rreturn_store;
+    public void setRreturn_sid(Long rreturn_sid) {
+        this.rreturn_sid = rreturn_sid;
     }
 
     public String getName() {
@@ -127,30 +125,6 @@ public class Order {
         this.bill = bill;
     }
 
-    public Integer getDay_cost() {
-        return day_cost;
-    }
-
-    public void setDay_cost(Integer day_cost) {
-        this.day_cost = day_cost;
-    }
-
-    public Integer getBase_insurance() {
-        return base_insurance;
-    }
-
-    public void setBase_insurance(Integer base_insurance) {
-        this.base_insurance = base_insurance;
-    }
-
-    public Integer getFree_insurance() {
-        return free_insurance;
-    }
-
-    public void setFree_insurance(Integer free_insurance) {
-        this.free_insurance = free_insurance;
-    }
-
     public Timestamp getRbegin() {
         return rbegin;
     }
@@ -165,14 +139,6 @@ public class Order {
 
     public void setRend(Timestamp rend) {
         this.rend = rend;
-    }
-
-    public Double getDistance() {
-        return distance;
-    }
-
-    public void setDistance(Double distance) {
-        this.distance = distance;
     }
 
     public Long getViid() {
@@ -207,14 +173,6 @@ public class Order {
         this.status = status;
     }
 
-    public Timestamp getCreate_time() {
-        return create_time;
-    }
-
-    public void setCreate_time(Timestamp create_time) {
-        this.create_time = create_time;
-    }
-
     public String getOid() {
         return oid;
     }
@@ -223,33 +181,11 @@ public class Order {
         this.oid = oid;
     }
 
-    @Override
-    public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", oid='" + oid + '\'' +
-                ", viid=" + viid +
-                ", vid=" + vid +
-                ", begin=" + begin +
-                ", end=" + end +
-                ", rent_store=" + rent_store +
-                ", return_store=" + return_store +
-                ", name='" + name + '\'' +
-                ", identity='" + identity + '\'' +
-                ", phone='" + phone + '\'' +
-                ", bill='" + bill + '\'' +
-                ", day_cost=" + day_cost +
-                ", base_insurance=" + base_insurance +
-                ", free_insurance=" + free_insurance +
-                ", pay_info='" + pay_info + '\'' +
-                ", rbegin=" + rbegin +
-                ", rend=" + rend +
-                ", rrent_store=" + rrent_store +
-                ", rreturn_store=" + rreturn_store +
-                ", distance=" + distance +
-                ", cost_info='" + cost_info + '\'' +
-                ", status=" + status +
-                ", create_time=" + create_time +
-                '}';
+    public String getPre_cost() {
+        return pre_cost;
+    }
+
+    public void setPre_cost(String pre_cost) {
+        this.pre_cost = pre_cost;
     }
 }

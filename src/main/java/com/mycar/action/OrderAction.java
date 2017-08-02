@@ -114,8 +114,9 @@ public class OrderAction {
     @ResponseBody
     public HttpResponse cancle(HttpServletRequest request,
                                HttpServletResponse response,
-                               @PathVariable("oid") long id)
+                               @PathVariable("oid") long id,
+                               @RequestBody Order order)
     {
-        return new HttpResponse(orderService.cancleOrder(id));
+        return new HttpResponse(orderService.cancleOrder(id, order));
     }
 }

@@ -1,10 +1,11 @@
 package com.mycar.service.impl;
 
-import com.mycar.logic.VehicleCost;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.mycar.logic.VehicleCostLogic;
 import com.mycar.model.Order;
 import com.mycar.service.OrderService;
 import com.mycar.service.WeiXinPayService;
-import com.mycar.utils.TimeUtils;
 import com.mycar.utils.WeiXinPayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,8 +31,14 @@ public class WeiXinPayServiceImpl implements WeiXinPayService {
             return null;
         }
 
-        int days = TimeUtils.TimeDiff(order.getBegin(),order.getEnd());
-        Integer total_cost = VehicleCost.getTotalCost(order.getDay_cost(),order.getBase_insurance(),order.getFree_insurance(), days);
+        int sum = 0;
+        JSONObject pre_cost = JSONObject.parseObject(order.getPre_cost());
+        int base_insurance = pre_cost.getInteger("base_insurance");
+        int free_insurance = pre_cost.getInteger("free_insurance");
+        JSONArray day_costs = pre_cost.getJSONArray("day_costs");
+        for ( int i = 0; i <  day_costs.size(); ++ i) {
+            sum += base_insurance + free_insurance + day_costs.getJSONObject(i).getInteger("value");
+        }
 
         //return weiXinPayUtils.getPayUrl(order,total_cost.toString(),"",client_ip);
         return "http://weixin.pay/test";

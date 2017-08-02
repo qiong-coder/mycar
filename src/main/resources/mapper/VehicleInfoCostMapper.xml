@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycar.mapper.VehicleInfoCostMapper">
+
+    <select id="getVehicleInfoCostById" resultType="com.mycar.model.VehicleInfoCost">
+        SELECT * FROM VehicleInfoCost WHERE viid=#{viid}
+    </select>
+
+    <select id="getVehicleInfoCostByIdWithoutDayCost" resultType="com.mycar.model.VehicleInfoCost">
+        SELECT viid, base_insurance, free_insurance  FROM VehicleInfoCost WHERE viid=#{viid}
+    </select>
+
+    <update id="updateDayCost">
+        UPDATE VehicleInfoCost
+        SET (day_cost) VALUES(#{day_cost})
+        WHERE viid=${viid}
+    </update>
+
+    <update id="updateInsurance">
+        UPDATE VehicleInfoCost
+        SET (base_insurance, free_insurance) VALUES(#{base_insurance}, #{free_insurance})
+        WHERE viid=#{viid}
+    </update>
+
+</mapper>

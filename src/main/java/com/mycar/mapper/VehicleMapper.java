@@ -1,5 +1,6 @@
 package com.mycar.mapper;
 
+import com.alibaba.fastjson.JSONObject;
 import com.mycar.model.Vehicle;
 
 import java.util.List;
@@ -15,4 +16,5 @@ public interface VehicleMapper {
 
     List<Vehicle> getAll();
 
+    int updateVehicleById(Vehicle vehicle);
 }

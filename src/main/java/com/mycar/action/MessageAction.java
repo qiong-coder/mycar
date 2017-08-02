@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Created by qixiang on 7/18/17.
+ * Created by qiong-coder on 7/18/17.
  */
 
 @RestController

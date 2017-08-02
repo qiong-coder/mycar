@@ -16,6 +16,7 @@ public class HttpStatus {
     public static int ORDER_STATUS_ERROR = -5;
     public static int MESSAGE_CHECK_ERROR = -6;
     public static int MESSAGE_SEND_TIMEOUT = -7;
+    public static int NO_VEHICLE_COST_INFO = -8;
 
     private static Map<Integer, String> statusInfos = new HashMap<Integer,String>() {{
        put(OK,"success");
@@ -26,6 +27,7 @@ public class HttpStatus {
        put(ORDER_STATUS_ERROR, "order's status is not right");
        put(MESSAGE_CHECK_ERROR, "message check is error");
        put(MESSAGE_SEND_TIMEOUT, "message send is not timeout");
+       put(NO_VEHICLE_COST_INFO, "failure to find the vehicle cost info");
     }};
 
     public static String getInfo(int status) {

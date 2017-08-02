@@ -8,8 +8,9 @@ import java.sql.Timestamp;
 public class Vehicle {
 
     private Long id;
-    private Long iid; // VehicleInfo Id;
+    private Long iid; // VehicleInfo id;
     private String number; // 车牌
+    private Long sid; // 门店标号
     private Integer status; // 车辆状态
     private Timestamp begin; // 修车/租车开始时间
     private Timestamp end; // 修车/租车预计结束时间
@@ -38,6 +39,14 @@ public class Vehicle {
         this.number = number;
     }
 
+    public Long getSid() {
+        return sid;
+    }
+
+    public void setSid(Long sid) {
+        this.sid = sid;
+    }
+
     public Integer getStatus() {
         return status;
     }
@@ -62,15 +71,4 @@ public class Vehicle {
         this.end = end;
     }
 
-    @Override
-    public String toString() {
-        return "Vehicle{" +
-                "id=" + id +
-                ", iid=" + iid +
-                ", number='" + number + '\'' +
-                ", status=" + status +
-                ", begin=" + begin +
-                ", end=" + end +
-                '}';
-    }
 }

@@ -28,4 +28,6 @@ public interface VehicleService {
     List<VehicleInfo> getVehicleInfosByTime(Timestamp begin, Timestamp end);
 
     Map<Long, VehicleInfo> getVehicleInfoByOrders(List<Order> orders);
+
+    int updateVehicleById(Vehicle vehicle);
 }

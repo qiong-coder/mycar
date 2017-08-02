@@ -34,7 +34,7 @@ public interface OrderService {
 
     int finishedOrder(long id, Order order); // 最终完成订单
 
-    int cancleOrder(long id); // 取消订单
+    int cancleOrder(long id, Order order); // 取消订单
 
 
 }

@@ -1,11 +1,11 @@
 package com.mycar.service.impl;
 
-import com.mycar.logic.VehicleCost;
 import com.mycar.mapper.VehicleInfoMapper;
 import com.mycar.mapper.VehicleMapper;
 import com.mycar.model.Order;
 import com.mycar.model.Vehicle;
 import com.mycar.model.VehicleInfo;
+import com.mycar.service.VehicleInfoCostService;
 import com.mycar.service.VehicleService;
 import com.mycar.utils.TimeUtils;
 import com.mycar.utils.VehicleStatus;
@@ -29,6 +29,8 @@ public class VehicleServiceImpl implements VehicleService {
     private VehicleMapper vehicleMapper;
     @Autowired
     private VehicleInfoMapper vehicleInfoMapper;
+    @Autowired
+    private VehicleInfoCostService vehicleInfoCostService;
 
     @Override
     public Vehicle getVehicleById(long id) {
@@ -73,6 +75,7 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public List<VehicleInfo> getVehicleInfosByTime(Timestamp begin, Timestamp end) {
+
         List<Vehicle> vehicles = getAllVehicles();
 
         if ( vehicles == null || vehicles.isEmpty() ) return null;
@@ -81,6 +84,8 @@ public class VehicleServiceImpl implements VehicleService {
         for ( Vehicle vehicle : vehicles )
         {
             long iid = vehicle.getIid();
+            if ( vidSet.contains(iid) ) continue;
+
             VehicleStatus status = VehicleStatus.values()[vehicle.getStatus()];
             switch ( status )
             {
@@ -103,10 +108,12 @@ public class VehicleServiceImpl implements VehicleService {
         for ( Long vid : vidSet )
         {
             VehicleInfo vehicleInfo = getVehicleInfoById(vid);
-            vehicleInfos.add(vehicleInfo);
+            if ( vehicleInfo != null ) {
+                vehicleInfo.setCost(vehicleInfoCostService.getVehicleInfoCostById(vehicleInfo.getId()));
+                vehicleInfos.add(vehicleInfo);
+            }
         }
 
-        //if ( vehicleInfoIntegerMap.isEmpty() ) return null;
         return vehicleInfos;
     }
 
@@ -124,5 +131,11 @@ public class VehicleServiceImpl implements VehicleService {
             }
         }
         return vehicleInfos;
+    }
+
+    @Override
+    public int updateVehicleById(Vehicle vehicle) {
+        return vehicleMapper.updateVehicleById(vehicle);
+
     }
 }

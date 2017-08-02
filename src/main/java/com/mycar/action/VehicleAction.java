@@ -3,6 +3,7 @@ package com.mycar.action;
 
 import com.mycar.model.Vehicle;
 import com.mycar.model.VehicleInfo;
+import com.mycar.service.VehicleInfoCostService;
 import com.mycar.service.VehicleService;
 import com.mycar.utils.HttpResponse;
 import com.mycar.utils.HttpStatus;
@@ -31,6 +32,9 @@ public class VehicleAction {
     @Resource
     private VehicleService vehicleService;
 
+    @Resource
+    private VehicleInfoCostService vehicleInfoCostService;
+
     @RequestMapping(value = "/vehicle/{vid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public HttpResponse getVehicleById(HttpServletRequest request,
@@ -39,7 +43,6 @@ public class VehicleAction {
     {
         Vehicle vehicle = vehicleService.getVehicleById(vid);
         if ( vehicle == null ) {
-            logger.error("failure to get the vehicle - {}", vid);
             return new HttpResponse(HttpStatus.NO_VEHICLE);
         } else return new HttpResponse(vehicle);
     }
@@ -70,7 +73,12 @@ public class VehicleAction {
         Timestamp end = new Timestamp(end_s * TimeUtils.MILLIS_PER_SECOND);
 
         List<VehicleInfo> vehicleInfos = vehicleService.getVehicleInfosByTime(begin,end);
-        if ( vehicleInfos == null ) logger.warn("there is no vehicle to rent - {}:{}", begin,end);
+        if (vehicleInfos == null ) return new HttpResponse(HttpStatus.NO_VEHICLE_INFO);
+
+        for ( VehicleInfo vehicleInfo : vehicleInfos ) {
+            vehicleInfo.setCost(vehicleInfoCostService.getVehicleInfoCostById(vehicleInfo.getId()));
+        }
+
         return new HttpResponse(vehicleInfos);
     }
 
@@ -85,11 +93,15 @@ public class VehicleAction {
         Timestamp begin = new Timestamp(begin_s * TimeUtils.MILLIS_PER_SECOND);
         Timestamp end = new Timestamp( end_s * TimeUtils.MILLIS_PER_SECOND);
 
-        VehicleInfo vehicleInfo = vehicleService.getVehicleInfoByIdAndTime(id,begin,end);
+        VehicleInfo vehicleInfo = vehicleService.getVehicleInfoById(id);
+
         if ( vehicleInfo == null )
         {
             logger.warn("failure to get the vehicle info - id:{} begin:{} end:{}",id,begin,end);
             return new HttpResponse(HttpStatus.NO_VEHICLE_INFO);
-        } else return new HttpResponse(vehicleInfo);
+        }
+
+        vehicleInfo.setCost(vehicleInfoCostService.getVehicleInfoCostById(vehicleInfo.getId()));
+        return new HttpResponse(vehicleInfo);
     }
 }

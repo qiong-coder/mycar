@@ -8,14 +8,13 @@ public class VehicleInfo {
     private Long id;
     private String name;  // 车系
     private String brand; // 品牌
-    private Double displacement; // 排量
+    private String displacement; // 排量
     private String gearbox; // 变速箱
     private String boxes; // 几厢车
-    private Integer manned; // 乘员量
+    private String manned; // 乘员量
     private String description;
-    private Integer day_cost; // 日租赁费
-    private Integer base_insurance; // 基础保险费
-    private Integer free_insurance; // 免赔保险费
+    private String picture;
+    private VehicleInfoCost cost;
 
     public Long getId() {
         return id;
@@ -41,14 +40,6 @@ public class VehicleInfo {
         this.brand = brand;
     }
 
-    public Double getDisplacement() {
-        return displacement;
-    }
-
-    public void setDisplacement(Double displacement) {
-        this.displacement = displacement;
-    }
-
     public String getGearbox() {
         return gearbox;
     }
@@ -65,14 +56,6 @@ public class VehicleInfo {
         this.boxes = boxes;
     }
 
-    public Integer getManned() {
-        return manned;
-    }
-
-    public void setManned(Integer manned) {
-        this.manned = manned;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -81,46 +64,35 @@ public class VehicleInfo {
         this.description = description;
     }
 
-    public Integer getDay_cost() {
-        return day_cost;
+    public String getPicture() {
+        return picture;
     }
 
-    public void setDay_cost(Integer day_cost) {
-        this.day_cost = day_cost;
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 
-    public Integer getBase_insurance() {
-        return base_insurance;
+    public String getDisplacement() {
+        return displacement;
     }
 
-    public void setBase_insurance(Integer base_insurance) {
-        this.base_insurance = base_insurance;
+    public void setDisplacement(String displacement) {
+        this.displacement = displacement;
     }
 
-    public Integer getFree_insurance() {
-        return free_insurance;
+    public String getManned() {
+        return manned;
     }
 
-    public void setFree_insurance(Integer free_insurance) {
-        this.free_insurance = free_insurance;
+    public void setManned(String manned) {
+        this.manned = manned;
     }
 
+    public VehicleInfoCost getCost() {
+        return cost;
+    }
 
-
-    @Override
-    public String toString() {
-        return "VehicleInfo{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", brand='" + brand + '\'' +
-                ", displacement=" + displacement +
-                ", gearbox='" + gearbox + '\'' +
-                ", boxes='" + boxes + '\'' +
-                ", manned=" + manned +
-                ", description='" + description + '\'' +
-                ", day_cost=" + day_cost +
-                ", base_insurance=" + base_insurance +
-                ", free_insurance=" + free_insurance +
-                '}';
+    public void setCost(VehicleInfoCost cost) {
+        this.cost = cost;
     }
 }

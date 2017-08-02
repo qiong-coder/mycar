@@ -10,7 +10,6 @@ public class Store {
     private long id;
     private String address;
     private String phone;
-    private Timestamp create_time;
 
     public long getId() {
         return id;
@@ -36,21 +35,4 @@ public class Store {
         this.phone = phone;
     }
 
-    public Timestamp getCreate_time() {
-        return create_time;
-    }
-
-    public void setCreate_time(Timestamp create_time) {
-        this.create_time = create_time;
-    }
-
-    @Override
-    public String toString() {
-        return "Store{" +
-                "id=" + id +
-                ", address='" + address + '\'' +
-                ", phone='" + phone + '\'' +
-                ", create_time=" + create_time +
-                '}';
-    }
 }

@@ -1,14 +1,16 @@
 package com.mycar.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
+
+
 import com.alibaba.fastjson.JSONObject;
-import com.mycar.logic.VehicleCost;
+import com.mycar.logic.VehicleCostLogic;
 import com.mycar.mapper.OrderMapper;
 import com.mycar.model.Order;
 import com.mycar.model.Vehicle;
 import com.mycar.model.VehicleInfo;
+import com.mycar.model.VehicleInfoCost;
 import com.mycar.service.OrderService;
+import com.mycar.service.VehicleInfoCostService;
 import com.mycar.service.VehicleService;
 import com.mycar.service.WeiXinPayService;
 import com.mycar.utils.*;
@@ -17,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.xml.ws.spi.WebServiceFeatureAnnotation;
 import java.util.List;
 
 /**
@@ -37,13 +38,16 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderMapper orderMapper;
 
+    @Autowired
+    private VehicleInfoCostService vehicleInfoCostService;
+
     private static void mergeInfo(Order l, Order r)
     {
         if ( r.getPay_info() != null )
-            l.setPay_info(VehicleCost.mergeInfo(l.getPay_info(),r.getPay_info()));
+            l.setPay_info(VehicleCostLogic.mergeInfo(l.getPay_info(),r.getPay_info()));
 
         if ( r.getCost_info() != null )
-            l.setCost_info(VehicleCost.mergeInfo(l.getPay_info(),r.getCost_info()));
+            l.setCost_info(VehicleCostLogic.mergeInfo(l.getPay_info(),r.getCost_info()));
     }
 
     @Override
@@ -115,13 +119,13 @@ public class OrderServiceImpl implements OrderService {
         }
 
         order.setViid(viid);
-        order.setDay_cost(vehicleInfo.getDay_cost());
-        order.setBase_insurance(vehicleInfo.getBase_insurance());
-        order.setFree_insurance(vehicleInfo.getFree_insurance());
+        order.setOid(OrderUtils.getOrderId(order.getViid(),order.getRent_sid()));
+        VehicleInfoCost vehicleInfoCost = vehicleInfoCostService.getVehicleInfoCostById(viid);
 
-        int days = TimeUtils.TimeDiff(order.getBegin(),order.getEnd());
-        int cost = VehicleCost.getTotalCost(order.getDay_cost(),order.getBase_insurance(),order.getFree_insurance(), days);
-        order.setPay_info( VehicleCost.getPayCostInfo(cost,order.getName()) );
+        int pay = VehicleCostLogic.getPreCostInfo(vehicleInfoCost,order);
+
+        order.setPay_info(VehicleCostLogic.getPayInfo(pay, order.getName()));
+
         order.setCost_info("[]");
         if ( orderMapper.insertOrder(order) != 1 ) return HttpStatus.ERROR;
 
@@ -171,12 +175,20 @@ public class OrderServiceImpl implements OrderService {
         }
 
         o.setVid(vehicle.getId());
+        o.setRbegin(order.getRbegin());
+        if ( order.getRend() != null ) o.setRend(order.getRend());
+
+        o.setRrent_sid(order.getRrent_sid());
+        if ( order.getRreturn_sid() != null ) o.setRreturn_sid(order.getRreturn_sid());
+
+        vehicle.setBegin(o.getRbegin()); vehicle.setEnd(o.getRend());
+        vehicle.setStatus(VehicleStatus.RENTING.getStatus()); vehicle.setSid(o.getRrent_sid());
 
         mergeInfo(o,order);
 
         o.setStatus(OrderStatus.RENTING.getStatus());
 
-        if ( orderMapper.updateCostAndStatus(order) == 1 )
+        if ( orderMapper.updateCostAndStatus(order) == 1 && vehicleService.updateVehicleById(vehicle) == 1 )
             return HttpStatus.OK;
         else return HttpStatus.ERROR;
     }
@@ -193,9 +205,17 @@ public class OrderServiceImpl implements OrderService {
             return HttpStatus.ORDER_STATUS_ERROR;
         }
 
+        o.setRend(order.getRend());
+        o.setRreturn_sid(order.getRreturn_sid());
+
         mergeInfo(o,order);
 
         o.setStatus(OrderStatus.DRAWBACK.getStatus());
+
+        Vehicle vehicle = vehicleService.getVehicleById(o.getVid());
+        vehicle.setSid(order.getRreturn_sid());
+        vehicle.setStatus(VehicleStatus.OK.getStatus());
+        vehicleService.updateVehicleById(vehicle);
 
         if ( orderMapper.updateCostAndStatus(o) == 1 ) return HttpStatus.OK;
         else return HttpStatus.ERROR;
@@ -222,14 +242,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public int cancleOrder(long id) {
-        Order order = getOrderById(id);
+    public int cancleOrder(long id, Order order) {
+        Order o = getOrderById(id);
 
-        if ( order == null ) return HttpStatus.NO_ORDER;
+        if ( o == null ) return HttpStatus.NO_ORDER;
 
         // TODO: 退款操作
-        order.setStatus(OrderStatus.CANCLED.getStatus());
 
+        mergeInfo(o,order);
+
+        order.setStatus(OrderStatus.CANCLED.getStatus());
         if ( orderMapper.updateStatus(order) == 1 ) return HttpStatus.OK;
         else return HttpStatus.ERROR;
     }

@@ -13,19 +13,6 @@
         <property name="testOnBorrow" value="${redis.testOnBorrow}" />
     </bean>
 
-    <!--<bean id="shardedJedisPool" class="redis.clients.jedis.ShardedJedisPool"  scope="singleton">-->
-        <!--<constructor-arg index="0" ref="jedisPoolConfig" />-->
-        <!--<constructor-arg index="1">-->
-            <!--<list>-->
-                <!--<bean class="redis.clients.jedis.JedisShardInfo">-->
-                    <!--<constructor-arg name="host" value="${redis.host}" />-->
-                    <!--<constructor-arg name="port" value="${redis.port}" />-->
-                    <!--<constructor-arg name="timeout" value="${redis.timeout}" />-->
-                <!--</bean>-->
-            <!--</list>-->
-        <!--</constructor-arg>-->
-    <!--</bean>-->
-
     <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
         <constructor-arg index="0" ref="jedisPoolConfig"/>
         <constructor-arg index="1" type="java.lang.String" value="${redis.host}"/>
