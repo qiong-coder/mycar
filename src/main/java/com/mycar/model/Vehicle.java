@@ -1,10 +1,13 @@
 package com.mycar.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.sql.Timestamp;
 
 /**
  * Created by stupid-coder on 7/15/17.
  */
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class Vehicle {
 
     private Long id;

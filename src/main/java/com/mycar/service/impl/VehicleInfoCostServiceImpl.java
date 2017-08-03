@@ -23,12 +23,13 @@ public class VehicleInfoCostServiceImpl implements VehicleInfoCostService {
     public VehicleInfoCost getVehicleInfoCostById(long viid) {
         VehicleInfoCost vehicleInfoCost = vehicleInfoCostMapper.getVehicleInfoCostById(viid);
         if ( vehicleInfoCost == null ) return null;
-
+        vehicleInfoCost.parseDay_costs_parse();
         return vehicleInfoCost;
     }
 
     @Override
     public int updateDayCosts(long viid, VehicleInfoCost vehicleInfoCost) {
+        vehicleInfoCost.dumpDay_costs_parse();
         return vehicleInfoCostMapper.updateDayCost(vehicleInfoCost);
     }
 

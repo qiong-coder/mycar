@@ -1,12 +1,14 @@
 package com.mycar.model;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.sql.Timestamp;
 
 /**
  * Created by stupid-coder on 7/16/17.
  */
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class Order {
     private Long id;  // 订单Mysql-ID
     private String oid; // 订单ID

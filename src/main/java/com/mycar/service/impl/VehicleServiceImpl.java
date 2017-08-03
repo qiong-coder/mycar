@@ -121,11 +121,8 @@ public class VehicleServiceImpl implements VehicleService {
         List<VehicleInfo> vehicleInfos = new ArrayList<>();
         for ( Long vid : vidSet )
         {
-            VehicleInfo vehicleInfo = getVehicleInfoById(vid);
-            if ( vehicleInfo != null ) {
-                vehicleInfo.setCost(vehicleInfoCostService.getVehicleInfoCostById(vehicleInfo.getId()));
-                vehicleInfos.add(vehicleInfo);
-            }
+            VehicleInfo vehicleInfo = getVehicleInfoAndCostById(vid);
+            if ( vehicleInfo != null ) vehicleInfos.add(vehicleInfo);
         }
 
         return vehicleInfos;

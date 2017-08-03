@@ -79,8 +79,8 @@ public class VehicleAction {
                                     @PathVariable("begin") long begin_s,
                                     @PathVariable("end") long end_s)
     {
-        Timestamp begin = new Timestamp(begin_s * TimeUtils.MILLIS_PER_SECOND);
-        Timestamp end = new Timestamp(end_s * TimeUtils.MILLIS_PER_SECOND);
+        Timestamp begin = new Timestamp(begin_s);
+        Timestamp end = new Timestamp(end_s);
 
         List<VehicleInfo> vehicleInfos = vehicleService.getVehicleInfosByTime(begin,end);
         if (vehicleInfos == null ) return new HttpResponse(HttpStatus.NO_VEHICLE_INFO);
