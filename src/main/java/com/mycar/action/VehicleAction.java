@@ -82,22 +82,17 @@ public class VehicleAction {
         return new HttpResponse(vehicleInfos);
     }
 
-    @RequestMapping(value = "/vehicle/info/{viid}/{begin}/{end}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/vehicle/info/{viid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public HttpResponse getInfoByIdAndCost(HttpServletRequest request,
                                            HttpServletResponse response,
-                                           @PathVariable("viid") long id,
-                                           @PathVariable("begin") long begin_s,
-                                           @PathVariable("end") long end_s)
+                                           @PathVariable("viid") long id)
     {
-        Timestamp begin = new Timestamp(begin_s * TimeUtils.MILLIS_PER_SECOND);
-        Timestamp end = new Timestamp( end_s * TimeUtils.MILLIS_PER_SECOND);
-
         VehicleInfo vehicleInfo = vehicleService.getVehicleInfoById(id);
 
         if ( vehicleInfo == null )
         {
-            logger.warn("failure to get the vehicle info - id:{} begin:{} end:{}",id,begin,end);
+            logger.warn("failure to get the vehicle info - id:{} begin:{} end:{}",id);
             return new HttpResponse(HttpStatus.NO_VEHICLE_INFO);
         }
 

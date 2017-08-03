@@ -1,0 +1,25 @@
+* 汽车车系租车价格查询接口
+** 接口
+   URL：http://ip:port/mycar/vehicle/info/cost/{viid}/
+   METHOD: GET
+** 参数说明
+   {viid} 需要查询的车系ID
+** 返回说明
+   返回的数据说明：
+    base_insurance：基础保险
+    free_insurance：免赔保险
+    day_costs：json二维数据，表示每个月天的租车费用
+
+* 汽车车系租车价格修改
+** 接口
+   URL：http://ip:port/mycar/vehicle/info/cost/{viid}/
+   METHOD: PUT
+** 请求说明
+   {viid} 待修改车系的ID
+*** 请求body(这个接口一个调用只能修改一类的数据，或者保险类，或者日租车费用)
+   base_insurance： 基础保险
+   free_insurance： 免赔保险
+   或者
+   day_costs：json二维数据，修改后的每天租车费用
+
+

@@ -12,23 +12,23 @@
    | 字段           | 类型      | 说明                                             |
    |----------------+-----------+--------------------------------------------------|
    | id             | Integer   | 订单的ID                                         |
+   | oid            | String    | 内部生成的订单ID号串                               |
    | viid           | Integer   | 车辆信息ID                                       |
    | vid            | Integer   | 车辆ID                                           |
    | begin          | Timestamp | 借车预期开始时间                                 |
    | end            | Timestamp | 借车预期结束时间                                 |
-   | rent_address   | String    | 借车地址                                         |
-   | return_adress  | String    | 还车地址                                         |
+   | rent_sid       | Integer   | 借车门店编号                                         |
+   | return_sid     | Integer   | 还车门店编号                                         |
    | name           | String    | 租车人名字                                       |
    | identity       | String    | 身份证                                           |
    | phone          | String    | 手机号                                           |
    | bill           | String    | 发票信息                                         |
-   | day_cost       | Double    | 日均租车花费（分为单位）（根据汽车信息内部关联）            |
-   | base_insurance | Double    | 基础保险费                                       |
-   | free_insurance | Double    | 免赔保险费                                       |
+   | pre_cost       | String    | 租车的基本信息 |
    | pay_info       | String    | 用户支付信息，json串，需要打印出来给用户签字确认 |
    | rbegin         | Timestamp | 实际的借车时间                                   |
    | rend           | Timestamp | 实际的还车时间                                   |
-   | distance       | Double    | 人工填写的里程数                                 |
+   | rrent_sid      | Integer   | 实际的借车门店ID                                 |
+   | rreturn_sid    | Integer   | 实际的还车门店ID |
    | cost_info      | String    | 扣钱明细，需要每次工作人员填写，提交             |
    | status         | Integer   | 订单状态                                         |
    | create_time    | Timestamp | 订单的创建时间                                   |
@@ -71,7 +71,7 @@
    {viid} 为用户在选车页面选择的想要租用的车系ID
 
 *** 请求的POST的结构体
-    请求的结构体就是结构体[[*Order 数据结构][Order]]中的一些字段：begin, end, rent_address, return_address, name, identity, phone, bill。
+    请求的结构体就是结构体[[*Order 数据结构][Order]]中的一些字段：begin, end, rent_sid, return_sid, name, identity, phone, bill。
 ** 返回结构
    status=0，data保存的是当前订单的ID。后续用户检测是否支付成功。
 
@@ -128,4 +128,11 @@
 ** 接口说明
    URI: http://ip:port/mycar/order/cancled/{oid}/
    METHOD: PUT
+** 请求结构体
+    Order的中的字段cost_info，可以用来填写取消原因
+    {
+    "reason" : "取消原因，不想完了",
+    "value": 0,
+    "operator": "用户"
+    }
 

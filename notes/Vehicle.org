@@ -1,19 +1,34 @@
 * 数据结构
+** Vehicle 单个汽车字段
+   |字段|类型|说明|
+   |id|Integer|当前汽车ID|
+   |iid|Integer|当前汽车所属车系ID|
+   |number|String|汽车的车牌号|
+   |sid|Integer|当前汽车所在门店|
+   |status|Integer|当前汽车状态，0表示空闲，1在租状态，2修理状态|
 ** VehicleInfo 汽车车系信息结构
    | 字段           | 类型    | 说明                         |
    |----------------+---------+------------------------------|
    | id             | Integer | 当前车型的ID                 |
    | name           | String  | 车系名称                     |
    | brand          | String  | 品牌                         |
-   | displacement   | Double  | 排量                         |
+   | displacement   | String  | 排量                         |
    | gearbox        | String  | 变速箱                       |
    | boxes          | String  | 几厢车                       |
-   | manned         | Integer | 乘员量                       |
+   | manned         | String | 乘员量                       |
    | description    | String  | 车辆的其他描述，当前还未使用 |
-   | day_cost       | Double  | 日租价格                     |
-   | base_insurance | Double  | 基础保险费                   |
-   | free_insurance | Double  | 免责保险费                   |
-   | total_cost     | Double  | 总共租车费用                 |
+   | picture        | String  | 车系的图片 |
+   | cost           | VehicleInfoCost | 汽车租车花费信息 |
+
+** VehicleInfoCost 数据结构
+    | 字段           | 类型    | 说明       |
+    |----------------+---------+------------|
+    | viid           | Integer | 当前车系ID |
+    | base_insurance | Integer | 基础保险   |
+    | free_insurance | Integer | 免责保险   |
+    | day_costs      | String  | 日租费用   |
+
+    其中 *day_costs* 为一个二维json数组，第一维是月份0-11,第二维是日0-31。保存的是日租车的费用，单位都是分。
 
 * 获取可租车型接口
   该接口用于在短租页面选车页获取可租车列表
@@ -24,16 +39,14 @@
    {begin} 为用户想要租车的起始时间的UNIX时间戳，单位为秒。
    {end} 为用户想要还车的结束时间的UNIX时间戳，单位为秒。
 ** 返回结构
-   返回的结果中data为一个List<VehicleInfo>对象，具体字段参考：[[*VehicleInfo 汽车车系信息结构][VehicleInfo 汽车车系信息结构]]
+   返回的结果中data为一个List<VehicleInfo>对象，具体字段参考：[[*VehicleInfo 汽车车系信息结构][VehicleInfo 汽车车系信息结构]]，其中cost字段填有租车费用信息，需要前端解析。
 
 * 获取具体车型的接口
   该接口用于在租车页面下订单页，获取选择的对应车型的信息
 ** 接口说明
-    URI： http://ip:port/mycar/vehicle/info/{id}/{begin}/{end}/
+    URI： http://ip:port/mycar/vehicle/info/{id}/
     METHOD：GET
 ** 请求参数说明
    + {id} :: 表示为车型ID
-   + {begin} :: 为用户想要租车的起始时间的UNIX时间戳，单位为秒。
-   + {end} :: 为用户想要还车的结束时间的UNIX时间戳，单位为秒。
 ** 返回结构
-   返回结构中data为VehicleInfo结构体，参考字段：[[*VehicleInfo 汽车车系信息结构][VehicleInfo 汽车车系信息结构]]
+   返回结构中data为VehicleInfo结构体，参考字段：[[*VehicleInfo 汽车车系信息结构][VehicleInfo 汽车车系信息结构]]，cost字段填有租车费用信息。
