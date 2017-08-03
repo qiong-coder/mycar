@@ -19,11 +19,15 @@ public interface VehicleService {
 
     VehicleInfo getVehicleInfoById(long id);
 
+    VehicleInfo getVehicleInfoAndCostById(long id);
+
     List<Vehicle> getAllVehicles();
+
+    List<Vehicle> getAllVehiclesByStatusAndSid(int status, long sid);
 
     List<VehicleInfo> getAllVehicleInfos();
 
-    VehicleInfo getVehicleInfoByIdAndTime(long id, Timestamp begin, Timestamp end);
+    //VehicleInfo getVehicleInfoByIdAndTime(long id, Timestamp begin, Timestamp end);
 
     List<VehicleInfo> getVehicleInfosByTime(Timestamp begin, Timestamp end);
 

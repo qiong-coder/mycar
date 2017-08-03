@@ -24,27 +24,11 @@ public class VehicleInfoCostServiceImpl implements VehicleInfoCostService {
         VehicleInfoCost vehicleInfoCost = vehicleInfoCostMapper.getVehicleInfoCostById(viid);
         if ( vehicleInfoCost == null ) return null;
 
-        vehicleInfoCost.parseDay_cost();
         return vehicleInfoCost;
     }
 
     @Override
     public int updateDayCosts(long viid, VehicleInfoCost vehicleInfoCost) {
-//        if ( begin.compareTo(end) > 0 ) return 0;
-//
-//        VehicleInfoCost vehicleInfoCost = vehicleInfoCostMapper.getVehicleInfoCostById(viid);
-//        if ( vehicleInfoCost == null ) return 0;
-//
-//        Calendar bcalendar = Calendar.getInstance();
-//        bcalendar.setTime(begin);
-//        Calendar ecalendar = Calendar.getInstance();
-//        ecalendar.setTime(end);
-//
-//        do {
-//            vehicleInfoCost.setDay_cost(bcalendar.getTime(),cost);
-//            bcalendar.add(Calendar.DATE,1);
-//        } while ( bcalendar.compareTo(ecalendar) <= 0 );
-
         return vehicleInfoCostMapper.updateDayCost(vehicleInfoCost);
     }
 

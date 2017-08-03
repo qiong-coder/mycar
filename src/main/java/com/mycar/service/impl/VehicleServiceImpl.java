@@ -35,14 +35,21 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public Vehicle getVehicleById(long id) {
         Vehicle vehicle = vehicleMapper.getById(id);
-        if ( vehicle == null ) logger.error("fialure to get the vehicle - {}", id);
+        if ( vehicle == null ) logger.error("failure to get the vehicle - {}", id);
         return vehicle;
+    }
+
+    @Override
+    public List<Vehicle> getAllVehiclesByStatusAndSid(int status, long sid) {
+        List<Vehicle> vehicles = vehicleMapper.getByStatusAndSid(status,sid);
+        if ( vehicles == null || vehicles.isEmpty() ) logger.warn("failure to get the vehicle by status and sid - status:{}\tsid:{}",status,sid);
+        return vehicles;
     }
 
     @Override
     public Vehicle getVehicleByNumber(String number) {
         Vehicle vehicle = vehicleMapper.getByNumber(number);
-        if ( vehicle == null ) logger.error("fialure to get the vehicle - {}", number);
+        if ( vehicle == null ) logger.error("failure to get the vehicle - {}", number);
         return vehicle;
     }
 
@@ -50,6 +57,15 @@ public class VehicleServiceImpl implements VehicleService {
     public VehicleInfo getVehicleInfoById(long id) {
         VehicleInfo vehicleInfo = vehicleInfoMapper.getById(id);
         if ( vehicleInfo == null ) logger.error("failure to get the vehicle info - {}", id);
+        return vehicleInfo;
+    }
+
+    @Override
+    public VehicleInfo getVehicleInfoAndCostById(long id) {
+        VehicleInfo vehicleInfo = getVehicleInfoById(id);
+        if ( vehicleInfo != null ) {
+            vehicleInfo.setCost(vehicleInfoCostService.getVehicleInfoCostById(vehicleInfo.getId()));
+        }
         return vehicleInfo;
     }
 
@@ -67,11 +83,11 @@ public class VehicleServiceImpl implements VehicleService {
         return vehicleInfos;
     }
 
-    @Override
-    public VehicleInfo getVehicleInfoByIdAndTime(long id, Timestamp begin, Timestamp end) {
-        VehicleInfo vehicleInfo = getVehicleInfoById(id);
-        return vehicleInfo;
-    }
+//    @Override
+//    public VehicleInfo getVehicleInfoByIdAndTime(long id, Timestamp begin, Timestamp end) {
+//        VehicleInfo vehicleInfo = getVehicleInfoById(id);
+//        return vehicleInfo;
+//    }
 
     @Override
     public List<VehicleInfo> getVehicleInfosByTime(Timestamp begin, Timestamp end) {
@@ -101,8 +117,6 @@ public class VehicleServiceImpl implements VehicleService {
         // TODO: 未来的订单影响
 
         if ( vidSet.isEmpty() ) return null;
-
-        long days = TimeUtils.TimeDiff(end,begin);
 
         List<VehicleInfo> vehicleInfos = new ArrayList<>();
         for ( Long vid : vidSet )

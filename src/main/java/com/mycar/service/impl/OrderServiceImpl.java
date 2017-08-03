@@ -106,6 +106,11 @@ public class OrderServiceImpl implements OrderService {
                 ret = new JSONObject();
                 ret.put("order",order);
                 ret.put("vehicleInfo", vehicleInfo);
+
+            }
+            if ( order.getVid() != null ) {
+                Vehicle vehicle = vehicleService.getVehicleById(order.getVid());
+                if ( vehicle != null ) ret.put("vehicle", vehicle);
             }
         } return ret;
     }

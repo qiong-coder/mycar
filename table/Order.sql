@@ -16,6 +16,7 @@ CREATE TABLE `Order` (
   `identity`        VARCHAR(20) NOT NULL COMMENT '租车人身份证ID',
   `phone`           VARCHAR(20) NOT NULL COMMENT '租车人电话',
   `bill`            TEXT DEFAULT NULL COMMENT '支票信息',
+  `pre_cost`        TEXT DEFAULT NULL COMMENT '用户租车价格信息',
   `pay_info`        TEXT COMMENT '用户交钱的具体信息',
   `rbegin`          DATETIME DEFAULT NULL COMMENT '实际租车时间',
   `rend`            DATETIME DEFAULT NULL COMMENT '实际还车时间',

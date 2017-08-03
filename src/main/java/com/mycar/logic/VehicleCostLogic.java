@@ -31,8 +31,8 @@ public class VehicleCostLogic {
         int free_insurance = vehicleInfoCostInfo.getFree_insurance();
         JSONArray costInfo = new JSONArray();
 
-        Calendar bclander = Calendar.getInstance();
-        bclander.setTime(order.getBegin());
+        Calendar bcalender = Calendar.getInstance();
+        bcalender.setTime(order.getBegin());
         Calendar ecalender = Calendar.getInstance();
         ecalender.setTime(order.getEnd());
 
@@ -42,13 +42,13 @@ public class VehicleCostLogic {
         JSONArray dayCostInfos = new JSONArray();
         do {
             JSONObject dayCostInfoItem = new JSONObject();
-            dayCostInfoItem.put("reason",bclander.toString());
-            int cost = vehicleInfoCostInfo.getDay_cost(bclander.getTime());
+            dayCostInfoItem.put("reason",bcalender.getTime().toString());
+            int cost = vehicleInfoCostInfo.getDay_cost(bcalender.getTime());
             dayCostInfoItem.put("value",cost);
             dayCostInfos.add(dayCostInfoItem);
             sum += cost + base_insurance + free_insurance;
-            bclander.add(Calendar.DATE,1);
-        } while (bclander.compareTo(ecalender) <= 0 );
+            bcalender.add(Calendar.DATE,1);
+        } while (bcalender.compareTo(ecalender) <= 0 );
         preCostInfo.put("day_costs", dayCostInfos);
 
         order.setPre_cost(preCostInfo.toJSONString());

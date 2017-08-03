@@ -12,7 +12,6 @@ public class VehicleInfoCost {
     private Long viid;
     private Integer base_insurance;
     private Integer free_insurance;
-    private String day_costs;
     private JSONArray day_costs_parse;
 
     public Long getViid() {
@@ -40,11 +39,11 @@ public class VehicleInfoCost {
     }
 
     public String getDay_costs() {
-        return day_costs;
+        return day_costs_parse.toJSONString();
     }
 
     public void setDay_costs(String day_costs) {
-        this.day_costs = day_costs;
+        this.day_costs_parse = JSONArray.parseArray(day_costs);
     }
 
     public JSONArray getDay_costs_parse() {
@@ -61,9 +60,4 @@ public class VehicleInfoCost {
 
     public void setDay_cost(Date date, int cost) { day_costs_parse.getJSONArray(date.getMonth()).set(date.getDate(),cost); }
 
-    public void parseDay_cost() {
-        this.day_costs_parse = JSONArray.parseArray(day_costs);
-    }
-
-    public void dumpDay_cost() { day_costs = day_costs_parse.toJSONString(); }
 }

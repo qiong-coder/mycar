@@ -17,5 +17,4 @@ CREATE TABLE `VehicleInfo` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
-INSERT `VehicleInfo`(name,brand,displacement,gearbox,boxes,manned,description,picture)
-VALUES("X6","宝马","2.0T","自动挡","3厢","5","豪车","x6.jpg")
+INSERT `VehicleInfo`(name,brand,displacement,gearbox,boxes,manned,description,picture) VALUES("X6","宝马","2.0T","自动挡","3厢","5","豪车","x6.jpg");

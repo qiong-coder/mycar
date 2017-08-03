@@ -2,6 +2,7 @@ package com.mycar.mapper;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mycar.model.Vehicle;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -11,6 +12,8 @@ import java.util.List;
 public interface VehicleMapper {
 
     Vehicle getById(long id);
+
+    List<Vehicle> getByStatusAndSid(@Param("status") int status, @Param("sid") long sid);
 
     Vehicle getByNumber(String number);
 

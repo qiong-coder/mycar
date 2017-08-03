@@ -11,6 +11,8 @@ public interface VehicleInfoMapper {
 
     List<VehicleInfo> getAll();
 
+    List<VehicleInfo> getByStatusAndSid(int status, long sid);
+
     VehicleInfo getById(long id);
 
 }

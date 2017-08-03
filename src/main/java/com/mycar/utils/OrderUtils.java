@@ -7,7 +7,7 @@ public class OrderUtils {
 
     public static String getOrderId(long vid, long sid)
     {
-        return String.format("%s%02x%02x%02x",TimeUtils.GetSampleTime(0L),sid,vid,(int)Math.random()*100);
+        return String.format("%s%02X%02X%02X",TimeUtils.GetSampleTime(0L),sid,vid,(int)(Math.random()*100));
     }
 
 }

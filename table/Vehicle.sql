@@ -15,4 +15,4 @@ CREATE TABLE `Vehicle` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
-INSERT `Vehicle` (iid,number,sid,status) VALUES(1,"京A10001",1,0)
+INSERT `Vehicle` (iid,number,sid,status) VALUES(1,"京A10001",1,0);
