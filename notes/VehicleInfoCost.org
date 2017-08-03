@@ -8,7 +8,7 @@
    返回的数据说明：
     base_insurance：基础保险
     free_insurance：免赔保险
-    day_costs：json二维数据，表示每个月天的租车费用
+    day_costs_parse：json二维数据，表示每个月天的租车费用
 
 * 汽车车系租车价格修改
 ** 接口
@@ -20,6 +20,6 @@
    base_insurance： 基础保险
    free_insurance： 免赔保险
    或者
-   day_costs：json二维数据，修改后的每天租车费用
+   day_costs_parse：json二维数据，修改后的每天租车费用
 
 
