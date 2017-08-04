@@ -80,6 +80,9 @@ public class VehicleServiceImpl implements VehicleService {
     public List<VehicleInfo> getAllVehicleInfos() {
         List<VehicleInfo> vehicleInfos = vehicleInfoMapper.getAll();
         if ( vehicleInfos == null || vehicleInfos.size() == 0 ) logger.error("failure to get the all vehicle infos");
+        for ( VehicleInfo vehicleInfo : vehicleInfos ) {
+            vehicleInfo.setCost(vehicleInfoCostService.getVehicleInfoCostById(vehicleInfo.getId()));
+        }
         return vehicleInfos;
     }
 

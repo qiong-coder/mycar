@@ -8,7 +8,7 @@
         SELECT * FROM `Store` WHERE id=#{id}
     </select>
 
-    <select id="GetStores" resultType="com.mycar.model.Store">
+    <select id="GetAllStores" resultType="com.mycar.model.Store">
         SELECT * FROM `Store`
     </select>
 

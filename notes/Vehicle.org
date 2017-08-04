@@ -50,3 +50,10 @@
    + {id} :: 表示为车型ID
 ** 返回结构
    返回结构中data为VehicleInfo结构体，参考字段：[[*VehicleInfo 汽车车系信息结构][VehicleInfo 汽车车系信息结构]]，cost字段填有租车费用信息。
+
+* 获取所有车系详情
+** 接口说明
+    URI：http://ip:port/mycar/vehicle/info/
+    METHOD: GET
+** 返回结构体
+    结果类型为List<VehicleInfo>

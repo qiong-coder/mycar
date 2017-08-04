@@ -1,0 +1,19 @@
+* 数据结构
+  | 字段    | 类型    | 说明                 |
+  |---------+---------+----------------------|
+  | id      | Integer | 门店ID               |
+  | address | String  | 门店地址             |
+  | phone   | String  | 门店电话，以逗号分割 |
+
+
+* 根据ID获取门店详情
+** 接口说明
+   URI: http://ip:port/mycar/store/{id}/
+   METHOD：GET
+** 请求参数说明
+   {id} - 门店ID
+
+* 获取所有的门店详情
+** 接口说明
+   URI：http://ip:port/mycar/store/
+   METHOD: GET

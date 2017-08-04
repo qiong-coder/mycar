@@ -35,7 +35,7 @@ public class VehicleAction {
     @Resource
     private VehicleInfoCostService vehicleInfoCostService;
 
-    @RequestMapping(value = "/vehicles/{status}/{sid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/vehicles/{status}/{sid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public HttpResponse getVehiclesByStatus(@PathVariable("status") int status,
                                             @PathVariable("sid") long sid)
@@ -45,7 +45,7 @@ public class VehicleAction {
         else return new HttpResponse(vehicles);
     }
 
-    @RequestMapping(value = "/vehicle/{vid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/vehicle/{vid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public HttpResponse getVehicleById(HttpServletRequest request,
                                        HttpServletResponse response,
@@ -58,21 +58,20 @@ public class VehicleAction {
     }
 
 
-//    @RequestMapping(value = "/vehicle/info/{viid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-//    @ResponseBody
-//    public HttpResponse getInfoById(HttpServletRequest request,
-//                                    HttpServletResponse response,
-//                                    @PathVariable("viid") long id)
-//    {
-//        VehicleInfo info = vehicleService.getVehicleInfoById(id);
-//        if ( info == null )
-//        {
-//            logger.warn("failure to get the vehicle info - {}", id);
-//            return new HttpResponse(HttpStatus.NO_VEHICLE_INFO);
-//        } else return new HttpResponse(info);
-//    }
+    @RequestMapping(value = "/vehicle/info/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public HttpResponse getInfoById(HttpServletRequest request,
+                                    HttpServletResponse response)
+    {
+        List<VehicleInfo> info = vehicleService.getAllVehicleInfos();
+        if ( info == null )
+        {
+            logger.warn("failure to get the all vehicle info");
+            return new HttpResponse(HttpStatus.NO_VEHICLE_INFO);
+        } else return new HttpResponse(info);
+    }
 
-    @RequestMapping(value = "/vehicle/info/{begin}/{end}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/vehicle/info/{begin}/{end}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public HttpResponse getAllInfos(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -88,7 +87,7 @@ public class VehicleAction {
         return new HttpResponse(vehicleInfos);
     }
 
-    @RequestMapping(value = "/vehicle/info/{viid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/vehicle/info/{viid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public HttpResponse getInfoByIdAndCost(HttpServletRequest request,
                                            HttpServletResponse response,

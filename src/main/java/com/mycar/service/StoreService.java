@@ -1,13 +1,13 @@
-package com.mycar.mapper;
+package com.mycar.service;
 
 import com.mycar.model.Store;
 
 import java.util.List;
 
 /**
- * Created by stupid-coder on 7/30/17.
+ * Created by qixiang on 8/4/17.
  */
-public interface StoreMapper {
+public interface StoreService {
 
     Store GetStoreById(long id);
 

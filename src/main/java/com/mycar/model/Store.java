@@ -1,21 +1,19 @@
 package com.mycar.model;
 
-import java.sql.Timestamp;
-
 /**
  * Created by stupid-coder on 7/30/17.
  */
 public class Store {
 
-    private long id;
+    private Integer id;
     private String address;
     private String phone;
 
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
