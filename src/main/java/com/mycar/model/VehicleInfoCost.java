@@ -62,7 +62,7 @@ public class VehicleInfoCost {
         return day_costs_parse.getJSONArray(date.getMonth()).getInteger(date.getDate());
     }
 
-    public void setDay_cost(Date date, int cost) { day_costs_parse.getJSONArray(date.getMonth()).set(date.getDate(),cost); }
+    public void setDay_cost(Date date, int cost) { day_costs_parse.getJSONArray(date.getMonth()).set(date.getDate()-1,cost); }
 
     public void parseDay_costs_parse() {
         this.day_costs_parse = JSONArray.parseArray(day_costs);
