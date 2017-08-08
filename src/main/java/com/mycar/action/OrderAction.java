@@ -2,6 +2,7 @@ package com.mycar.action;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mycar.model.Order;
+import com.mycar.model.OrderStatusCount;
 import com.mycar.service.OrderService;
 import com.mycar.service.VehicleService;
 import com.mycar.utils.HttpResponse;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by stupid-coder on 7/17/17.
@@ -39,6 +42,14 @@ public class OrderAction {
         JSONObject ret = orderService.getOrdersAndVehicleInfosByStatus(status);
         if ( ret == null ) return new HttpResponse(HttpStatus.NO_ORDER);
         else return new HttpResponse(ret);
+    }
+
+    @RequestMapping(value = "/orders/number/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public HttpResponse getOrdersNumberByStatus()
+    {
+        List<OrderStatusCount> ordersCounts = orderService.getOrdersNumberByStatus();
+        return new HttpResponse(ordersCounts);
     }
 
     @RequestMapping(value = "/order/{oid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

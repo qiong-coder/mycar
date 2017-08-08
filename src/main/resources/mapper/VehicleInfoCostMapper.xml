@@ -14,7 +14,7 @@
 
     <update id="updateDayCost">
         UPDATE VehicleInfoCost
-        SET (day_cost) VALUES(#{day_cost})
+        SET day_costs=#{day_costs}
         WHERE viid=${viid}
     </update>
 

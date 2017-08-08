@@ -39,6 +39,7 @@ public class VehicleInfoCostAction {
     public HttpResponse updateVehicleInfoCostByViid(@PathVariable("viid") long viid,
                                                     @RequestBody VehicleInfoCost costInfo)
     {
+        costInfo.setViid(viid);
         if ( costInfo.getDay_costs_parse() != null ) {
             if ( vehicleInfoCostService.updateDayCosts(viid,costInfo) != 0 )
                 return new HttpResponse(HttpStatus.OK);

@@ -5,10 +5,7 @@ package com.mycar.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.mycar.logic.VehicleCostLogic;
 import com.mycar.mapper.OrderMapper;
-import com.mycar.model.Order;
-import com.mycar.model.Vehicle;
-import com.mycar.model.VehicleInfo;
-import com.mycar.model.VehicleInfoCost;
+import com.mycar.model.*;
 import com.mycar.service.OrderService;
 import com.mycar.service.VehicleInfoCostService;
 import com.mycar.service.VehicleService;
@@ -20,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by stupid-coder on 7/18/17.
@@ -60,6 +58,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getOrdersByStatus(int status) {
         return orderMapper.getOrdersByStatus(status);
+    }
+
+    @Override
+    public List<OrderStatusCount> getOrdersNumberByStatus() {
+        List<OrderStatusCount> statusCounts = orderMapper.getOrdersNumberByStatus();
+        if ( statusCounts == null && statusCounts.isEmpty() )logger.warn("failure to find the status number");
+        return statusCounts;
     }
 
     @Override

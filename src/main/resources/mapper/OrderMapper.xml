@@ -28,4 +28,8 @@
     <select id="getOrdersByIdentityAndPhone" resultType="com.mycar.model.Order">
         SELECT * FROM `Order` WHERE `identity`=#{identity} and phone=#{phone}
     </select>
+
+    <select id="getOrdersNumberByStatus" resultType="com.mycar.model.OrderStatusCount">
+        SELECT DISTINCT  status as status, COUNT(1) as count FROM `Order` ORDER BY status;
+    </select>
 </mapper>
