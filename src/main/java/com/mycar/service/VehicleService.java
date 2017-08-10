@@ -23,7 +23,9 @@ public interface VehicleService {
 
     List<Vehicle> getAllVehicles();
 
-    List<Vehicle> getAllVehiclesByStatusAndSid(int status, long sid);
+    List<Vehicle> getAllVehiclesByViid(long viid);
+
+    List<Vehicle> getAllVehiclesByViidAndStatusAndSid(long viid, int status, long sid);
 
     List<VehicleInfo> getAllVehicleInfos();
 
@@ -31,7 +33,9 @@ public interface VehicleService {
 
     List<VehicleInfo> getVehicleInfosByTime(Timestamp begin, Timestamp end);
 
-    Map<Long, VehicleInfo> getVehicleInfoByOrders(List<Order> orders);
+    Map<Long, VehicleInfo> getVehicleInfosByOrders(List<Order> orders);
+
+    Map<Long, Vehicle> getVehiclesByOrders(List<Order> orders);
 
     int updateVehicleById(Vehicle vehicle);
 }

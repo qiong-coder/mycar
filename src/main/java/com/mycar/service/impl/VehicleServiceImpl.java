@@ -40,9 +40,9 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public List<Vehicle> getAllVehiclesByStatusAndSid(int status, long sid) {
-        List<Vehicle> vehicles = vehicleMapper.getByStatusAndSid(status,sid);
-        if ( vehicles == null || vehicles.isEmpty() ) logger.warn("failure to get the vehicle by status and sid - status:{}\tsid:{}",status,sid);
+    public List<Vehicle> getAllVehiclesByViidAndStatusAndSid(long viid, int status, long sid) {
+        List<Vehicle> vehicles = vehicleMapper.getByViidAndStatusAndSid(viid,status,sid);
+        if ( vehicles == null || vehicles.isEmpty() ) logger.warn("failure to get the vehicle by status and sid - viid:{}\tstatus:{}\tsid:{}",viid,status,sid);
         return vehicles;
     }
 
@@ -77,6 +77,13 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
+    public List<Vehicle> getAllVehiclesByViid(long viid) {
+        List<Vehicle> vehicles = vehicleMapper.getByViid(viid);
+        if ( vehicles == null || vehicles.size() == 0 ) logger.error("failure to get the vehcile by viid - {}", viid);
+        return vehicles;
+    }
+
+    @Override
     public List<VehicleInfo> getAllVehicleInfos() {
         List<VehicleInfo> vehicleInfos = vehicleInfoMapper.getAll();
         if ( vehicleInfos == null || vehicleInfos.size() == 0 ) logger.error("failure to get the all vehicle infos");
@@ -102,7 +109,7 @@ public class VehicleServiceImpl implements VehicleService {
         Set<Long> vidSet = new HashSet<>();
         for ( Vehicle vehicle : vehicles )
         {
-            long iid = vehicle.getIid();
+            long iid = vehicle.getViid();
             if ( vidSet.contains(iid) ) continue;
 
             VehicleStatus status = VehicleStatus.values()[vehicle.getStatus()];
@@ -132,7 +139,7 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public Map<Long, VehicleInfo> getVehicleInfoByOrders(List<Order> orders) {
+    public Map<Long, VehicleInfo> getVehicleInfosByOrders(List<Order> orders) {
 
         Map<Long, VehicleInfo> vehicleInfos =  new HashMap();
         for ( Order order : orders ) {
@@ -145,6 +152,21 @@ public class VehicleServiceImpl implements VehicleService {
             }
         }
         return vehicleInfos;
+    }
+
+    @Override
+    public Map<Long, Vehicle> getVehiclesByOrders(List<Order> orders) {
+        Map<Long, Vehicle> vehicleMap = new HashMap<>();
+        for ( Order order : orders ) {
+            Long vid = order.getVid();
+            if ( vid != null ) continue;
+            else {
+                Vehicle vehicle = getVehicleById(vid);
+                if ( vehicle == null ) continue;
+                vehicleMap.put(vid, vehicle);
+            }
+        }
+        return vehicleMap;
     }
 
     @Override

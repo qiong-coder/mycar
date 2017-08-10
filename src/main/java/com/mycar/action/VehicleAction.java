@@ -35,21 +35,31 @@ public class VehicleAction {
     @Resource
     private VehicleInfoCostService vehicleInfoCostService;
 
-    @RequestMapping(value="/vehicles/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/vehicles/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public HttpResponse getVehicles()
+    public HttpResponse getVehiclesByStatus()
     {
         List<Vehicle> vehicles = vehicleService.getAllVehicles();
         if ( vehicles == null || vehicles.isEmpty() ) return new HttpResponse(HttpStatus.NO_VEHICLE);
         else return new HttpResponse(vehicles);
     }
 
-    @RequestMapping(value = "/vehicles/{status}/{sid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/vehicles/{viid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public HttpResponse getVehiclesByStatus(@PathVariable("status") int status,
+    public HttpResponse getVehiclesByStatus(@PathVariable("viid") long viid)
+    {
+        List<Vehicle> vehicles = vehicleService.getAllVehiclesByViid(viid);
+        if ( vehicles == null || vehicles.isEmpty() ) return new HttpResponse(HttpStatus.NO_VEHICLE);
+        else return new HttpResponse(vehicles);
+    }
+
+    @RequestMapping(value = "/vehicles/{viid}/{status}/{sid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public HttpResponse getVehiclesByStatus(@PathVariable("viid") long viid,
+                                            @PathVariable("status") int status,
                                             @PathVariable("sid") long sid)
     {
-        List<Vehicle> vehicles = vehicleService.getAllVehiclesByStatusAndSid(status,sid);
+        List<Vehicle> vehicles = vehicleService.getAllVehiclesByViidAndStatusAndSid(viid,status,sid);
         if ( vehicles == null || vehicles.isEmpty() ) return new HttpResponse(HttpStatus.NO_VEHICLE);
         else return new HttpResponse(vehicles);
     }

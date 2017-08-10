@@ -5,7 +5,7 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `Vehicle`;
 CREATE TABLE `Vehicle` (
   `id`              INT(10) NOT NULL AUTO_INCREMENT,
-  `iid`             INT(10) NOT NULL COMMENT '车系ID',
+  `viid`            INT(10) NOT NULL COMMENT '车系ID',
   `number`          VARCHAR(20) NOT NULL UNIQUE COMMENT '车牌',
   `sid`             INT(10) NOT NULL COMMENT '当前所在门店',
   `status`          INT(10) NOT NULL DEFAULT 0 COMMENT '车辆的状态',
@@ -15,4 +15,4 @@ CREATE TABLE `Vehicle` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
-INSERT `Vehicle` (iid,number,sid,status) VALUES(1,"京A10001",1,0);
+INSERT `Vehicle` (viid,number,sid,status) VALUES(1,"京A10001",1,0);

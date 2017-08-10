@@ -13,7 +13,9 @@ public interface VehicleMapper {
 
     Vehicle getById(long id);
 
-    List<Vehicle> getByStatusAndSid(@Param("status") int status, @Param("sid") long sid);
+    List<Vehicle> getByViid(@Param("viid") long viid);
+
+    List<Vehicle> getByViidAndStatusAndSid(@Param("viid") long viid, @Param("status") int status, @Param("sid") long sid);
 
     Vehicle getByNumber(String number);
 

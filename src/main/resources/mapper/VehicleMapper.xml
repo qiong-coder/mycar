@@ -7,8 +7,12 @@
       SELECT * FROM Vehicle WHERE id=#{id}
     </select>
 
-    <select id="getByStatusAndSid" resultType="com.mycar.model.Vehicle">
-        SELECT * FROM Vehicle WHERE status=#{status} and sid=#{sid}
+    <select id="getByViid" parameterType="long" resultType="com.mycar.model.Vehicle">
+        SELECT * FROM Vehicle WHERE viid=#{viid}
+    </select>
+
+    <select id="getByViidAndStatusAndSid" resultType="com.mycar.model.Vehicle">
+        SELECT * FROM Vehicle WHERE viid=#{viid} and status=#{status} and sid=#{sid}
     </select>
     <select id="getAll" resultType="com.mycar.model.Vehicle">
         SELECT * FROM Vehicle

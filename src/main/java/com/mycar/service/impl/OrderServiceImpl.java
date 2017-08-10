@@ -82,7 +82,8 @@ public class OrderServiceImpl implements OrderService {
 
         if ( orderList != null && !orderList.isEmpty() ) {
             ret = new JSONObject();
-            ret.put("vehicleInfos",vehicleService.getVehicleInfoByOrders(orderList));
+            ret.put("vehicleInfos",vehicleService.getVehicleInfosByOrders(orderList));
+            ret.put("vehicles", vehicleService.getVehiclesByOrders(orderList));
             ret.put("orders", orderList);
         }
         return ret;
@@ -95,7 +96,8 @@ public class OrderServiceImpl implements OrderService {
 
         if ( orderList != null && !orderList.isEmpty()) {
             ret = new JSONObject();
-            ret.put("vehicleInfos",vehicleService.getVehicleInfoByOrders(orderList));
+            ret.put("vehicleInfos",vehicleService.getVehicleInfosByOrders(orderList));
+            ret.put("vehicles",vehicleService.getVehiclesByOrders(orderList));
             ret.put("orders", orderList);
         }
         return ret;

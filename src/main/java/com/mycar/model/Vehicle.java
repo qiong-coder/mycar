@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 public class Vehicle {
 
     private Long id;
-    private Long iid; // VehicleInfo id;
+    private Long viid; // VehicleInfo id;
     private String number; // 车牌
     private Long sid; // 门店标号
     private Integer status; // 车辆状态
@@ -26,12 +26,12 @@ public class Vehicle {
         this.id = id;
     }
 
-    public Long getIid() {
-        return iid;
+    public Long getViid() {
+        return viid;
     }
 
-    public void setIid(Long iid) {
-        this.iid = iid;
+    public void setViid(Long viid) {
+        this.viid = viid;
     }
 
     public String getNumber() {

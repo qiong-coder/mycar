@@ -41,6 +41,27 @@
 ** 返回结构
    返回的结果中data为一个List<VehicleInfo>对象，具体字段参考：[[*VehicleInfo 汽车车系信息结构][VehicleInfo 汽车车系信息结构]]，其中cost字段填有租车费用信息，需要前端解析。
 
+* 获取车型车辆接口
+  该接口用于在短租页面选车页获取车辆信息
+** 接口说明
+    URI： http://ip:port/mycar/vehicles/{viid}/
+    METHOD：GET
+** 请求参数说明
+   {viid} 车系ID
+** 返回结构
+   返回的结果中data为一个List<Vehicle>对象
+
+* 获取车型车辆接口
+  该接口用于在短租页面选车页获取车辆信息
+** 接口说明
+    URI： http://ip:port/mycar/vehicles/{viid}/{status}/{sid}/
+    METHOD：GET
+** 请求参数说明
+   {viid} 车系ID
+   {status} 车辆状态 0 为可租
+   {sid} 门店ID
+** 返回结构
+   返回的结果中data为一个List<Vehicle>对象
 * 获取具体车型的接口
   该接口用于在租车页面下订单页，获取选择的对应车型的信息
 ** 接口说明
