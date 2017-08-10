@@ -23,3 +23,11 @@
    day_costs_parse：json二维数据，修改后的每天租车费用
 
 
+* 汽车车系租车价格获取
+** 接口
+   URL：http://ip:port/mycar/vehicle/info/cost/{viid}/{begin}/{end}/
+   METHOD: GET
+** 请求说明
+   {viid} 车系
+   {begin} 租车开始时间
+   {end} 租车结束时间
