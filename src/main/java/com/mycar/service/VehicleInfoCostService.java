@@ -1,7 +1,10 @@
 package com.mycar.service;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.mycar.model.VehicleInfoCost;
+
+import java.sql.Timestamp;
 
 
 /**
@@ -10,6 +13,8 @@ import com.mycar.model.VehicleInfoCost;
 public interface VehicleInfoCostService {
 
     VehicleInfoCost getVehicleInfoCostById(long viid);
+
+    JSONObject getVehicleInfoCostInfo(long viid, Timestamp begin, Timestamp end);
 
     int updateDayCosts(long viid, VehicleInfoCost vehicleInfoCost);
 

@@ -3,6 +3,7 @@ package com.mycar.model;
 import com.alibaba.fastjson.JSONArray;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -58,11 +59,13 @@ public class VehicleInfoCost {
         this.day_costs_parse = day_costs_parse;
     }
 
-    public int getDay_cost(Date date) {
-        return day_costs_parse.getJSONArray(date.getMonth()).getInteger(date.getDate());
+    public int getDay_cost(Calendar calendar) {
+        return day_costs_parse.getJSONArray(calendar.get(Calendar.MONTH)).getInteger(calendar.get(Calendar.DATE)-1);
     }
 
-    public void setDay_cost(Date date, int cost) { day_costs_parse.getJSONArray(date.getMonth()).set(date.getDate()-1,cost); }
+    public void setDay_cost(Calendar calendar, int cost) {
+        day_costs_parse.getJSONArray(calendar.get(Calendar.MONTH)).set(calendar.get(Calendar.DATE)-1,cost);
+    }
 
     public void parseDay_costs_parse() {
         this.day_costs_parse = JSONArray.parseArray(day_costs);

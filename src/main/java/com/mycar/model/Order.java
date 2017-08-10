@@ -30,6 +30,7 @@ public class Order {
     private Long rreturn_sid; // 实际还车门店
     private String cost_info; // 扣钱明细
     private Integer status; // 交易状态
+    private Timestamp create_time;
 
     public Long getId() {
         return id;
@@ -189,5 +190,13 @@ public class Order {
 
     public void setPre_cost(String pre_cost) {
         this.pre_cost = pre_cost;
+    }
+
+    public Timestamp getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(Timestamp create_time) {
+        this.create_time = create_time;
     }
 }

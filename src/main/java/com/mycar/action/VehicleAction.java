@@ -35,6 +35,15 @@ public class VehicleAction {
     @Resource
     private VehicleInfoCostService vehicleInfoCostService;
 
+    @RequestMapping(value="/vehicles/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public HttpResponse getVehicles()
+    {
+        List<Vehicle> vehicles = vehicleService.getAllVehicles();
+        if ( vehicles == null || vehicles.isEmpty() ) return new HttpResponse(HttpStatus.NO_VEHICLE);
+        else return new HttpResponse(vehicles);
+    }
+
     @RequestMapping(value = "/vehicles/{status}/{sid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public HttpResponse getVehiclesByStatus(@PathVariable("status") int status,

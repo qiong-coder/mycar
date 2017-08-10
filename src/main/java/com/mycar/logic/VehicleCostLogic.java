@@ -43,7 +43,7 @@ public class VehicleCostLogic {
         do {
             JSONObject dayCostInfoItem = new JSONObject();
             dayCostInfoItem.put("reason",bcalender.getTime().toString());
-            int cost = vehicleInfoCostInfo.getDay_cost(bcalender.getTime());
+            int cost = vehicleInfoCostInfo.getDay_cost(bcalender);
             dayCostInfoItem.put("value",cost);
             dayCostInfos.add(dayCostInfoItem);
             sum += cost + base_insurance + free_insurance;

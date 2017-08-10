@@ -1,5 +1,6 @@
 package com.mycar.action;
 
+import com.alibaba.fastjson.JSONObject;
 import com.mycar.model.VehicleInfoCost;
 import com.mycar.service.VehicleInfoCostService;
 import com.mycar.utils.HttpResponse;
@@ -24,6 +25,21 @@ public class VehicleInfoCostAction {
 
     @Resource
     VehicleInfoCostService vehicleInfoCostService;
+
+
+    @RequestMapping(value = "/vehicle/info/cost/{viid}/{begin}/{end}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public HttpResponse getVehicleInfoCostInfo(@PathVariable("viid") Long viid,
+                                               @PathVariable("begin") Long begin,
+                                               @PathVariable("end") Long end)
+    {
+        Timestamp begin_timestamp = new Timestamp(begin);
+        Timestamp end_timestamp = new Timestamp(end);
+        JSONObject cost_info = vehicleInfoCostService.getVehicleInfoCostInfo(viid,begin_timestamp,end_timestamp);
+        if ( cost_info == null ) return new HttpResponse(HttpStatus.NO_VEHICLE_INFO);
+        else return new HttpResponse(cost_info);
+
+    }
 
     @RequestMapping(value = "/vehicle/info/cost/{viid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
