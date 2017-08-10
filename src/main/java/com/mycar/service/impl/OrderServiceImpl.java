@@ -74,33 +74,30 @@ public class OrderServiceImpl implements OrderService {
         return orders;
     }
 
-
-    @Override
-    public JSONObject getOrdersAndVehicleInfosByStatus(int status) {
-        JSONObject ret = null;
-        List<Order> orderList = getOrdersByStatus(status);
-
-        if ( orderList != null && !orderList.isEmpty() ) {
-            ret = new JSONObject();
-            ret.put("vehicleInfos",vehicleService.getVehicleInfosByOrders(orderList));
-            ret.put("vehicles", vehicleService.getVehiclesByOrders(orderList));
-            ret.put("orders", orderList);
-        }
+    private JSONObject mergetVehicleInfoAndVehicle(List<Order> orderList) {
+        JSONObject ret = new JSONObject();
+        ret.put("vehicleInfos",vehicleService.getVehicleInfosByOrders(orderList));
+        ret.put("vehicles", vehicleService.getVehiclesByOrders(orderList));
+        ret.put("orders", orderList);
         return ret;
     }
 
     @Override
+    public JSONObject getOrdersAndVehicleInfosByStatus(int status) {
+        List<Order> orderList = getOrdersByStatus(status);
+
+        if ( orderList != null && !orderList.isEmpty() ) {
+           return mergetVehicleInfoAndVehicle(orderList);
+        } else return null;
+    }
+
+    @Override
     public JSONObject getOrdersAndVechileInfosByIdentityAndPhone(String identity, String phone) {
-        JSONObject ret = null;
         List<Order> orderList = getOrdersByIdentityAndPhone(identity, phone);
 
         if ( orderList != null && !orderList.isEmpty()) {
-            ret = new JSONObject();
-            ret.put("vehicleInfos",vehicleService.getVehicleInfosByOrders(orderList));
-            ret.put("vehicles",vehicleService.getVehiclesByOrders(orderList));
-            ret.put("orders", orderList);
-        }
-        return ret;
+           return mergetVehicleInfoAndVehicle(orderList);
+        } else return null;
     }
 
     @Override

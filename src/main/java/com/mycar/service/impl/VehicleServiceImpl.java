@@ -159,7 +159,7 @@ public class VehicleServiceImpl implements VehicleService {
         Map<Long, Vehicle> vehicleMap = new HashMap<>();
         for ( Order order : orders ) {
             Long vid = order.getVid();
-            if ( vid != null ) continue;
+            if ( vid == null ) continue;
             else {
                 Vehicle vehicle = getVehicleById(vid);
                 if ( vehicle == null ) continue;
