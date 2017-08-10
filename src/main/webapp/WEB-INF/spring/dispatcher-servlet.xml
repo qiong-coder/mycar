@@ -9,8 +9,6 @@
 
     <context:annotation-config/>
 
-    <mvc:annotation-driven/>
-
     <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
 
     <context:component-scan base-package="com.mycar" use-default-filters="false">
@@ -22,4 +20,8 @@
         <property name="prefix" value="/WEB-INF/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
+
+    <mvc:default-servlet-handler/>
+    <mvc:annotation-driven/>
+
 </beans>
