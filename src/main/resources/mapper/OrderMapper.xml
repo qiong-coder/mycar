@@ -21,6 +21,10 @@
         UPDATE `Order` SET status=#{status} WHERE id=#{id}
     </update>
 
+    <update id="updateCostInfoAndStatus" parameterType="com.mycar.model.Order">
+        UPDATE `Order` SET cost_info=#{cost_info}, status=#{status} WHERE id=#{id}
+    </update>
+
     <update id="updateInfoAndStatus" parameterType="com.mycar.model.Order">
         UPDATE `Order` SET pay_info=#{pay_info}, cost_info=#{cost_info}, status=#{status} WHERE id=#{id}
     </update>

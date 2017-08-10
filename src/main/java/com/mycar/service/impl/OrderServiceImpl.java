@@ -45,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
             l.setPay_info(VehicleCostLogic.mergeInfo(l.getPay_info(),r.getPay_info()));
 
         if ( r.getCost_info() != null )
-            l.setCost_info(VehicleCostLogic.mergeInfo(l.getPay_info(),r.getCost_info()));
+            l.setCost_info(VehicleCostLogic.mergeInfo(l.getCost_info(),r.getCost_info()));
     }
 
     @Override
@@ -259,9 +259,8 @@ public class OrderServiceImpl implements OrderService {
         // TODO: 退款操作
 
         mergeInfo(o,order);
-
-        order.setStatus(OrderStatus.CANCLED.getStatus());
-        if ( orderMapper.updateStatus(order) == 1 ) return HttpStatus.OK;
+        o.setStatus(OrderStatus.CANCLED.getStatus());
+        if ( orderMapper.updateCostInfoAndStatus(o) == 1 ) return HttpStatus.OK;
         else return HttpStatus.ERROR;
     }
 }
