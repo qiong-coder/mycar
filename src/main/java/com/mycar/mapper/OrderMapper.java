@@ -22,7 +22,7 @@ public interface OrderMapper {
 
     int updateCostInfoAndStatus(Order order);
 
-    int updateCostAndStatus(Order order);
+    int updateInfoAndStatus(Order order);
 
     List<Order> getOrdersByIdentityAndPhone(@Param("identity") String identity, @Param("phone") String phone);
 

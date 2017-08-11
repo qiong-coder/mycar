@@ -34,6 +34,6 @@
     </select>
 
     <select id="getOrdersNumberByStatus" resultType="com.mycar.model.OrderStatusCount">
-        SELECT DISTINCT  status as status, COUNT(1) as count FROM `Order` ORDER BY status;
+        SELECT status, COUNT(1) as count FROM `Order` GROUP BY status;
     </select>
 </mapper>

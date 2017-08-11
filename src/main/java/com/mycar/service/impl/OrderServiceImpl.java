@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by stupid-coder on 7/18/17.
@@ -197,7 +196,7 @@ public class OrderServiceImpl implements OrderService {
 
         o.setStatus(OrderStatus.RENTING.getStatus());
 
-        if ( orderMapper.updateCostAndStatus(order) == 1 && vehicleService.updateVehicleById(vehicle) == 1 )
+        if ( orderMapper.updateInfoAndStatus(o) == 1 && vehicleService.updateVehicleById(vehicle) == 1 )
             return HttpStatus.OK;
         else return HttpStatus.ERROR;
     }
@@ -226,7 +225,7 @@ public class OrderServiceImpl implements OrderService {
         vehicle.setStatus(VehicleStatus.OK.getStatus());
         vehicleService.updateVehicleById(vehicle);
 
-        if ( orderMapper.updateCostAndStatus(o) == 1 ) return HttpStatus.OK;
+        if ( orderMapper.updateInfoAndStatus(o) == 1 ) return HttpStatus.OK;
         else return HttpStatus.ERROR;
         //TODO: 退款线程
     }
@@ -246,7 +245,7 @@ public class OrderServiceImpl implements OrderService {
         mergeInfo(o,order);
         o.setStatus(OrderStatus.DRAWBACK.getStatus());
 
-        if ( orderMapper.updateCostAndStatus(o) == 1 ) return  HttpStatus.OK;
+        if ( orderMapper.updateInfoAndStatus(o) == 1 ) return  HttpStatus.OK;
         else return HttpStatus.ERROR;
     }
 
@@ -260,7 +259,7 @@ public class OrderServiceImpl implements OrderService {
 
         mergeInfo(o,order);
         o.setStatus(OrderStatus.CANCLED.getStatus());
-        if ( orderMapper.updateCostInfoAndStatus(o) == 1 ) return HttpStatus.OK;
+        if ( orderMapper.updateInfoAndStatus(o) == 1 ) return HttpStatus.OK;
         else return HttpStatus.ERROR;
     }
 }

@@ -23,7 +23,6 @@ public class StoreAction {
 
     private static Logger logger = LoggerFactory.getLogger(StoreAction.class);
 
-
     @Resource
     StoreService storeService;
 
