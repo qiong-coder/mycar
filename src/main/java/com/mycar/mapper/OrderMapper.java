@@ -20,6 +20,8 @@ public interface OrderMapper {
 
     int updateStatus(Order order);
 
+    int updateRentingOrder(Order order);
+
     int updateCostInfoAndStatus(Order order);
 
     int updateInfoAndStatus(Order order);

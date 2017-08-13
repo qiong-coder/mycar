@@ -109,7 +109,6 @@ public class OrderServiceImpl implements OrderService {
                 ret = new JSONObject();
                 ret.put("order",order);
                 ret.put("vehicleInfo", vehicleInfo);
-
             }
             if ( order.getVid() != null ) {
                 Vehicle vehicle = vehicleService.getVehicleById(order.getVid());
@@ -185,18 +184,22 @@ public class OrderServiceImpl implements OrderService {
         o.setVid(vehicle.getId());
         o.setRbegin(order.getRbegin());
         if ( order.getRend() != null ) o.setRend(order.getRend());
+        else o.setRend(o.getEnd());
 
         o.setRrent_sid(order.getRrent_sid());
         if ( order.getRreturn_sid() != null ) o.setRreturn_sid(order.getRreturn_sid());
+        else o.setRreturn_sid(o.getReturn_sid());
 
-        vehicle.setBegin(o.getRbegin()); vehicle.setEnd(o.getRend());
-        vehicle.setStatus(VehicleStatus.RENTING.getStatus()); vehicle.setSid(o.getRrent_sid());
+        vehicle.setBegin(o.getRbegin());
+        vehicle.setEnd(o.getRend());
+        vehicle.setStatus(VehicleStatus.RENTING.getStatus());
+        //vehicle.setSid(o.getRrent_sid());
 
         mergeInfo(o,order);
 
         o.setStatus(OrderStatus.RENTING.getStatus());
 
-        if ( orderMapper.updateInfoAndStatus(o) == 1 && vehicleService.updateVehicleById(vehicle) == 1 )
+        if ( orderMapper.updateRentingOrder(o) == 1 && vehicleService.updateVehicleById(vehicle) == 1 )
             return HttpStatus.OK;
         else return HttpStatus.ERROR;
     }

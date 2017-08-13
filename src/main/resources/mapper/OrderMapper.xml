@@ -17,6 +17,11 @@
         VALUES (#{viid}, #{oid}, #{begin}, #{end}, #{rent_sid}, #{return_sid}, #{name}, #{identity}, #{phone}, #{bill},#{pre_cost}, #{pay_info}, #{cost_info})
     </insert>
 
+    <update id="updateRentingOrder" parameterType="com.mycar.model.Order">
+        UPDATE `Order` SET vid=#{vid}, rbegin=#{rbegin}, rend=#{rend}, rrent_sid=#{rrent_sid}, rreturn_sid=#{rreturn_sid}, cost_info=#{cost_info}, pay_info=#{pay_info}, status=#{status}
+        WHERE id=#{id}
+    </update>
+
     <update id="updateStatus" parameterType="com.mycar.model.Order">
         UPDATE `Order` SET status=#{status} WHERE id=#{id}
     </update>

@@ -23,6 +23,6 @@
     </select>
 
     <update id="updateVehicleById" parameterType="com.mycar.model.Vehicle">
-        UPDATE Vehicle SET sid=#{sid}, status=#{status}, begin=#{begin}, end=#{end} WHERE id=#{id}
+        UPDATE Vehicle SET status=#{status}, begin=#{begin}, end=#{end} WHERE id=#{id}
     </update>
 </mapper>
