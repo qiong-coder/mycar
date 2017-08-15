@@ -28,6 +28,7 @@ public class Order {
     private Timestamp rend;
     private Long rrent_sid; // 实际借车门店
     private Long rreturn_sid; // 实际还车门店
+    private Long distance;
     private String cost_info; // 扣钱明细
     private Integer status; // 交易状态
     private Timestamp create_time;
@@ -198,5 +199,13 @@ public class Order {
 
     public void setCreate_time(Timestamp create_time) {
         this.create_time = create_time;
+    }
+
+    public Long getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Long distance) {
+        this.distance = distance;
     }
 }

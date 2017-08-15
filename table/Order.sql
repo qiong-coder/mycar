@@ -22,6 +22,7 @@ CREATE TABLE `Order` (
   `rend`            DATETIME DEFAULT NULL COMMENT '实际还车时间',
   `rrent_sid`       INT(10) DEFAULT NULL COMMENT '实际取车门店',
   `rreturn_sid`     INT(10) DEFAULT NULL COMMENT '实际还车门店',
+  `distance`        INT(10) DEFAULT NULL COMMENT '借车的行驶里程',
   `cost_info`       TEXT COMMENT '租车的最终花费的具体信息',
   `status`          INT(10) NOT NULL DEFAULT 0,
   `create_time`     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

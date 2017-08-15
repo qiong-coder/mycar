@@ -190,6 +190,8 @@ public class OrderServiceImpl implements OrderService {
         if ( order.getRreturn_sid() != null ) o.setRreturn_sid(order.getRreturn_sid());
         else o.setRreturn_sid(o.getReturn_sid());
 
+        o.setDistance(order.getDistance());
+
         vehicle.setBegin(o.getRbegin());
         vehicle.setEnd(o.getRend());
         vehicle.setStatus(VehicleStatus.RENTING.getStatus());
@@ -218,10 +220,13 @@ public class OrderServiceImpl implements OrderService {
 
         o.setRend(order.getRend());
         o.setRreturn_sid(order.getRreturn_sid());
+        o.setDistance(order.getDistance());
 
         mergeInfo(o,order);
 
         o.setStatus(OrderStatus.DRAWBACK.getStatus());
+
+
 
         Vehicle vehicle = vehicleService.getVehicleById(o.getVid());
         vehicle.setSid(order.getRreturn_sid());
