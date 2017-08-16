@@ -116,7 +116,7 @@ public class OrderAction {
     public HttpResponse finished(HttpServletRequest request,
                                  HttpServletResponse response,
                                  @PathVariable("oid") long id,
-                                 @RequestBody Order order)
+                                 @RequestBody(required = false) Order order)
     {
         return new HttpResponse(orderService.finishedOrder(id,order));
     }

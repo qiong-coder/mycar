@@ -40,6 +40,7 @@ public class OrderServiceImpl implements OrderService {
 
     private static void mergeInfo(Order l, Order r)
     {
+        if ( r == null ) return;
         if ( r.getPay_info() != null )
             l.setPay_info(VehicleCostLogic.mergeInfo(l.getPay_info(),r.getPay_info()));
 
@@ -251,7 +252,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         mergeInfo(o,order);
-        o.setStatus(OrderStatus.DRAWBACK.getStatus());
+        o.setStatus(OrderStatus.FINISHED.getStatus());
 
         if ( orderMapper.updateInfoAndStatus(o) == 1 ) return  HttpStatus.OK;
         else return HttpStatus.ERROR;
