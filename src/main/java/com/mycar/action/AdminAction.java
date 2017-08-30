@@ -25,21 +25,20 @@ public class AdminAction {
     AdminService adminService;
 
     @RequestMapping(value = "/admin/login/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public HttpResponse login(HttpServletRequest request,
                               HttpServletResponse response,
                               @RequestBody Admin admin)
     {
-
         return  new HttpResponse(null);
     }
 
-
-    @RequestMapping(value = "/admin/logout/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
+    @RequestMapping(value = "/admin/logout/", method = RequestMethod.GET)
     public HttpResponse logout(HttpServletRequest request,
                                HttpServletResponse response)
     {
+        adminService.logout("");
         return new HttpResponse(null);
     }
+
+
 }
