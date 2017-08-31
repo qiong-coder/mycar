@@ -65,10 +65,22 @@
 ** 返回结构
 	status : 0 添加成功
 	
-* 删除车型车辆接口
+* 修改车辆接口
+  该接口用于修改车辆信息
+** 接口说明
+    URI： http://ip:port/mycar/vehicles/info/{vid}/
+    METHOD：POST
+** 请求参数说明
+   {viid} 车型ID
+** 请求POST的结构体
+	请求的结构体就是结构体Vehicle中的一些字段：iid, number, description。
+** 返回结构
+	status : 0 修改陈宫
+	
+* 删除车辆接口
   该接口用于后台删除车辆, 后台将车辆状态置为"已删除" , 只可作为历史订单关联使用
 ** 接口说明
-    URI： http://ip:port/mycar/vehicles/{id}/
+    URI： http://ip:port/mycar/vehicles/info/{id}/
     METHOD：DELETE
 ** 请求参数说明
    {id} 车辆ID
