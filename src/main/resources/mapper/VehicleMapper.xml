@@ -11,9 +11,14 @@
         SELECT * FROM Vehicle WHERE viid=#{viid}
     </select>
 
-    <select id="getByViidAndStatusAndSid" resultType="com.mycar.model.Vehicle">
-        SELECT * FROM Vehicle WHERE viid=#{viid} and status=#{status} and sid=#{sid}
+    <select id="getByViidAndStatus" resultType="com.mycar.model.Vehicle">
+        SELECT * FROM Vehicle WHERE viid=#{viid} and status=#{status}
     </select>
+
+    <select id="getVehicleCount">
+        SELECT COUNT(1) FROM Vehicle WHERE viid=#{viid} and is_delete=0
+    </select>
+
     <select id="getAll" resultType="com.mycar.model.Vehicle">
         SELECT * FROM Vehicle
     </select>
@@ -25,4 +30,18 @@
     <update id="updateVehicleById" parameterType="com.mycar.model.Vehicle">
         UPDATE Vehicle SET status=#{status}, begin=#{begin}, end=#{end} WHERE id=#{id}
     </update>
+
+    <update id="updateVehicleDescription" parameterType="com.mycar.model.Vehicle">
+        UPDATE Vehicle SET description=#{description} WHERE id=#{id}
+    </update>
+
+    <update id="updateVehicleToDelete">
+        UPDATE Vehicle SET is_delete=1 WHERE id =#{id}
+    </update>
+
+    <insert id="insertVehicle" parameterType="com.mycar.model.Vehicle" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO Vehicle(`viid`, `number`, `description`)
+        VALUES(#{viid}, #{number}, #{description})
+    </insert>
+
 </mapper>

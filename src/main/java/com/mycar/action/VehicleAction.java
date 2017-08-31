@@ -53,13 +53,12 @@ public class VehicleAction {
         else return new HttpResponse(vehicles);
     }
 
-    @RequestMapping(value = "/vehicles/{viid}/{status}/{sid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/vehicles/{viid}/{status}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public HttpResponse getVehiclesByStatus(@PathVariable("viid") long viid,
-                                            @PathVariable("status") int status,
-                                            @PathVariable("sid") long sid)
+                                            @PathVariable("status") int status)
     {
-        List<Vehicle> vehicles = vehicleService.getAllVehiclesByViidAndStatusAndSid(viid,status,sid);
+        List<Vehicle> vehicles = vehicleService.getAllVehiclesByViidAndStatusAndSid(viid,status);
         if ( vehicles == null || vehicles.isEmpty() ) return new HttpResponse(HttpStatus.NO_VEHICLE);
         else return new HttpResponse(vehicles);
     }
@@ -76,10 +75,35 @@ public class VehicleAction {
         } else return new HttpResponse(vehicle);
     }
 
+    @RequestMapping(value = "/vehicle/{viid}/", method = RequestMethod.POST )
+    public HttpResponse addVehicle(@PathVariable("viid") long viid,
+                                   Vehicle vehicle)
+    {
+        vehicle.setViid(viid);
+        int id = vehicleService.insertVechile(vehicle);
+        if ( id == -1 ) return new HttpResponse(HttpStatus.DUPLICATE_VEHICLE);
+        else return new HttpResponse(id);
+    }
+
+    @RequestMapping(value = "/vehicle/{vid}/", method = RequestMethod.PUT )
+    public HttpResponse updateVehicleByVid(@PathVariable("vid") long vid,
+                                           @RequestParam("description") String description)
+    {
+        int id = vehicleService.updateVehicleDescription(vid, description);
+        if ( id == -1 ) return new HttpResponse(HttpStatus.NO_VEHICLE);
+        else return new HttpResponse(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/vehicle/{vid}/", method = RequestMethod.DELETE )
+    public HttpResponse deleteVehicleById(@PathVariable("vid") long vid)
+    {
+        vehicleService.updateVehicleToDelete(vid);
+        return new HttpResponse(HttpStatus.OK);
+    }
 
     @RequestMapping(value = "/vehicle/info/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public HttpResponse getInfoById(HttpServletRequest request,
+    public HttpResponse getAllInfos(HttpServletRequest request,
                                     HttpServletResponse response)
     {
         List<VehicleInfo> info = vehicleService.getAllVehicleInfos();
@@ -90,12 +114,29 @@ public class VehicleAction {
         } else return new HttpResponse(info);
     }
 
+    @RequestMapping(value = "/vehicle/info/", method = RequestMethod.POST)
+    public HttpResponse insertVehicleInfo(VehicleInfo vehicleInfo) {
+        return new HttpResponse(vehicleService.insertVehicleInfo(vehicleInfo));
+    }
+
+    @RequestMapping(value = "/vehicle/info/{viid}/", method = RequestMethod.PUT)
+    public HttpResponse updateVehicleInfo(@PathVariable("viid") long viid,
+                                          VehicleInfo vehicleInfo) {
+
+        return new HttpResponse(vehicleService.updateVehicleInfo(viid,vehicleInfo));
+    }
+
+    @RequestMapping(value = "/vehicle/info/{viid}/", method = RequestMethod.DELETE)
+    public HttpResponse deleteVehicleInfo(@PathVariable("viid") long viid) {
+        return new HttpResponse(vehicleService.updateVehicleInfoToDelete(viid));
+    }
+
     @RequestMapping(value = "/vehicle/info/{begin}/{end}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public HttpResponse getAllInfos(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    @PathVariable("begin") long begin_s,
-                                    @PathVariable("end") long end_s)
+    public HttpResponse getAllInfosWithTime(HttpServletRequest request,
+                                            HttpServletResponse response,
+                                            @PathVariable("begin") long begin_s,
+                                            @PathVariable("end") long end_s)
     {
         Timestamp begin = new Timestamp(begin_s);
         Timestamp end = new Timestamp(end_s);

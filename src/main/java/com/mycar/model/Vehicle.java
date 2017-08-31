@@ -13,10 +13,11 @@ public class Vehicle {
     private Long id;
     private Long viid; // VehicleInfo id;
     private String number; // 车牌
-    private Long sid; // 门店标号
+    private String description; // 描述
     private Integer status; // 车辆状态
     private Timestamp begin; // 修车/租车开始时间
     private Timestamp end; // 修车/租车预计结束时间
+    private Integer is_delete;
 
     public Long getId() {
         return id;
@@ -40,14 +41,6 @@ public class Vehicle {
 
     public void setNumber(String number) {
         this.number = number;
-    }
-
-    public Long getSid() {
-        return sid;
-    }
-
-    public void setSid(Long sid) {
-        this.sid = sid;
     }
 
     public Integer getStatus() {
@@ -74,4 +67,19 @@ public class Vehicle {
         this.end = end;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Integer getIs_delete() {
+        return is_delete;
+    }
+
+    public void setIs_delete(Integer is_delete) {
+        this.is_delete = is_delete;
+    }
 }

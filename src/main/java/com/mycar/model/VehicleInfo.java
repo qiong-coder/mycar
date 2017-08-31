@@ -10,14 +10,16 @@ public class VehicleInfo {
 
     private Long id;
     private String name;  // 车系
-    private String brand; // 品牌
     private String displacement; // 排量
     private String gearbox; // 变速箱
     private String boxes; // 几厢车
     private String manned; // 乘员量
+    private Integer spare;
     private String description;
     private String picture;
     private VehicleInfoCost cost;
+    private Integer is_delete;
+    private Integer vehicle_count;
 
     public Long getId() {
         return id;
@@ -33,14 +35,6 @@ public class VehicleInfo {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
     }
 
     public String getGearbox() {
@@ -97,5 +91,29 @@ public class VehicleInfo {
 
     public void setCost(VehicleInfoCost cost) {
         this.cost = cost;
+    }
+
+    public Integer getSpare() {
+        return spare;
+    }
+
+    public void setSpare(Integer spare) {
+        this.spare = spare;
+    }
+
+    public Integer getIs_delete() {
+        return is_delete;
+    }
+
+    public void setIs_delete(Integer is_delete) {
+        this.is_delete = is_delete;
+    }
+
+    public Integer getVehicle_count() {
+        return vehicle_count;
+    }
+
+    public void setVehicle_count(Integer vehicle_count) {
+        this.vehicle_count = vehicle_count;
     }
 }

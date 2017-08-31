@@ -40,9 +40,9 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public List<Vehicle> getAllVehiclesByViidAndStatusAndSid(long viid, int status, long sid) {
-        List<Vehicle> vehicles = vehicleMapper.getByViidAndStatusAndSid(viid,status,sid);
-        if ( vehicles == null || vehicles.isEmpty() ) logger.warn("failure to get the vehicle by status and sid - viid:{}\tstatus:{}\tsid:{}",viid,status,sid);
+    public List<Vehicle> getAllVehiclesByViidAndStatusAndSid(long viid, int status) {
+        List<Vehicle> vehicles = vehicleMapper.getByViidAndStatus(viid,status);
+        if ( vehicles == null || vehicles.isEmpty() ) logger.warn("failure to get the vehicle by status and sid - viid:{}\tstatus:{}", viid,status);
         return vehicles;
     }
 
@@ -89,6 +89,7 @@ public class VehicleServiceImpl implements VehicleService {
         if ( vehicleInfos == null || vehicleInfos.size() == 0 ) logger.error("failure to get the all vehicle infos");
         for ( VehicleInfo vehicleInfo : vehicleInfos ) {
             vehicleInfo.setCost(vehicleInfoCostService.getVehicleInfoCostById(vehicleInfo.getId()));
+            vehicleInfo.setVehicle_count(vehicleMapper.getVehicleCount(vehicleInfo.getId()));
         }
         return vehicleInfos;
     }
@@ -172,6 +173,41 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public int updateVehicleById(Vehicle vehicle) {
         return vehicleMapper.updateVehicleById(vehicle);
+    }
 
+    @Override
+    public int updateVehicleDescription(long id, String description) {
+        Vehicle vehicle = vehicleMapper.getById(id);
+        if ( vehicle == null ) return -1;
+        vehicle.setDescription(description);
+        return vehicleMapper.updateVehicleDescription(vehicle);
+    }
+
+    @Override
+    public int insertVechile(Vehicle vehicle) {
+        if ( vehicleMapper.getByNumber(vehicle.getNumber()) !=  null )
+            return -1;
+        return vehicleMapper.insertVehicle(vehicle);
+    }
+
+    @Override
+    public int updateVehicleToDelete(long vid) {
+        return vehicleMapper.updateVehicleToDelete(vid);
+    }
+
+    @Override
+    public int insertVehicleInfo(VehicleInfo vehicleInfo) {
+        return vehicleInfoMapper.insertVehicleInfo(vehicleInfo);
+    }
+
+    @Override
+    public int updateVehicleInfo(long viid, VehicleInfo vehicleInfo) {
+        vehicleInfo.setId(viid);
+        return vehicleInfoMapper.updateVehicleInfo(vehicleInfo);
+    }
+
+    @Override
+    public int updateVehicleInfoToDelete(long viid) {
+        return vehicleInfoMapper.updateVehicleInfoToDelete(viid);
     }
 }

@@ -1,6 +1,7 @@
 package com.mycar.mapper;
 
 import com.mycar.model.VehicleInfo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -15,4 +16,9 @@ public interface VehicleInfoMapper {
 
     VehicleInfo getById(long id);
 
+    int insertVehicleInfo(VehicleInfo vehicleInfo);
+
+    int updateVehicleInfo(VehicleInfo vehicleInfo);
+
+    int updateVehicleInfoToDelete(@Param("id")long viid);
 }

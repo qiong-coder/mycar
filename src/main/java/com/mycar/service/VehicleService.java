@@ -25,7 +25,7 @@ public interface VehicleService {
 
     List<Vehicle> getAllVehiclesByViid(long viid);
 
-    List<Vehicle> getAllVehiclesByViidAndStatusAndSid(long viid, int status, long sid);
+    List<Vehicle> getAllVehiclesByViidAndStatusAndSid(long viid, int status);
 
     List<VehicleInfo> getAllVehicleInfos();
 
@@ -38,4 +38,16 @@ public interface VehicleService {
     Map<Long, Vehicle> getVehiclesByOrders(List<Order> orders);
 
     int updateVehicleById(Vehicle vehicle);
+
+    int updateVehicleDescription(long id, String description);
+
+    int insertVechile(Vehicle vehicle);
+
+    int updateVehicleToDelete(long vid);
+
+    int insertVehicleInfo(VehicleInfo vehicleInfo);
+
+    int updateVehicleInfo(long viid, VehicleInfo vehicleInfo);
+
+    int updateVehicleInfoToDelete(long viid);
 }

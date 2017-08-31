@@ -22,6 +22,7 @@ public class Order {
     private String identity; // 证件号码
     private String phone; // 手机号码
     private String bill; // 发票
+    private Integer is_free_insurance; // 是否缴纳免责保险
     private String pre_cost; // 租车的基本价格信息
     private String pay_info; // 用户付钱明细
     private Timestamp rbegin; // 实际还车时间
@@ -127,6 +128,14 @@ public class Order {
 
     public void setBill(String bill) {
         this.bill = bill;
+    }
+
+    public Integer getIs_free_insurance() {
+        return is_free_insurance;
+    }
+
+    public void setIs_free_insurance(Integer is_free_insurance) {
+        this.is_free_insurance = is_free_insurance;
     }
 
     public Timestamp getRbegin() {

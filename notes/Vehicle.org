@@ -2,7 +2,7 @@
 ** Vehicle 单个汽车字段
    |字段|类型|说明|
    |id|Integer|当前汽车ID|
-   |iid|Integer|当前汽车所属车型ID|
+   |viid|Integer|当前汽车所属车型ID|
    |number|String|汽车的车牌号|
    |description|String|车辆的其描述|
    |status|Integer|当前汽车状态，0表示空闲，1在租状态，2修理状态|
@@ -56,12 +56,12 @@
 * 添加车型车辆接口
   该接口用于后台给某车型添加可用车辆信息的接口
 ** 接口说明
-    URI： http://ip:port/mycar/vehicles/{viid}/
+    URI： http://ip:port/mycar/vehicle/{viid}/
     METHOD：POST
 ** 请求参数说明
    {viid} 车型ID
 ** 请求POST的结构体
-	请求的结构体就是结构体Vehicle中的一些字段：iid, number, description。
+	请求的结构体就是结构体Vehicle中的一些字段：number, description。
 ** 返回结构
 	status : 0 添加成功
 	
@@ -90,12 +90,11 @@
 * 获取车型车辆接口
   该接口用于在短租页面选车页获取车辆信息
 ** 接口说明
-    URI： http://ip:port/mycar/vehicles/{viid}/{status}/{sid}/
+    URI： http://ip:port/mycar/vehicles/{viid}/{status}/
     METHOD：GET
 ** 请求参数说明
    {viid} 车型ID
    {status} 车辆状态 0 为可租
-   {sid} 门店ID
 ** 返回结构
    返回的结果中data为一个List<Vehicle>对象
 * 获取具体车型的接口

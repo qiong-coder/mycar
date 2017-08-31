@@ -10,4 +10,18 @@
     <select id="getAll" resultType="com.mycar.model.VehicleInfo">
         SELECT * FROM VehicleInfo
     </select>
+
+    <insert id="insertVehicleInfo" parameterType="com.mycar.model.VehicleInfo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO VehicleInfo(`name`,`displacement`, `gearbox`, `boxes`, `manned`, `spare`, `description`, `picture`)
+        VALUES (#{name}, #{displacement}, #{gearbox}, #{boxes}, #{manned}, #{spare}, #{description}, #{})
+    </insert>
+
+    <update id="updateVehicleInfo" parameterType="com.mycar.model.VehicleInfo">
+        UPDATE VehicleInfo SET name=#{name}, displacement=#{displacement}, gearbox=#{gearbox}, boxes=#{boxes},
+        manned=#{manned}, spare=#{spare}, description=#{description}, picture=#{picture}
+    </update>
+
+    <update id="updateVehicleInfoToDelete">
+        UPDATE VehicleInfo SET is_delete=1 WHERE id=#{id}
+    </update>
 </mapper>

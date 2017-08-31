@@ -18,6 +18,7 @@ public class HttpStatus {
     public static int MESSAGE_SEND_TIMEOUT = -7;
     public static int NO_VEHICLE_COST_INFO = -8;
     public static int NO_STORE = -9;
+    public static int DUPLICATE_VEHICLE = -10;
 
     private static Map<Integer, String> statusInfos = new HashMap<Integer,String>() {{
        put(OK,"success");
@@ -30,6 +31,7 @@ public class HttpStatus {
        put(MESSAGE_SEND_TIMEOUT, "message send is not timeout");
        put(NO_VEHICLE_COST_INFO, "failure to find the vehicle cost info");
        put(NO_STORE, "failure to find the store info");
+       put(DUPLICATE_VEHICLE, "the vehicle's number duplicate");
     }};
 
     public static String getInfo(int status) {
