@@ -2,28 +2,30 @@
 ** Vehicle 单个汽车字段
    |字段|类型|说明|
    |id|Integer|当前汽车ID|
-   |iid|Integer|当前汽车所属车系ID|
+   |iid|Integer|当前汽车所属车型ID|
    |number|String|汽车的车牌号|
-   |sid|Integer|当前汽车所在门店|
+   |description|String|车辆的其描述|
    |status|Integer|当前汽车状态，0表示空闲，1在租状态，2修理状态|
-** VehicleInfo 汽车车系信息结构
+   |is_delete|Integer|0 未删除, 1 已删除|
+** VehicleInfo 汽车车型信息结构
    | 字段           | 类型    | 说明                         |
    |----------------+---------+------------------------------|
    | id             | Integer | 当前车型的ID                 |
-   | name           | String  | 车系名称                     |
-   | brand          | String  | 品牌                         |
+   | name           | String  | 车型名称                     |
    | displacement   | String  | 排量                         |
    | gearbox        | String  | 变速箱                       |
    | boxes          | String  | 几厢车                       |
-   | manned         | String | 乘员量                       |
+   | manned         | String  | 乘员量                       |
+   | spare          | Integer | 预留备用车数量   			 |
    | description    | String  | 车辆的其他描述，当前还未使用 |
-   | picture        | String  | 车系的图片 |
-   | cost           | VehicleInfoCost | 汽车租车花费信息 |
+   | picture        | String  | 车型的图片 					 |
+   | cost           | VehicleInfoCost | 汽车租车花费信息 	 |
+   | is_delete      | Integer | 0 未删除, 1 已删除 			 |
 
 ** VehicleInfoCost 数据结构
     | 字段           | 类型    | 说明       |
     |----------------+---------+------------|
-    | viid           | Integer | 当前车系ID |
+    | viid           | Integer | 当前车型ID |
     | base_insurance | Integer | 基础保险   |
     | free_insurance | Integer | 免责保险   |
     | day_costs      | String  | 日租费用   |
@@ -39,7 +41,7 @@
    {begin} 为用户想要租车的起始时间的UNIX时间戳，单位为秒。
    {end} 为用户想要还车的结束时间的UNIX时间戳，单位为秒。
 ** 返回结构
-   返回的结果中data为一个List<VehicleInfo>对象，具体字段参考：[[*VehicleInfo 汽车车系信息结构][VehicleInfo 汽车车系信息结构]]，其中cost字段填有租车费用信息，需要前端解析。
+   返回的结果中data为一个List<VehicleInfo>对象，具体字段参考：[[*VehicleInfo 汽车车型信息结构][VehicleInfo 汽车车型信息结构]]，其中cost字段填有租车费用信息，需要前端解析。
 
 * 获取车型车辆接口
   该接口用于在短租页面选车页获取车辆信息
@@ -47,9 +49,31 @@
     URI： http://ip:port/mycar/vehicles/{viid}/
     METHOD：GET
 ** 请求参数说明
-   {viid} 车系ID
+   {viid} 车型ID
 ** 返回结构
    返回的结果中data为一个List<Vehicle>对象
+
+* 添加车型车辆接口
+  该接口用于后台给某车型添加可用车辆信息的接口
+** 接口说明
+    URI： http://ip:port/mycar/vehicles/{viid}/
+    METHOD：POST
+** 请求参数说明
+   {viid} 车型ID
+** 请求POST的结构体
+	请求的结构体就是结构体Vehicle中的一些字段：iid, number, description。
+** 返回结构
+	status : 0 添加成功
+	
+* 删除车型车辆接口
+  该接口用于后台删除车辆, 后台将车辆状态置为"已删除" , 只可作为历史订单关联使用
+** 接口说明
+    URI： http://ip:port/mycar/vehicles/{id}/
+    METHOD：DELETE
+** 请求参数说明
+   {id} 车辆ID
+** 返回结构
+	status : 0 删除成功
 
 * 获取车型车辆接口
   该接口用于在短租页面选车页获取车辆信息
@@ -57,7 +81,7 @@
     URI： http://ip:port/mycar/vehicles/{viid}/{status}/{sid}/
     METHOD：GET
 ** 请求参数说明
-   {viid} 车系ID
+   {viid} 车型ID
    {status} 车辆状态 0 为可租
    {sid} 门店ID
 ** 返回结构
@@ -70,11 +94,43 @@
 ** 请求参数说明
    + {id} :: 表示为车型ID
 ** 返回结构
-   返回结构中data为VehicleInfo结构体，参考字段：[[*VehicleInfo 汽车车系信息结构][VehicleInfo 汽车车系信息结构]]，cost字段填有租车费用信息。
+   返回结构中data为VehicleInfo结构体，参考字段：[[*VehicleInfo 汽车车型信息结构][VehicleInfo 汽车车型信息结构]]，cost字段填有租车费用信息。
 
-* 获取所有车系详情
+* 获取所有车型详情
 ** 接口说明
     URI：http://ip:port/mycar/vehicle/info/
     METHOD: GET
 ** 返回结构体
     结果类型为List<VehicleInfo>
+	vehicles_count : 类型Integer, 为当前车型的车辆总数(包含预留备用车数量)
+	
+* 添加车型
+** 接口说明
+    URI：http://ip:port/mycar/vehicle/info/
+    METHOD: POST
+** 请求POST的结构体
+	请求的结构体就是结构体VehicleInfo中的一些字段：name, displacement, gearbox, boxes, manned, spare, picture。
+** 返回结构体
+	status : 0 添加成功
+    id : 车型id
+		
+* 删除车型
+	接口用于删除车型, 后台将本车型置为"已删除", 只可作为历史订单关联使用.
+** 接口说明
+    URI：http://ip:port/mycar/vehicle/info/{id}/
+    METHOD: DELETE
+** 请求参数说明
+   + {id} :: 表示为车型ID
+** 返回结构体
+	status : 0 删除成功
+	
+* 修改车型
+** 接口说明
+    URI：http://ip:port/mycar/vehicle/info/{id}/
+    METHOD: POST
+** 请求参数说明
+   + {id} :: 表示为车型ID
+** 请求POST的结构体
+	请求的结构体就是结构体VehicleInfo中的一些字段：name, displacement, gearbox, boxes, manned, spare, picture。
+** 返回结构体
+	status : 0 修改成功
