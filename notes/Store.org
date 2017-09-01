@@ -17,3 +17,45 @@
 ** 接口说明
    URI：http://ip:port/mycar/store/
    METHOD: GET
+
+* 新增门店
+** 接口说明
+   URI：http://ip:port/mycar/store/
+   METHOD: POST
+** 请求POST的结构体
+    #+BEGIN_SRC java
+	{
+		"address":"xxxxxx",
+		"phone":"132xxxxxxxx",
+	}
+    #+END_SRC
+   
+** 返回结构体
+	status : 0 添加成功
+    id : 门店id
+	
+	
+* 修改门店
+** 接口说明
+   URI：http://ip:port/mycar/store/{id}/
+   METHOD: POST
+** 请求POST的结构体
+    #+BEGIN_SRC java
+	{
+		"address":"xxxxxx",
+		"phone":"132xxxxxxxx",
+	}
+    #+END_SRC
+   
+** 返回结构体
+	status : 0 修改成功
+	
+* 删除门店
+	接口用于删除门店, 后台将本车型置为"已删除", 只可作为历史订单关联使用.
+** 接口说明
+    URI：http://ip:port/mycar/store/{id}/
+    METHOD: DELETE
+** 请求参数说明
+   + {id} :: 表示为门店ID
+** 返回结构体
+	status : 0 删除成功
