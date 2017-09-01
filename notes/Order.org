@@ -133,8 +133,8 @@
 * 取消接口
   用户取消用户订单
 ** 接口说明
-   URI: http://ip:port/mycar/order/cancled/{oid}/
-   METHOD: PUT
+	URI: http://ip:port/mycar/order/cancled/{oid}/
+	METHOD: PUT
 ** 请求结构体
     Order的中的字段cost_info，可以用来填写取消原因
     {
@@ -143,3 +143,38 @@
     "operator": "用户"
     }
 
+* 用车历史查询
+	后台可以根据车型/车牌号+时间段为条件获取一段时间内的某车型/车牌号的车辆的用车天数;
+	返回的用车记录包含时间段内的车辆的租赁日次和闲置日次
+** 接口说明
+	URI: http://ip:port/mycar/order/history/{type}/{data}/{begin}/{end}/
+	METHOD: GET
+** 请求参数说明
+	{type} 表示请求方式, 0代表根据车型, 1代表根据车牌号
+	{data} 表示请求参数, 当type为0时为车型id, 当type为1时为车牌号(模糊匹配), 当data为null时为查询所有车辆的历史记录
+	{begin} 开始时间 Timestamp
+	{end} 结束时间 Timestamp
+
+** 返回结构
+	
+    #+BEGIN_SRC java
+	{
+		"ret_day_total": 60,  // 总租赁日次
+		"idle_day": 20,       // 闲置日次
+		"history": [
+			{
+				"name": "奥迪A6L",   // 车型
+				"number": "京A8888", // 车牌号
+				"oid": "02984762",   // 订单号
+				"ret_day": 3		 // 租赁日次
+			},
+			{
+				"name": "奥迪A6L",
+				"number": "京A8889",
+				"oid": "02984763",
+				"ret_day": 6
+			}
+		]
+	}
+    #+END_SRC
+   
