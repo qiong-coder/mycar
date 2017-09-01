@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.mycar.model.Order;
 import com.mycar.model.OrderStatusCount;
 import com.mycar.model.Vehicle;
+import com.mycar.response.OrderHistory;
 import com.mycar.utils.OrderStatus;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -40,5 +42,5 @@ public interface OrderService {
 
     int cancleOrder(long id, Order order); // 取消订单
 
-
+    OrderHistory orderHistory(String type, String data, Timestamp begin,Timestamp end);
 }

@@ -8,6 +8,7 @@ public class Store {
     private Integer id;
     private String address;
     private String phone;
+    private Integer is_delete;
 
     public Integer getId() {
         return id;
@@ -33,4 +34,11 @@ public class Store {
         this.phone = phone;
     }
 
+    public Integer getIs_delete() {
+        return is_delete;
+    }
+
+    public void setIs_delete(Integer is_delete) {
+        this.is_delete = is_delete;
+    }
 }

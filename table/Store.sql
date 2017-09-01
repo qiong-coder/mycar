@@ -7,6 +7,7 @@ CREATE TABLE `Store` (
   `id`              INT(10) NOT NULL AUTO_INCREMENT,
   `address`         VARCHAR(100) NOT NULL COMMENT '门店地址',
   `phone`           VARCHAR(100) NOT NULL COMMENT '门店电话',
+  `is_delete`       INT(10) NOT NULL DEFAULT 0,
   `create_time`     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;

@@ -41,4 +41,9 @@
     <select id="getOrdersNumberByStatus" resultType="com.mycar.model.OrderStatusCount">
         SELECT status, COUNT(1) as count FROM `Order` GROUP BY status;
     </select>
+
+    <select id="getOrdersByInterval" resultType="com.mycar.model.Order">
+        SELECT oid,viid,vid,rbegin,rend FROM `Order`
+        WHERE status BETWEEN 2 AND 4 AND ( rbegin &gt; UNIX_TIMESTAMP(#{end}) OR rend &lt; UNIX_TIMESTAMP(#{begin}) )
+    </select>
 </mapper>

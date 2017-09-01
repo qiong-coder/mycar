@@ -77,12 +77,12 @@ public class VehicleAction {
 
     @RequestMapping(value = "/vehicle/{viid}/", method = RequestMethod.POST )
     public HttpResponse addVehicle(@PathVariable("viid") long viid,
-                                   Vehicle vehicle)
+                                   @RequestBody  Vehicle vehicle)
     {
         vehicle.setViid(viid);
         int id = vehicleService.insertVechile(vehicle);
-        if ( id == -1 ) return new HttpResponse(HttpStatus.DUPLICATE_VEHICLE);
-        else return new HttpResponse(id);
+        if ( id != 1 ) return new HttpResponse(HttpStatus.DUPLICATE_VEHICLE);
+        else return new HttpResponse(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/vehicle/{vid}/", method = RequestMethod.PUT )
@@ -90,15 +90,16 @@ public class VehicleAction {
                                            @RequestParam("description") String description)
     {
         int id = vehicleService.updateVehicleDescription(vid, description);
-        if ( id == -1 ) return new HttpResponse(HttpStatus.NO_VEHICLE);
+        if ( id != 1 ) return new HttpResponse(HttpStatus.NO_VEHICLE);
         else return new HttpResponse(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/vehicle/{vid}/", method = RequestMethod.DELETE )
     public HttpResponse deleteVehicleById(@PathVariable("vid") long vid)
     {
-        vehicleService.updateVehicleToDelete(vid);
-        return new HttpResponse(HttpStatus.OK);
+        int count = vehicleService.updateVehicleToDelete(vid);
+        if ( count != 1 ) return new HttpResponse(HttpStatus.NO_VEHICLE);
+        else return new HttpResponse(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/vehicle/info/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -115,20 +116,24 @@ public class VehicleAction {
     }
 
     @RequestMapping(value = "/vehicle/info/", method = RequestMethod.POST)
-    public HttpResponse insertVehicleInfo(VehicleInfo vehicleInfo) {
-        return new HttpResponse(vehicleService.insertVehicleInfo(vehicleInfo));
+    public HttpResponse insertVehicleInfo(@RequestBody  VehicleInfo vehicleInfo) {
+        vehicleService.insertVehicleInfo(vehicleInfo);
+        return new HttpResponse(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/vehicle/info/{viid}/", method = RequestMethod.PUT)
     public HttpResponse updateVehicleInfo(@PathVariable("viid") long viid,
-                                          VehicleInfo vehicleInfo) {
-
-        return new HttpResponse(vehicleService.updateVehicleInfo(viid,vehicleInfo));
+                                          @RequestBody  VehicleInfo vehicleInfo) {
+        int count = vehicleService.updateVehicleInfo(viid,vehicleInfo);
+        if (count != 1) return new HttpResponse(HttpStatus.NO_VEHICLE);
+        return new HttpResponse(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/vehicle/info/{viid}/", method = RequestMethod.DELETE)
     public HttpResponse deleteVehicleInfo(@PathVariable("viid") long viid) {
-        return new HttpResponse(vehicleService.updateVehicleInfoToDelete(viid));
+        int count = vehicleService.updateVehicleInfoToDelete(viid);
+        if ( count != 1 ) return new HttpResponse(HttpStatus.NO_VEHICLE_INFO);
+        return new HttpResponse(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/vehicle/info/{begin}/{end}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

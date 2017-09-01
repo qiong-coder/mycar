@@ -12,4 +12,17 @@
         SELECT * FROM `Store`
     </select>
 
+    <insert id="insertStore" parameterType="com.mycar.model.Store" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `Store` (`address`,`phone`)
+        VALUES (#{address}, #{phone})
+    </insert>
+
+    <update id="updateStore" parameterType="com.mycar.model.Store">
+        UPDATE Store SET address=#{address}, phone=#{phone} WHERE id=#{id}
+    </update>
+
+    <update id="updateStoreToDelete">
+        UPDATE Store SET is_delete=1 WHERE id=#{id}
+    </update>
+
 </mapper>

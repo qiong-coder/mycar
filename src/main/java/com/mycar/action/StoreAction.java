@@ -27,8 +27,7 @@ public class StoreAction {
     StoreService storeService;
 
     @RequestMapping(value = "/{id}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ResponseBody
-    public HttpResponse getById(@PathVariable("id") long id)
+    public HttpResponse getById(@PathVariable("id") Integer id)
     {
         Store store = storeService.GetStoreById(id);
         if ( store == null ) return new HttpResponse(HttpStatus.NO_STORE);
@@ -36,7 +35,6 @@ public class StoreAction {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ResponseBody
     public HttpResponse getAll()
     {
         List<Store> stores = storeService.GetAllStores();
@@ -44,6 +42,30 @@ public class StoreAction {
         else return new HttpResponse(stores);
     }
 
+    @RequestMapping(value = "/", method = RequestMethod.POST)
+    public HttpResponse insertStore(@RequestBody Store store)
+    {
+        int id = storeService.insertStore(store);
+        if ( id == -1 ) return new HttpResponse(HttpStatus.DUPLICATE_STORE);
+        return new HttpResponse(HttpStatus.OK);
+    }
 
+    @RequestMapping(value = "/{oid}/", method = RequestMethod.PUT)
+    public HttpResponse updateStore(@PathVariable("oid") Integer oid,
+                                    @RequestBody  Store store)
+    {
+        int count = storeService.updateStore(oid,store);
+        if ( count != 1 ) return new HttpResponse(HttpStatus.NO_STORE);
+        return new HttpResponse(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{oid}/", method = RequestMethod.DELETE)
+    public HttpResponse deleteStore(@PathVariable("oid") Integer oid)
+    {
+        int count = storeService.updateStoreToDelete(oid);
+        if ( count != 1 ) return new HttpResponse(HttpStatus.NO_STORE);
+        else return new HttpResponse(HttpStatus.OK);
+
+    }
 
 }

@@ -185,8 +185,7 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public int insertVechile(Vehicle vehicle) {
-        if ( vehicleMapper.getByNumber(vehicle.getNumber()) !=  null )
-            return -1;
+        if ( vehicleMapper.getByNumber(vehicle.getNumber()) !=  null ) return -1;
         return vehicleMapper.insertVehicle(vehicle);
     }
 

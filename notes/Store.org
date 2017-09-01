@@ -38,7 +38,7 @@
 * 修改门店
 ** 接口说明
    URI：http://ip:port/mycar/store/{id}/
-   METHOD: POST
+   METHOD: PUT
 ** 请求POST的结构体
     #+BEGIN_SRC java
 	{

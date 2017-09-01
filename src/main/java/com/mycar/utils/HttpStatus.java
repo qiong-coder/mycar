@@ -19,6 +19,7 @@ public class HttpStatus {
     public static int NO_VEHICLE_COST_INFO = -8;
     public static int NO_STORE = -9;
     public static int DUPLICATE_VEHICLE = -10;
+    public static int DUPLICATE_STORE = -11;
 
     private static Map<Integer, String> statusInfos = new HashMap<Integer,String>() {{
        put(OK,"success");
@@ -32,6 +33,7 @@ public class HttpStatus {
        put(NO_VEHICLE_COST_INFO, "failure to find the vehicle cost info");
        put(NO_STORE, "failure to find the store info");
        put(DUPLICATE_VEHICLE, "the vehicle's number duplicate");
+       put(DUPLICATE_STORE, "the store's address duplicate");
     }};
 
     public static String getInfo(int status) {

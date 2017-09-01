@@ -13,7 +13,7 @@
 
     <insert id="insertVehicleInfo" parameterType="com.mycar.model.VehicleInfo" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO VehicleInfo(`name`,`displacement`, `gearbox`, `boxes`, `manned`, `spare`, `description`, `picture`)
-        VALUES (#{name}, #{displacement}, #{gearbox}, #{boxes}, #{manned}, #{spare}, #{description}, #{})
+        VALUES (#{name}, #{displacement}, #{gearbox}, #{boxes}, #{manned}, #{spare}, #{description}, #{picture})
     </insert>
 
     <update id="updateVehicleInfo" parameterType="com.mycar.model.VehicleInfo">

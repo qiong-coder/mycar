@@ -9,8 +9,14 @@ import java.util.List;
  */
 public interface StoreService {
 
-    Store GetStoreById(long id);
+    Store GetStoreById(int id);
 
     List<Store> GetAllStores();
+
+    int insertStore(Store store);
+
+    int updateStore(int id, Store store);
+
+    int updateStoreToDelete(int id);
 
 }
