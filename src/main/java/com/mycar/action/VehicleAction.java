@@ -75,9 +75,9 @@ public class VehicleAction {
         } else return new HttpResponse(vehicle);
     }
 
-    @RequestMapping(value = "/vehicle/{viid}/", method = RequestMethod.POST )
+    @RequestMapping(value = "/vehicle/{viid}/", method = RequestMethod.POST)
     public HttpResponse addVehicle(@PathVariable("viid") long viid,
-                                   Vehicle vehicle)
+                                   @RequestBody Vehicle vehicle)
     {
         vehicle.setViid(viid);
         int id = vehicleService.insertVechile(vehicle);
@@ -115,7 +115,7 @@ public class VehicleAction {
     }
 
     @RequestMapping(value = "/vehicle/info/", method = RequestMethod.POST)
-    public HttpResponse insertVehicleInfo(VehicleInfo vehicleInfo) {
+    public HttpResponse insertVehicleInfo(@RequestBody VehicleInfo vehicleInfo) {
         return new HttpResponse(vehicleService.insertVehicleInfo(vehicleInfo));
     }
 
