@@ -150,10 +150,10 @@
 	URI: http://ip:port/mycar/order/history/{type}/{data}/{begin}/{end}/
 	METHOD: GET
 ** 请求参数说明
-	{type} 表示请求方式, 0代表根据车型, 1代表根据车牌号
-	{data} 表示请求参数, 当type为0时为车型id, 当type为1时为车牌号(模糊匹配), 当data为null时为查询所有车辆的历史记录
-	{begin} 开始时间 Timestamp
-	{end} 结束时间 Timestamp
+	{type} 表示请求方式, 0代表根据车型, 1代表根据车牌号  
+	{data} 表示请求参数, 当type为0时为车型id, 当type为1时为车牌号(模糊匹配), 当data为null时为查询所有车辆的历史记录  
+	{begin} 开始时间 Timestamp  
+	{end} 结束时间 Timestamp  
 
 ** 返回结构
 	
