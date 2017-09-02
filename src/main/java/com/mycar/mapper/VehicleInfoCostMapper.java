@@ -17,4 +17,6 @@ public interface VehicleInfoCostMapper {
 
     int updateInsurance(VehicleInfoCost vehicleInfoCost);
 
+    int insertDefaultVehicleInfoCost(VehicleInfoCost vehicleInfoCost);
+
 }

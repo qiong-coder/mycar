@@ -205,7 +205,10 @@ public class VehicleServiceImpl implements VehicleService {
         if ( filename == null ) return 0;
 
         vehicleInfo.setPicture(filename);
-        return vehicleInfoMapper.insertVehicleInfo(vehicleInfo);
+        int viid = vehicleInfoMapper.insertVehicleInfo(vehicleInfo);
+        //TODO: defualt vehicle info cost
+        vehicleInfoCostService.insertDefaultVehicleInfoCost(viid,10000,10000,10000);
+        return viid;
     }
 
     @Override

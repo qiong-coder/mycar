@@ -57,6 +57,7 @@ public class VehicleInfoCost {
 
     public void setDay_costs_parse(JSONArray day_costs_parse) {
         this.day_costs_parse = day_costs_parse;
+        dumpDay_costs_parse();
     }
 
     public int getDay_cost(Calendar calendar) {

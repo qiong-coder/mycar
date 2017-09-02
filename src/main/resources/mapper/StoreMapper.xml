@@ -9,16 +9,16 @@
     </select>
 
     <select id="GetAllStores" resultType="com.mycar.model.Store">
-        SELECT * FROM `Store`
+        SELECT * FROM `Store` WHERE is_delete=0
     </select>
 
     <insert id="insertStore" parameterType="com.mycar.model.Store" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO `Store` (`address`,`phone`)
-        VALUES (#{address}, #{phone})
+        INSERT INTO `Store` (`name`, ``address`,`phone`)
+        VALUES (#[name}, #{address}, #{phone})
     </insert>
 
     <update id="updateStore" parameterType="com.mycar.model.Store">
-        UPDATE Store SET address=#{address}, phone=#{phone} WHERE id=#{id}
+        UPDATE Store SET name=#{name}, address=#{address}, phone=#{phone} WHERE id=#{id}
     </update>
 
     <update id="updateStoreToDelete">

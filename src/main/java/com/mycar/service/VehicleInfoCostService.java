@@ -20,4 +20,6 @@ public interface VehicleInfoCostService {
 
     int updateInsurance(long viid, int base_insurance, int free_insurance);
 
+    int insertDefaultVehicleInfoCost(long viid, int base_insurance, int free_insurance, int day_cost);
+
 }

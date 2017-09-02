@@ -20,6 +20,8 @@ public class HttpStatus {
     public static int NO_STORE = -9;
     public static int DUPLICATE_VEHICLE = -10;
     public static int DUPLICATE_STORE = -11;
+    public static int LOGIN_ERROR = -12;
+    public static int LOGOUT_ERROR = -13;
 
     private static Map<Integer, String> statusInfos = new HashMap<Integer,String>() {{
        put(OK,"success");
@@ -34,6 +36,8 @@ public class HttpStatus {
        put(NO_STORE, "failure to find the store info");
        put(DUPLICATE_VEHICLE, "the vehicle's number duplicate");
        put(DUPLICATE_STORE, "the store's address duplicate");
+       put(LOGIN_ERROR, "failure to login the account");
+       put(LOGOUT_ERROR, "failure to logout");
     }};
 
     public static String getInfo(int status) {

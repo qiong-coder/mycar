@@ -24,4 +24,8 @@
         WHERE viid=#{viid}
     </update>
 
+    <insert id="insertDefaultVehicleInfoCost" parameterType="com.mycar.model.VehicleInfoCost">
+        INSERT INTO VehicleInfoCost (viid, base_insurance, free_insurance, day_costs)
+        VALUES (#{viid}, #{base_insurance}, #{free_insurance}, #{day_costs})
+    </insert>
 </mapper>

@@ -6,6 +6,7 @@ package com.mycar.model;
 public class Store {
 
     private Integer id;
+    private String name;
     private String address;
     private String phone;
     private Integer is_delete;
@@ -16,6 +17,14 @@ public class Store {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAddress() {

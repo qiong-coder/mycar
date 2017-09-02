@@ -3,7 +3,7 @@ package com.mycar.model;
 /**
  * Created by qixiang on 7/31/17.
  */
-public class Admin {
+public class Account {
 
     private Long id;
     private String name;
@@ -44,7 +44,7 @@ public class Admin {
 
     @Override
     public String toString() {
-        return "Admin{" +
+        return "Account{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
