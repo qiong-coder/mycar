@@ -7,6 +7,7 @@ import com.mycar.model.Vehicle;
 import com.mycar.model.VehicleInfo;
 import com.mycar.service.VehicleInfoCostService;
 import com.mycar.service.VehicleService;
+import com.mycar.utils.FileUploadUtils;
 import com.mycar.utils.TimeUtils;
 import com.mycar.utils.VehicleStatus;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Part;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -31,6 +33,9 @@ public class VehicleServiceImpl implements VehicleService {
     private VehicleInfoMapper vehicleInfoMapper;
     @Autowired
     private VehicleInfoCostService vehicleInfoCostService;
+
+    @Autowired
+    private FileUploadUtils fileUploadUtils;
 
     @Override
     public Vehicle getVehicleById(long id) {
@@ -185,8 +190,7 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public int insertVechile(Vehicle vehicle) {
-        if ( vehicleMapper.getByNumber(vehicle.getNumber()) !=  null )
-            return -1;
+        if ( vehicleMapper.getByNumber(vehicle.getNumber()) !=  null ) return -1;
         return vehicleMapper.insertVehicle(vehicle);
     }
 
@@ -196,7 +200,11 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public int insertVehicleInfo(VehicleInfo vehicleInfo) {
+    public int insertVehicleInfo(VehicleInfo vehicleInfo, Part attachment) {
+        String filename = fileUploadUtils.save(attachment);
+        if ( filename == null ) return 0;
+
+        vehicleInfo.setPicture(filename);
         return vehicleInfoMapper.insertVehicleInfo(vehicleInfo);
     }
 

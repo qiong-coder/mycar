@@ -1,6 +1,7 @@
 package com.mycar.mapper;
 
 import com.mycar.model.Store;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -9,8 +10,14 @@ import java.util.List;
  */
 public interface StoreMapper {
 
-    Store GetStoreById(long id);
+    Store GetStoreById(int id);
 
     List<Store> GetAllStores();
+
+    int insertStore(Store store);
+
+    int updateStore(Store store);
+
+    int updateStoreToDelete(@Param("id") Integer id);
 
 }

@@ -20,7 +20,7 @@ public class StoreServiceImpl implements StoreService {
     StoreMapper storeMapper;
 
     @Override
-    public Store GetStoreById(long id) {
+    public Store GetStoreById(int id) {
         Store store = storeMapper.GetStoreById(id);
         if ( store == null ) logger.warn("failure to get the store by id - {}", id);
         return store;
@@ -31,5 +31,21 @@ public class StoreServiceImpl implements StoreService {
         List<Store> stores = storeMapper.GetAllStores();
         if ( stores == null || stores.isEmpty() ) logger.warn("failure to get the all stores");
         return stores;
+    }
+
+    @Override
+    public int insertStore(Store store) {
+        return storeMapper.insertStore(store);
+    }
+
+    @Override
+    public int updateStore(int id, Store store) {
+        store.setId(id);
+        return storeMapper.updateStore(store);
+    }
+
+    @Override
+    public int updateStoreToDelete(int id) {
+        return storeMapper.updateStoreToDelete(id);
     }
 }

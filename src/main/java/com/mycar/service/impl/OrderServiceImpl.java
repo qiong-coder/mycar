@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.mycar.logic.VehicleCostLogic;
 import com.mycar.mapper.OrderMapper;
 import com.mycar.model.*;
+import com.mycar.response.OrderHistory;
 import com.mycar.service.OrderService;
 import com.mycar.service.VehicleInfoCostService;
 import com.mycar.service.VehicleService;
@@ -16,7 +17,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by stupid-coder on 7/18/17.
@@ -269,5 +273,53 @@ public class OrderServiceImpl implements OrderService {
         o.setStatus(OrderStatus.CANCLED.getStatus());
         if ( orderMapper.updateInfoAndStatus(o) == 1 ) return HttpStatus.OK;
         else return HttpStatus.ERROR;
+    }
+
+    @Override
+    public OrderHistory orderHistory(String type, String data, Timestamp begin, Timestamp end) {
+        List<Order> orders = orderMapper.getOrdersByInterval(begin,end);
+        OrderHistory orderHistory = new OrderHistory();
+
+        Map<Long, Integer> v_day_count = new HashMap<>();
+        Map<Long, Vehicle> vehicleMap = new HashMap<>();
+        Map<Long, VehicleInfo> vehicleInfoMap = new HashMap<>();
+
+        int total_days = TimeUtils.TimeDiff(begin,end);
+
+        for ( Order order : orders ) {
+            OrderHistory.OrderHistoryItem orderHistoryItem = orderHistory.new OrderHistoryItem();
+
+            int days = TimeUtils.TimeDiff(begin.compareTo(order.getRbegin()) > 0 ? begin : order.getRbegin(),
+                    end.compareTo(order.getRend()) > 0 ? order.getRend() : end);
+
+            if ( v_day_count.containsKey(order.getVid()) ) v_day_count.put(order.getVid(),
+                    v_day_count.get(order.getVid())+days);
+            else v_day_count.put(order.getVid(), days);
+
+            if ( !vehicleInfoMap.containsKey(order.getViid()) )
+                vehicleInfoMap.put(order.getViid(),vehicleService.getVehicleInfoById(order.getViid()));
+
+            if ( !vehicleMap.containsKey(order.getVid()) )
+                vehicleMap.put(order.getVid(),vehicleService.getVehicleById(order.getVid()));
+
+            VehicleInfo vehicleInfo = vehicleInfoMap.get(order.getViid());
+            Vehicle vehicle = vehicleMap.get(order.getVid());
+
+            orderHistoryItem.setName(vehicleInfo.getName());
+            orderHistoryItem.setNumber(vehicle.getNumber());
+            orderHistoryItem.setOid(order.getOid());
+            orderHistoryItem.setRet_day(days);
+            orderHistory.getHistory().add(orderHistoryItem);
+        }
+
+        int ret_days = 0;
+        for ( Map.Entry<Long, Integer> entry : v_day_count.entrySet() ) {
+            ret_days += entry.getValue();
+        }
+
+        orderHistory.setRet_day_total(ret_days);
+        orderHistory.setIdle_day(total_days*v_day_count.size()-ret_days);
+
+        return orderHistory;
     }
 }

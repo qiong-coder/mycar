@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -129,5 +130,16 @@ public class OrderAction {
                                @RequestBody Order order)
     {
         return new HttpResponse(orderService.cancleOrder(id, order));
+    }
+
+    @RequestMapping(value = "/order/history/{type}/{data}/{begin}/{end}/", method = RequestMethod.GET)
+    public HttpResponse history(@PathVariable String type,
+                                @PathVariable String data,
+                                @PathVariable Long begin,
+                                @PathVariable Long end)
+    {
+        Timestamp begin_stamp = new Timestamp(begin);
+        Timestamp end_stamp = new Timestamp(end);
+        return new HttpResponse(orderService.orderHistory(type, data, begin_stamp, end_stamp));
     }
 }

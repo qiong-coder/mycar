@@ -4,6 +4,7 @@ import com.mycar.model.Order;
 import com.mycar.model.Vehicle;
 import com.mycar.model.VehicleInfo;
 
+import javax.servlet.http.Part;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +46,7 @@ public interface VehicleService {
 
     int updateVehicleToDelete(long vid);
 
-    int insertVehicleInfo(VehicleInfo vehicleInfo);
+    int insertVehicleInfo(VehicleInfo vehicleInfo, Part attachment);
 
     int updateVehicleInfo(long viid, VehicleInfo vehicleInfo);
 
