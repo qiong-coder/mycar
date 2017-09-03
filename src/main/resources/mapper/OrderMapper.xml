@@ -60,12 +60,16 @@
         AND ( rbegin &gt; #{end} OR rend &lt; #{begin} )
     </select>
 
+
+
     <select id="getOrdersByScheduleInterval" resultType="com.mycar.model.Order">
         SELECT oid,viid,vid,`begin`,`end`,rbegin,rend,status FROM `Order`
-        WHERE (
-        ( status = 1 AND (`begin` &gt; #{end} OR `end` &lt; #{begin} ) )
-        OR (status = 2 AND ( rbegin &gt; #{end} OR rend &lt; #{begin} ) )
-        )
+        WHERE
+        (status = 1 AND ((`begin` &lt;= #{end} AND `begin` &gt;= #{begin})
+        OR (`end` &lt;= #{end} AND `end` &gt;= #{begin})) )
+        OR
+        (status = 2 AND ((rbegin &lt;= #{end} AND rbegin &gt;= #{begin})
+        OR (rend &lt;= #{end} AND rend &gt;= #{begin})) )
         <if test = "viid != null ">
             AND viid = #{viid}
         </if>

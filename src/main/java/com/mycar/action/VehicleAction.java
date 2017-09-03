@@ -125,10 +125,11 @@ public class VehicleAction {
         return new HttpResponse(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/vehicle/info/{viid}/", method = RequestMethod.PUT)
-    public HttpResponse updateVehicleInfo(@PathVariable("viid") long viid,
-                                          @RequestBody  VehicleInfo vehicleInfo) {
-        int count = vehicleService.updateVehicleInfo(viid,vehicleInfo);
+    @RequestMapping(value = "/vehicle/info/{viid}/", method = RequestMethod.POST)
+    public HttpResponse updateVehicleInfo(@RequestPart("attachment") Part attachment,
+                                          @PathVariable("viid") long viid,
+                                          VehicleInfo vehicleInfo) {
+        int count = vehicleService.updateVehicleInfo(viid,vehicleInfo,attachment);
         if (count != 1) return new HttpResponse(HttpStatus.NO_VEHICLE);
         return new HttpResponse(HttpStatus.OK);
     }

@@ -218,7 +218,10 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public int updateVehicleInfo(long viid, VehicleInfo vehicleInfo) {
+    public int updateVehicleInfo(long viid, VehicleInfo vehicleInfo, Part attachment) {
+        String filename = fileUploadUtils.save(attachment);
+        if ( filename != null ) vehicleInfo.setPicture(filename);
+
         vehicleInfo.setId(viid);
         return vehicleInfoMapper.updateVehicleInfo(vehicleInfo);
     }

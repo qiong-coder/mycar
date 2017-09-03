@@ -12,16 +12,20 @@
         SELECT viid, base_insurance, free_insurance  FROM VehicleInfoCost WHERE viid=#{viid}
     </select>
 
-    <update id="updateDayCost">
+    <update id="update" parameterType="com.mycar.model.VehicleInfoCost">
         UPDATE VehicleInfoCost
-        SET day_costs=#{day_costs}
-        WHERE viid=${viid}
-    </update>
-
-    <update id="updateInsurance">
-        UPDATE VehicleInfoCost
-        SET (base_insurance, free_insurance) VALUES(#{base_insurance}, #{free_insurance})
-        WHERE viid=#{viid}
+        <set>
+            <if test="base_insurance != null">
+                base_insurance = #{base_insurance},
+            </if>
+            <if test="free_insurance != null">
+                free_insurance = #{free_insurance},
+            </if>
+            <if test="day_costs != null">
+                day_costs = #{day_costs},
+            </if>
+        </set>
+        WHERE viid = #{viid}
     </update>
 
     <insert id="insertDefaultVehicleInfoCost" parameterType="com.mycar.model.VehicleInfoCost">

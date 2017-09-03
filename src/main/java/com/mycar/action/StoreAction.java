@@ -45,8 +45,7 @@ public class StoreAction {
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public HttpResponse insertStore(@RequestBody Store store)
     {
-        int id = storeService.insertStore(store);
-        if ( id == -1 ) return new HttpResponse(HttpStatus.DUPLICATE_STORE);
+        if ( storeService.insertStore(store) != 1 ) return new HttpResponse(HttpStatus.DUPLICATE_STORE);
         return new HttpResponse(HttpStatus.OK);
     }
 

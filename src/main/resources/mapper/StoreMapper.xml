@@ -13,8 +13,8 @@
     </select>
 
     <insert id="insertStore" parameterType="com.mycar.model.Store" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO `Store` (`name`, ``address`,`phone`)
-        VALUES (#[name}, #{address}, #{phone})
+        INSERT INTO `Store` (`name`, `address`,`phone`)
+        VALUES (#{name}, #{address}, #{phone})
     </insert>
 
     <update id="updateStore" parameterType="com.mycar.model.Store">

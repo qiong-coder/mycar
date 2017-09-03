@@ -42,7 +42,6 @@ public class VehicleInfoCostAction {
     }
 
     @RequestMapping(value = "/vehicle/info/cost/{viid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public HttpResponse getVehicleInfoCostByViid(@PathVariable("viid") long viid)
     {
         VehicleInfoCost vehicleInfoCost = vehicleInfoCostService.getVehicleInfoCostById(viid);
@@ -50,22 +49,14 @@ public class VehicleInfoCostAction {
         return new HttpResponse(vehicleInfoCost);
     }
 
-    @RequestMapping(value = "/vehicle/info/cost/{viid}/", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/vehicle/info/cost/{viid}/", method = RequestMethod.PUT)
     @ResponseBody
     public HttpResponse updateVehicleInfoCostByViid(@PathVariable("viid") long viid,
                                                     @RequestBody VehicleInfoCost costInfo)
     {
         costInfo.setViid(viid);
-        if ( costInfo.getDay_costs_parse() != null ) {
-            if ( vehicleInfoCostService.updateDayCosts(viid,costInfo) != 0 )
-                return new HttpResponse(HttpStatus.OK);
-            else return new HttpResponse(HttpStatus.ERROR);
-        }
-        else if ( costInfo.getBase_insurance() != null && costInfo.getFree_insurance() != null ) {
-            if (vehicleInfoCostService.updateInsurance(viid, costInfo.getBase_insurance(), costInfo.getFree_insurance()) != 0)
-                return new HttpResponse(HttpStatus.OK);
-            else return new HttpResponse(HttpStatus.ERROR);
-        } else return new HttpResponse(HttpStatus.ERROR);
+        if ( vehicleInfoCostService.update(costInfo) == 1 ) return new HttpResponse(HttpStatus.OK);
+        else return new HttpResponse(HttpStatus.ERROR);
     }
 
 }

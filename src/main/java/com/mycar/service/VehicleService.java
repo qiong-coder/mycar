@@ -49,7 +49,7 @@ public interface VehicleService {
 
     int insertVehicleInfo(VehicleInfo vehicleInfo, Part attachment);
 
-    int updateVehicleInfo(long viid, VehicleInfo vehicleInfo);
+    int updateVehicleInfo(long viid, VehicleInfo vehicleInfo, Part attachment);
 
     int updateVehicleInfoToDelete(long viid);
 

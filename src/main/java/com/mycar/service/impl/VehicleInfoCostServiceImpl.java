@@ -59,19 +59,24 @@ public class VehicleInfoCostServiceImpl implements VehicleInfoCostService {
     }
 
     @Override
-    public int updateDayCosts(long viid, VehicleInfoCost vehicleInfoCost) {
-        vehicleInfoCost.dumpDay_costs_parse();
-        return vehicleInfoCostMapper.updateDayCost(vehicleInfoCost);
+    public int update(VehicleInfoCost vehicleInfoCost) {
+        return vehicleInfoCostMapper.update(vehicleInfoCost);
     }
 
-    @Override
-    public int updateInsurance(long viid, int base_insurance, int free_insurance) {
-        VehicleInfoCost vehicleInfoCost = vehicleInfoCostMapper.getVehicleInfoCostByIdWithoutDayCost(viid);
-        if ( vehicleInfoCost == null ) return 0;
-        vehicleInfoCost.setBase_insurance(base_insurance);
-        vehicleInfoCost.setFree_insurance(free_insurance);
-        return vehicleInfoCostMapper.updateInsurance(vehicleInfoCost);
-    }
+    //    @Override
+//    public int updateDayCosts(long viid, VehicleInfoCost vehicleInfoCost) {
+//        vehicleInfoCost.dumpDay_costs_parse();
+//        return vehicleInfoCostMapper.updateDayCost(vehicleInfoCost);
+//    }
+//
+//    @Override
+//    public int updateInsurance(long viid, int base_insurance, int free_insurance) {
+//        VehicleInfoCost vehicleInfoCost = vehicleInfoCostMapper.getVehicleInfoCostByIdWithoutDayCost(viid);
+//        if ( vehicleInfoCost == null ) return 0;
+//        vehicleInfoCost.setBase_insurance(base_insurance);
+//        vehicleInfoCost.setFree_insurance(free_insurance);
+//        return vehicleInfoCostMapper.updateInsurance(vehicleInfoCost);
+//    }
 
     private JSONArray createDefaultDayCosts(int day_cost)
     {

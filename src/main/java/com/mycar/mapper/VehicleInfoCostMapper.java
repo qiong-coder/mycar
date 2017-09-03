@@ -13,9 +13,11 @@ public interface VehicleInfoCostMapper {
 
     VehicleInfoCost getVehicleInfoCostByIdWithoutDayCost(long viid);
 
-    int updateDayCost(VehicleInfoCost vehicleInfoCost);
+//    int updateDayCost(VehicleInfoCost vehicleInfoCost);
+//
+//    int updateInsurance(VehicleInfoCost vehicleInfoCost);
 
-    int updateInsurance(VehicleInfoCost vehicleInfoCost);
+    int update(VehicleInfoCost vehicleInfoCost);
 
     int insertDefaultVehicleInfoCost(VehicleInfoCost vehicleInfoCost);
 

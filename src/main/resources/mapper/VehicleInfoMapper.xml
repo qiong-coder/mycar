@@ -22,8 +22,34 @@
     </insert>
 
     <update id="updateVehicleInfo" parameterType="com.mycar.model.VehicleInfo">
-        UPDATE VehicleInfo SET name=#{name}, displacement=#{displacement}, gearbox=#{gearbox}, boxes=#{boxes},
-        manned=#{manned}, spare=#{spare}, description=#{description}, picture=#{picture}
+        UPDATE VehicleInfo
+        <set>
+            <if test="name!=null and name != ''">
+                `name`=#{name},
+            </if>
+            <if test="displacement!=null and displacement != ''">
+                displacement=#{displacement},
+            </if>
+            <if test="gearbox!=null and gearbox != ''">
+                gearbox=#{gearbox},
+            </if>
+            <if test="boxes!=null and boxes != ''">
+                boxes=#{boxes},
+            </if>
+            <if test="manned!=null and manned != ''">
+                manned=#{manned},
+            </if>
+            <if test="spare!=null and spare != ''">
+                spare=#{spare},
+            </if>
+            <if test="description!=null and description != ''">
+                description=#{description},
+            </if>
+            <if test="picture != null and picture != ''">
+                picture=#{picture}
+            </if>
+        </set>
+         WHERE id=#{id}
     </update>
 
     <update id="updateVehicleInfoToDelete">
