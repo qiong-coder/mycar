@@ -5,6 +5,7 @@ import com.mycar.model.Order;
 import com.mycar.model.OrderStatusCount;
 import com.mycar.model.Vehicle;
 import com.mycar.response.OrderHistory;
+import com.mycar.response.OrderSchedule;
 import com.mycar.utils.OrderStatus;
 
 import java.sql.Timestamp;
@@ -42,5 +43,7 @@ public interface OrderService {
 
     int cancleOrder(long id, Order order); // 取消订单
 
-    OrderHistory orderHistory(String type, String data, Timestamp begin,Timestamp end);
+    OrderHistory orderHistory(Long viid, String number, Timestamp begin,Timestamp end);
+
+    List<OrderSchedule> orderSchedule(Long viid, Timestamp begin, Timestamp end);
 }

@@ -31,6 +31,10 @@ public interface OrderMapper {
 
     List<OrderStatusCount> getOrdersNumberByStatus();
 
-    List<Order> getOrdersByInterval(@Param("begin") Timestamp begin, @Param("end") Timestamp end);
+    List<Order> getOrdersByViidInInterval(@Param("viid") Long viid, @Param("begin") Timestamp begin, @Param("end") Timestamp end);
+
+    List<Order> getOrdersByVidInInterval(@Param("vid") Long vid, @Param("begin") Timestamp begin, @Param("end") Timestamp end);
+
+    List<Order> getOrdersByScheduleInterval(@Param("viid") Long viid, @Param("begin") Timestamp begin, @Param("end") Timestamp end);
 
 }

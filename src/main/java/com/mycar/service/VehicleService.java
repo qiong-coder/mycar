@@ -3,6 +3,7 @@ package com.mycar.service;
 import com.mycar.model.Order;
 import com.mycar.model.Vehicle;
 import com.mycar.model.VehicleInfo;
+import com.mycar.response.VehicleInfoCount;
 
 import javax.servlet.http.Part;
 import java.sql.Timestamp;
@@ -22,13 +23,13 @@ public interface VehicleService {
 
     VehicleInfo getVehicleInfoAndCostById(long id);
 
-    List<Vehicle> getAllVehicles();
+    List<Vehicle> getAllVehicles(Integer is_delete);
 
-    List<Vehicle> getAllVehiclesByViid(long viid);
+    List<Vehicle> getAllVehiclesByViid(Long viid, Integer is_delete);
 
     List<Vehicle> getAllVehiclesByViidAndStatusAndSid(long viid, int status);
 
-    List<VehicleInfo> getAllVehicleInfos();
+    List<VehicleInfo> getAllVehicleInfos(Integer is_delete);
 
     //VehicleInfo getVehicleInfoByIdAndTime(long id, Timestamp begin, Timestamp end);
 
@@ -51,4 +52,6 @@ public interface VehicleService {
     int updateVehicleInfo(long viid, VehicleInfo vehicleInfo);
 
     int updateVehicleInfoToDelete(long viid);
+
+    Map<Long, VehicleInfoCount> getVehicleCount(Long viid);
 }

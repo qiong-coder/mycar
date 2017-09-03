@@ -1,5 +1,6 @@
 package com.mycar.utils;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -29,6 +30,10 @@ public class TimeUtils {
     public static int TimeDiff(Timestamp begin, Timestamp end)
     {
         return new Long(Math.round(Math.ceil((end.getTime() - begin.getTime()) / (3600*MILLIS_PER_SECOND*24.0)))).intValue();
+    }
+
+    public static int TimeDiffByDays(Timestamp begin, Timestamp end) {
+        return (int)((end.getTime()/(3600*MILLIS_PER_SECOND)-8)/24-(begin.getTime()/(3600*MILLIS_PER_SECOND)-8)/24)+1;
     }
 
     public final static long MILLIS_PER_SECOND = 1000L;

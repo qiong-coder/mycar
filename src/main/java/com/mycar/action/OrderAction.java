@@ -3,6 +3,8 @@ package com.mycar.action;
 import com.alibaba.fastjson.JSONObject;
 import com.mycar.model.Order;
 import com.mycar.model.OrderStatusCount;
+import com.mycar.response.OrderHistory;
+import com.mycar.response.OrderSchedule;
 import com.mycar.service.OrderService;
 import com.mycar.service.VehicleService;
 import com.mycar.utils.HttpResponse;
@@ -132,14 +134,32 @@ public class OrderAction {
         return new HttpResponse(orderService.cancleOrder(id, order));
     }
 
-    @RequestMapping(value = "/order/history/{type}/{data}/{begin}/{end}/", method = RequestMethod.GET)
-    public HttpResponse history(@PathVariable String type,
-                                @PathVariable String data,
+    @RequestMapping(value = "/order/history/{viid}/{number}/{begin}/{end}/", method = RequestMethod.GET)
+    public HttpResponse history(@PathVariable String viid,
+                                @PathVariable String number,
                                 @PathVariable Long begin,
                                 @PathVariable Long end)
     {
         Timestamp begin_stamp = new Timestamp(begin);
         Timestamp end_stamp = new Timestamp(end);
-        return new HttpResponse(orderService.orderHistory(type, data, begin_stamp, end_stamp));
+        OrderHistory history = orderService.orderHistory(viid.compareTo("null") == 0 ? null : Long.parseLong(viid),
+                number.compareTo("null")==0?null:number,
+                begin_stamp, end_stamp);
+        if ( history == null ) return new HttpResponse(HttpStatus.ERROR);
+        else return new HttpResponse(history);
+    }
+
+    @RequestMapping(value = "/order/schedule/{viid}/{begin}/{end}/", method = RequestMethod.GET)
+    public HttpResponse schedule(@PathVariable String viid,
+                                 @PathVariable Long begin,
+                                 @PathVariable Long end)
+    {
+        Timestamp begin_stamp = new Timestamp(begin);
+        Timestamp end_stamp = new Timestamp(end);
+        List<OrderSchedule> orderSchedules = orderService.orderSchedule(viid.compareTo("null") == 0 ? null : Long.parseLong(viid)
+                , begin_stamp, end_stamp);
+        if ( orderSchedules == null ) return new HttpResponse(HttpStatus.ERROR);
+        else return new HttpResponse(orderSchedules);
+
     }
 }

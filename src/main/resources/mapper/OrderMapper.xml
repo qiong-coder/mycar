@@ -42,8 +42,33 @@
         SELECT status, COUNT(1) as count FROM `Order` GROUP BY status;
     </select>
 
-    <select id="getOrdersByInterval" resultType="com.mycar.model.Order">
+    <select id="getOrdersByViidInInterval" resultType="com.mycar.model.Order">
         SELECT oid,viid,vid,rbegin,rend FROM `Order`
-        WHERE status BETWEEN 2 AND 4 AND ( rbegin &gt; UNIX_TIMESTAMP(#{end}) OR rend &lt; UNIX_TIMESTAMP(#{begin}) )
+        WHERE status BETWEEN 2 AND 4 AND (
+        ( rbegin &lt;= #{end} AND rbegin &gt;= #{begin} )
+        OR
+        ( rend &lt;= #{end} AND rend &gt;= #{begin} )
+        )
+        <if test="viid != null">
+            AND viid=#{viid}
+        </if>
+    </select>
+
+    <select id="getOrdersByVidInInterval" resultType="com.mycar.model.Order">
+        SELECT oid,viid,vid,rbegin,rend FROM `Order`
+        WHERE status BETWEEN 2 AND 4 AND vid=#{vid}
+        AND ( rbegin &gt; #{end} OR rend &lt; #{begin} )
+    </select>
+
+    <select id="getOrdersByScheduleInterval" resultType="com.mycar.model.Order">
+        SELECT oid,viid,vid,`begin`,`end`,rbegin,rend,status FROM `Order`
+        WHERE (
+        ( status = 1 AND (`begin` &gt; #{end} OR `end` &lt; #{begin} ) )
+        OR (status = 2 AND ( rbegin &gt; #{end} OR rend &lt; #{begin} ) )
+        )
+        <if test = "viid != null ">
+            AND viid = #{viid}
+        </if>
+
     </select>
 </mapper>

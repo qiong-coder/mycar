@@ -18,6 +18,7 @@ public class Vehicle {
     private Timestamp begin; // 修车/租车开始时间
     private Timestamp end; // 修车/租车预计结束时间
     private Integer is_delete;
+    private Timestamp create_time;
 
     public Long getId() {
         return id;
@@ -81,5 +82,13 @@ public class Vehicle {
 
     public void setIs_delete(Integer is_delete) {
         this.is_delete = is_delete;
+    }
+
+    public Timestamp getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(Timestamp create_time) {
+        this.create_time = create_time;
     }
 }

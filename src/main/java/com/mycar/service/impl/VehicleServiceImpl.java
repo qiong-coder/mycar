@@ -5,6 +5,8 @@ import com.mycar.mapper.VehicleMapper;
 import com.mycar.model.Order;
 import com.mycar.model.Vehicle;
 import com.mycar.model.VehicleInfo;
+import com.mycar.response.VehicleCount;
+import com.mycar.response.VehicleInfoCount;
 import com.mycar.service.VehicleInfoCostService;
 import com.mycar.service.VehicleService;
 import com.mycar.utils.FileUploadUtils;
@@ -75,26 +77,30 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public List<Vehicle> getAllVehicles() {
-        List<Vehicle> vehicles = vehicleMapper.getAll();
+    public List<Vehicle> getAllVehicles(Integer is_delete) {
+        List<Vehicle> vehicles = vehicleMapper.getAll(is_delete);
         if ( vehicles == null || vehicles.size() == 0 ) logger.error("failure to get the all vehicles");
         return vehicles;
     }
 
     @Override
-    public List<Vehicle> getAllVehiclesByViid(long viid) {
-        List<Vehicle> vehicles = vehicleMapper.getByViid(viid);
+    public List<Vehicle> getAllVehiclesByViid(Long viid, Integer is_delete) {
+        List<Vehicle> vehicles = vehicleMapper.getByViid(viid,is_delete);
         if ( vehicles == null || vehicles.size() == 0 ) logger.error("failure to get the vehcile by viid - {}", viid);
         return vehicles;
     }
 
     @Override
-    public List<VehicleInfo> getAllVehicleInfos() {
-        List<VehicleInfo> vehicleInfos = vehicleInfoMapper.getAll();
+    public List<VehicleInfo> getAllVehicleInfos(Integer is_delete) {
+        List<VehicleInfo> vehicleInfos = vehicleInfoMapper.getAll(is_delete);
         if ( vehicleInfos == null || vehicleInfos.size() == 0 ) logger.error("failure to get the all vehicle infos");
         for ( VehicleInfo vehicleInfo : vehicleInfos ) {
             vehicleInfo.setCost(vehicleInfoCostService.getVehicleInfoCostById(vehicleInfo.getId()));
-            vehicleInfo.setVehicle_count(vehicleMapper.getVehicleCount(vehicleInfo.getId()));
+            List<VehicleCount> vehicleCounts = vehicleMapper.getVehicleCount(vehicleInfo.getId(),is_delete);
+            for ( VehicleCount vehicleCount : vehicleCounts ) {
+                if ( vehicleCount.getViid().compareTo(vehicleInfo.getId()) == 0 )
+                    vehicleInfo.setVehicle_count(vehicleCount.getCount().intValue());
+            }
         }
         return vehicleInfos;
     }
@@ -108,7 +114,7 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public List<VehicleInfo> getVehicleInfosByTime(Timestamp begin, Timestamp end) {
 
-        List<Vehicle> vehicles = getAllVehicles();
+        List<Vehicle> vehicles = getAllVehicles(null);
 
         if ( vehicles == null || vehicles.isEmpty() ) return null;
 
@@ -205,10 +211,10 @@ public class VehicleServiceImpl implements VehicleService {
         if ( filename == null ) return 0;
 
         vehicleInfo.setPicture(filename);
-        int viid = vehicleInfoMapper.insertVehicleInfo(vehicleInfo);
+        if ( vehicleInfoMapper.insertVehicleInfo(vehicleInfo) != 1 ) return 0;
         //TODO: defualt vehicle info cost
-        vehicleInfoCostService.insertDefaultVehicleInfoCost(viid,10000,10000,10000);
-        return viid;
+        return vehicleInfoCostService.insertDefaultVehicleInfoCost(vehicleInfo.getId(),10000,10000,10000);
+
     }
 
     @Override
@@ -220,5 +226,25 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public int updateVehicleInfoToDelete(long viid) {
         return vehicleInfoMapper.updateVehicleInfoToDelete(viid);
+    }
+
+    @Override
+    public Map<Long, VehicleInfoCount> getVehicleCount(Long viid) {
+        List<VehicleCount> vehicleCounts = vehicleMapper.getVehicleCount(viid,null);
+        Map<Long, VehicleInfoCount> vehicleInfoCounts = new HashMap<>();
+        for ( VehicleCount vehicleCount : vehicleCounts ) {
+            VehicleInfoCount vehicleInfoCount = new VehicleInfoCount();
+            VehicleInfo vehicleInfo = vehicleInfoMapper.getById(vehicleCount.getViid());
+            if ( vehicleInfo != null ) {
+                vehicleInfoCount.setViid(vehicleCount.getViid());
+                vehicleInfoCount.setCount(vehicleCount.getCount());
+                vehicleInfoCount.setSpare(vehicleInfo.getSpare());
+                vehicleInfoCount.setName(vehicleInfo.getName());
+            } else {
+                continue;
+            }
+            vehicleInfoCounts.put(vehicleCount.getViid(),vehicleInfoCount);
+        }
+        return vehicleInfoCounts;
     }
 }

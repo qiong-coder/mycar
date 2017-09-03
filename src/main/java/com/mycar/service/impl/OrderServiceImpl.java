@@ -7,6 +7,8 @@ import com.mycar.logic.VehicleCostLogic;
 import com.mycar.mapper.OrderMapper;
 import com.mycar.model.*;
 import com.mycar.response.OrderHistory;
+import com.mycar.response.OrderSchedule;
+import com.mycar.response.VehicleInfoCount;
 import com.mycar.service.OrderService;
 import com.mycar.service.VehicleInfoCostService;
 import com.mycar.service.VehicleService;
@@ -16,11 +18,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.async.TimeoutDeferredResultProcessingInterceptor;
 
+import javax.xml.crypto.Data;
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by stupid-coder on 7/18/17.
@@ -276,50 +278,155 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderHistory orderHistory(String type, String data, Timestamp begin, Timestamp end) {
-        List<Order> orders = orderMapper.getOrdersByInterval(begin,end);
+    public OrderHistory orderHistory(Long viid, String number, Timestamp begin, Timestamp end) {
         OrderHistory orderHistory = new OrderHistory();
+        List<Vehicle> vehicles = null;
+        List<Order> orders = null;
 
-        Map<Long, Integer> v_day_count = new HashMap<>();
-        Map<Long, Vehicle> vehicleMap = new HashMap<>();
-        Map<Long, VehicleInfo> vehicleInfoMap = new HashMap<>();
-
-        int total_days = TimeUtils.TimeDiff(begin,end);
-
-        for ( Order order : orders ) {
-            OrderHistory.OrderHistoryItem orderHistoryItem = orderHistory.new OrderHistoryItem();
-
-            int days = TimeUtils.TimeDiff(begin.compareTo(order.getRbegin()) > 0 ? begin : order.getRbegin(),
-                    end.compareTo(order.getRend()) > 0 ? order.getRend() : end);
-
-            if ( v_day_count.containsKey(order.getVid()) ) v_day_count.put(order.getVid(),
-                    v_day_count.get(order.getVid())+days);
-            else v_day_count.put(order.getVid(), days);
-
-            if ( !vehicleInfoMap.containsKey(order.getViid()) )
-                vehicleInfoMap.put(order.getViid(),vehicleService.getVehicleInfoById(order.getViid()));
-
-            if ( !vehicleMap.containsKey(order.getVid()) )
-                vehicleMap.put(order.getVid(),vehicleService.getVehicleById(order.getVid()));
-
-            VehicleInfo vehicleInfo = vehicleInfoMap.get(order.getViid());
-            Vehicle vehicle = vehicleMap.get(order.getVid());
-
-            orderHistoryItem.setName(vehicleInfo.getName());
-            orderHistoryItem.setNumber(vehicle.getNumber());
-            orderHistoryItem.setOid(order.getOid());
-            orderHistoryItem.setRet_day(days);
-            orderHistory.getHistory().add(orderHistoryItem);
+        if ( viid != null ) {
+            vehicles = vehicleService.getAllVehiclesByViid(viid,null);
+            orders = orderMapper.getOrdersByViidInInterval(viid,begin,end);
+        } else if ( number != null ) {
+            Vehicle vehicle = vehicleService.getVehicleByNumber(number);
+            if ( vehicle != null ) {
+                vehicles = new ArrayList<>();
+                vehicles.add(vehicle);
+                orders = orderMapper.getOrdersByVidInInterval(vehicle.getId(), begin, end);
+            }
+        } else {
+            vehicles = vehicleService.getAllVehicles(null);
+            orders = orderMapper.getOrdersByViidInInterval(null,begin,end);
         }
 
-        int ret_days = 0;
-        for ( Map.Entry<Long, Integer> entry : v_day_count.entrySet() ) {
-            ret_days += entry.getValue();
+        if ( vehicles == null ||  vehicles.isEmpty() ) return orderHistory;
+
+        Map<Long, VehicleInfo> vehicleInfos = new HashMap<>();
+
+        int use_days = 0;
+        if ( orders != null ) {
+            for (Order order : orders) {
+                OrderHistory.OrderHistoryItem orderHistoryItem = orderHistory.new OrderHistoryItem();
+
+                Vehicle vehicle = null;
+                for (Vehicle vehicle_iter : vehicles) {
+                    if (vehicle_iter.getId().compareTo(order.getVid()) == 0) {
+                        vehicle = vehicle_iter;
+                        break;
+                    }
+                }
+                if (vehicle == null) continue;
+
+                int days = TimeUtils.TimeDiff(begin.compareTo(order.getRbegin()) > 0 ? begin : order.getRbegin(),
+                        end.compareTo(order.getRend()) > 0 ? order.getRend() : end);
+                use_days += days;
+
+                if (vehicleInfos.containsKey(order.getViid()))
+                    orderHistoryItem.setName(vehicleInfos.get(order.getViid()).getName());
+                else {
+                    VehicleInfo vehicleInfo = vehicleService.getVehicleInfoById(order.getViid());
+                    if (vehicleInfo == null) continue;
+                    orderHistoryItem.setName(vehicleInfo.getName());
+                    vehicleInfos.put(order.getViid(), vehicleInfo);
+                }
+
+                orderHistoryItem.setNumber(vehicle.getNumber());
+                orderHistoryItem.setOid(order.getOid());
+                orderHistoryItem.setRet_day(days);
+                orderHistory.getHistory().add(orderHistoryItem);
+            }
         }
 
-        orderHistory.setRet_day_total(ret_days);
-        orderHistory.setIdle_day(total_days*v_day_count.size()-ret_days);
+        orderHistory.setRet_day_total(use_days);
+
+        int total_days = 0;
+        for ( Vehicle vehicle : vehicles ) {
+            if (vehicle.getCreate_time().compareTo(end) > 0 ) continue;
+            total_days += TimeUtils.TimeDiff(
+                    begin.compareTo(vehicle.getCreate_time()) >= 0 ? begin : vehicle.getCreate_time(),
+                    end);
+        }
+        orderHistory.setIdle_day(total_days-use_days);
 
         return orderHistory;
+    }
+
+    @Override
+    public List<OrderSchedule> orderSchedule(Long viid, Timestamp begin, Timestamp end) {
+        List<Order> orders = orderMapper.getOrdersByScheduleInterval(viid, begin, end);
+        Map<Long, VehicleInfoCount> vehicleInfoCounts = vehicleService.getVehicleCount(viid);
+
+        int total_days = TimeUtils.TimeDiffByDays(begin,end);
+
+        Map<Long,Long[]> use_vehicle = new HashMap<>();
+
+        for ( Order order : orders ) {
+            Long id = order.getViid();
+            Long[] viid_use_vehicle;
+            if ( !use_vehicle.containsKey(id) ) {
+                viid_use_vehicle = new Long[total_days];
+                use_vehicle.put(id,viid_use_vehicle);
+            } else {
+                viid_use_vehicle = use_vehicle.get(id);
+            }
+            Timestamp use_begin;
+            Timestamp use_end;
+            if ( order.getStatus() == OrderStatus.PENDING.getStatus() ) {
+                use_begin = order.getBegin().compareTo(begin) <= 0 ? begin : order.getBegin();
+                use_end = order.getEnd().compareTo(end) >= 0 ? end : order.getEnd();
+            } else if ( order.getStatus() == OrderStatus.RENTING.getStatus() ) {
+                use_begin = order.getRbegin().compareTo(begin) <= 0 ? begin : order.getRbegin();
+                use_end = order.getRend().compareTo(end) >= 0 ? end : order.getRend();
+            } else continue;
+
+            int begin_index = TimeUtils.TimeDiffByDays(begin,use_begin)-1;
+            int end_index = TimeUtils.TimeDiffByDays(begin,use_end)-1;
+
+            for ( int i = begin_index; i < end_index; ++ i ) {
+                if ( viid_use_vehicle[i] == null ) viid_use_vehicle[i] = new Long(1);
+                else viid_use_vehicle[i] += 1;
+            }
+        }
+
+        List<OrderSchedule> orderSchedules = new ArrayList<>();
+        for ( Map.Entry<Long,Long[]> entry : use_vehicle.entrySet() ) {
+            Long id = entry.getKey();
+            Long[] viid_use_vehicle = entry.getValue();
+            Calendar calender = Calendar.getInstance();
+            calender.setTime(begin);
+
+            VehicleInfoCount vehicleInfoCount = vehicleInfoCounts.get(id);
+            if ( vehicleInfoCount == null ) return null;
+
+            OrderSchedule orderSchedule = new OrderSchedule(vehicleInfoCount.getName(),
+                    vehicleInfoCount.getCount(),
+                    vehicleInfoCount.getCount()-vehicleInfoCount.getSpare()-(viid_use_vehicle[0]==null?0:viid_use_vehicle[0]),
+                    calender.getTime());
+            int index = 0;
+            while ( index++ < viid_use_vehicle.length ) {
+
+                if ( viid_use_vehicle[index-1] == null ) {
+                    calender.add(Calendar.DATE,1);
+                    continue;
+                }
+
+                long stock = vehicleInfoCount.getCount() - vehicleInfoCount.getSpare() - viid_use_vehicle[index-1];
+
+                if ( orderSchedule.getStock() == stock ) {
+                    calender.add(Calendar.DATE,1);
+                    continue;
+                } else {
+                    orderSchedule.setEnd(calender.getTime());
+                    orderSchedules.add(orderSchedule);
+                    orderSchedule = new OrderSchedule(vehicleInfoCount.getName(),
+                            vehicleInfoCount.getCount(),
+                            stock,
+                            calender.getTime());
+                }
+            }
+            orderSchedule.setEnd(calender.getTime());
+            orderSchedules.add(orderSchedule);
+        }
+
+        return orderSchedules;
     }
 }

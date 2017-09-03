@@ -25,6 +25,7 @@
       <param-name>contextConfigLocation</param-name>
       <param-value>/WEB-INF/spring/dispatcher-servlet.xml</param-value>
     </init-param>
+    <multipart-config></multipart-config>
     <load-on-startup>1</load-on-startup>
 
   </servlet>
@@ -33,7 +34,7 @@
     <servlet-name>dispatcher</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
-  
+
   <filter>
     <filter-name>characterEncodingFilter</filter-name>
     <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -51,6 +52,7 @@
     <filter-name>characterEncodingFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+
 
   <session-config>
     <session-timeout>10</session-timeout>

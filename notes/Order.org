@@ -147,18 +147,18 @@
 	后台可以根据车型/车牌号+时间段为条件获取一段时间内的某车型/车牌号的车辆的用车天数;
 	返回的用车记录包含时间段内的车辆的租赁日次和闲置日次
 ** 接口说明
-	URI: http://ip:port/mycar/order/history/{type}/{data}/{begin}/{end}/
+	URI: http://ip:port/mycar/order/history/{viid}/{number}/{begin}/{end}/
 	METHOD: GET
 ** 请求参数说明
-	{type} 表示请求方式, 0代表根据车型, 1代表根据车牌号  
+	{viid} 表示按车系查询，可以设为null
 	
-	{data} 表示请求参数, 当type为0时为车型id, 当type为1时为车牌号(模糊匹配), 当data为null时为查询所有车辆的历史记录  
+	{number} 表示按车牌查询，可以设为null
 	
 	{begin} 开始时间 Timestamp  
 	
 	{end} 结束时间 Timestamp  
 
-	
+	以上viid和number都为null，则按全部查询
 ** 返回结构
 	
     #+BEGIN_SRC java

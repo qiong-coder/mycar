@@ -9,6 +9,11 @@
 
     <select id="getAll" resultType="com.mycar.model.VehicleInfo">
         SELECT * FROM VehicleInfo
+         <where>
+             <if test="is_delete!=null">
+                 is_delete=#{is_delete}
+             </if>
+         </where>
     </select>
 
     <insert id="insertVehicleInfo" parameterType="com.mycar.model.VehicleInfo" useGeneratedKeys="true" keyProperty="id">

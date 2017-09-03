@@ -9,18 +9,22 @@
 
     <select id="getByViid" parameterType="long" resultType="com.mycar.model.Vehicle">
         SELECT * FROM Vehicle WHERE viid=#{viid}
+        <if test="is_delete!=null">
+            AND is_delete=#{is_delete}
+        </if>
     </select>
 
     <select id="getByViidAndStatus" resultType="com.mycar.model.Vehicle">
         SELECT * FROM Vehicle WHERE viid=#{viid} and status=#{status}
     </select>
 
-    <select id="getVehicleCount" resultType="int">
-        SELECT COUNT(1) FROM Vehicle WHERE viid=#{viid} and is_delete=0
-    </select>
-
     <select id="getAll" resultType="com.mycar.model.Vehicle">
         SELECT * FROM Vehicle
+        <where>
+            <if test = "is_delete!=null">
+                is_delete=#{is_delete}
+            </if>
+        </where>
     </select>
 
     <select id="getByNumber" parameterType="string" resultType="com.mycar.model.Vehicle">
@@ -43,5 +47,18 @@
         INSERT INTO Vehicle(`viid`, `number`, `description`)
         VALUES(#{viid}, #{number}, #{description})
     </insert>
+
+    <select id="getVehicleCount" resultType="com.mycar.response.VehicleCount">
+        SELECT viid, count(1) as `count` FROM `Vehicle`
+        <where>
+            <if test="is_delete!=null">
+                is_delete=#{is_delete}
+            </if>
+            <if test="viid!=null">
+                AND viid=#{viid}
+            </if>
+        </where>
+        GROUP BY viid
+    </select>
 
 </mapper>
