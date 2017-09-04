@@ -41,7 +41,7 @@ public class VehicleAction {
     @ResponseBody
     public HttpResponse getVehiclesByStatus()
     {
-        List<Vehicle> vehicles = vehicleService.getAllVehicles(null);
+        List<Vehicle> vehicles = vehicleService.getAllVehicles(0);
         if ( vehicles == null || vehicles.isEmpty() ) return new HttpResponse(HttpStatus.NO_VEHICLE);
         else return new HttpResponse(vehicles);
     }
@@ -50,7 +50,7 @@ public class VehicleAction {
     @ResponseBody
     public HttpResponse getVehiclesByStatus(@PathVariable("viid") long viid)
     {
-        List<Vehicle> vehicles = vehicleService.getAllVehiclesByViid(viid,null);
+        List<Vehicle> vehicles = vehicleService.getAllVehiclesByViid(viid,0);
         if ( vehicles == null || vehicles.isEmpty() ) return new HttpResponse(HttpStatus.NO_VEHICLE);
         else return new HttpResponse(vehicles);
     }
