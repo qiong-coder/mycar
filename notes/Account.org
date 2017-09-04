@@ -1,0 +1,33 @@
+#+TITLE: 账户和权限接口说明
+
+* 数据结构
+** Account
+   | 字段     | 说明   |
+   |----------+--------|
+   | name     | 登陆名 |
+   | password | 密码   |
+
+* 逻辑说明
+  用户通过登陆接口，获取登陆TOKEN，该TOKEN会保存在session中，10分钟过期。
+  请求需要权限的接口时，在header中带上token=xxxxxxx既可。
+  需要保证前端页面支持cookie！
+
+* 接口说明
+** 登陆接口
+   + URI :: http://ip:port/mycar/account/login/
+   + METHOD :: POST
+   + 参数说明 ::
+     + name :: 登陆名 
+     + password :: 密码
+   + 返回 :: code=0，data保存有该用户token
+** 登出接口
+   + URI :: http://ip:port/mycar/account/logout/
+   + METHOD :: PUT
+   + 参数说明 ::
+     + header中带有token=xxxxxx字段
+** 注册接口
+   + URI :: http://ip:port/mycar/account/register/
+   + METHOD :: POST
+   + 参数说明 ::
+     + name :: 登陆名
+     + password :: 密码
