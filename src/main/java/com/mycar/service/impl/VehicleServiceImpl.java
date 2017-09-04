@@ -40,15 +40,15 @@ public class VehicleServiceImpl implements VehicleService {
     private FileUploadUtils fileUploadUtils;
 
     @Override
-    public Vehicle getVehicleById(long id) {
+    public Vehicle getVehicleById(Long id) {
         Vehicle vehicle = vehicleMapper.getById(id);
         if ( vehicle == null ) logger.error("failure to get the vehicle - {}", id);
         return vehicle;
     }
 
     @Override
-    public List<Vehicle> getAllVehiclesByViidAndStatusAndSid(long viid, int status) {
-        List<Vehicle> vehicles = vehicleMapper.getByViidAndStatus(viid,status);
+    public List<Vehicle> getAllVehiclesByViidAndStatusAndSid(Long viid, Integer status, Integer is_delete) {
+        List<Vehicle> vehicles = vehicleMapper.getByViidAndStatus(viid,status,is_delete);
         if ( vehicles == null || vehicles.isEmpty() ) logger.warn("failure to get the vehicle by status and sid - viid:{}\tstatus:{}", viid,status);
         return vehicles;
     }
@@ -61,14 +61,14 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public VehicleInfo getVehicleInfoById(long id) {
+    public VehicleInfo getVehicleInfoById(Long id) {
         VehicleInfo vehicleInfo = vehicleInfoMapper.getById(id);
         if ( vehicleInfo == null ) logger.error("failure to get the vehicle info - {}", id);
         return vehicleInfo;
     }
 
     @Override
-    public VehicleInfo getVehicleInfoAndCostById(long id) {
+    public VehicleInfo getVehicleInfoAndCostById(Long id) {
         VehicleInfo vehicleInfo = getVehicleInfoById(id);
         if ( vehicleInfo != null ) {
             vehicleInfo.setCost(vehicleInfoCostService.getVehicleInfoCostById(vehicleInfo.getId()));
@@ -114,7 +114,7 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public List<VehicleInfo> getVehicleInfosByTime(Timestamp begin, Timestamp end) {
 
-        List<Vehicle> vehicles = getAllVehicles(null);
+        List<Vehicle> vehicles = getAllVehicles(0);
 
         if ( vehicles == null || vehicles.isEmpty() ) return null;
 
@@ -232,8 +232,8 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public Map<Long, VehicleInfoCount> getVehicleCount(Long viid) {
-        List<VehicleCount> vehicleCounts = vehicleMapper.getVehicleCount(viid,null);
+    public Map<Long, VehicleInfoCount> getVehicleCount(Long viid, Integer is_delete) {
+        List<VehicleCount> vehicleCounts = vehicleMapper.getVehicleCount(viid,is_delete);
         Map<Long, VehicleInfoCount> vehicleInfoCounts = new HashMap<>();
         for ( VehicleCount vehicleCount : vehicleCounts ) {
             VehicleInfoCount vehicleInfoCount = new VehicleInfoCount();

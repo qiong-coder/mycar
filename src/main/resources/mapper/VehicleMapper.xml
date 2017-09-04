@@ -16,6 +16,9 @@
 
     <select id="getByViidAndStatus" resultType="com.mycar.model.Vehicle">
         SELECT * FROM Vehicle WHERE viid=#{viid} and status=#{status}
+        <if test="is_delete != null">
+            AND is_delete=#{is_delete}
+        </if>
     </select>
 
     <select id="getAll" resultType="com.mycar.model.Vehicle">

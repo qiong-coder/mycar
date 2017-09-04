@@ -60,7 +60,7 @@ public class VehicleAction {
     public HttpResponse getVehiclesByStatus(@PathVariable("viid") long viid,
                                             @PathVariable("status") int status)
     {
-        List<Vehicle> vehicles = vehicleService.getAllVehiclesByViidAndStatusAndSid(viid,status);
+        List<Vehicle> vehicles = vehicleService.getAllVehiclesByViidAndStatusAndSid(viid,status,0);
         if ( vehicles == null || vehicles.isEmpty() ) return new HttpResponse(HttpStatus.NO_VEHICLE);
         else return new HttpResponse(vehicles);
     }

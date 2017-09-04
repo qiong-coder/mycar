@@ -18,7 +18,7 @@ public interface VehicleMapper {
 
     List<Vehicle> getByViid(@Param("viid") Long viid, @Param("is_delete") Integer is_delete);
 
-    List<Vehicle> getByViidAndStatus(@Param("viid") Long viid, @Param("status") int status);
+    List<Vehicle> getByViidAndStatus(@Param("viid") Long viid, @Param("status") Integer status, @Param("is_delete") Integer is_delete);
 
     //int getVehicleCount(@Param("viid") long viid);
 

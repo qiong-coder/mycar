@@ -15,19 +15,19 @@ import java.util.Map;
  */
 public interface VehicleService {
 
-    Vehicle getVehicleById(long id);
+    Vehicle getVehicleById(Long id);
 
     Vehicle getVehicleByNumber(String number);
 
-    VehicleInfo getVehicleInfoById(long id);
+    VehicleInfo getVehicleInfoById(Long id);
 
-    VehicleInfo getVehicleInfoAndCostById(long id);
+    VehicleInfo getVehicleInfoAndCostById(Long id);
 
     List<Vehicle> getAllVehicles(Integer is_delete);
 
     List<Vehicle> getAllVehiclesByViid(Long viid, Integer is_delete);
 
-    List<Vehicle> getAllVehiclesByViidAndStatusAndSid(long viid, int status);
+    List<Vehicle> getAllVehiclesByViidAndStatusAndSid(Long viid, Integer status, Integer is_delete);
 
     List<VehicleInfo> getAllVehicleInfos(Integer is_delete);
 
@@ -53,5 +53,5 @@ public interface VehicleService {
 
     int updateVehicleInfoToDelete(long viid);
 
-    Map<Long, VehicleInfoCount> getVehicleCount(Long viid);
+    Map<Long, VehicleInfoCount> getVehicleCount(Long viid, Integer is_delete);
 }
