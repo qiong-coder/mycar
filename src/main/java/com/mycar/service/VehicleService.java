@@ -33,7 +33,7 @@ public interface VehicleService {
 
     //VehicleInfo getVehicleInfoByIdAndTime(long id, Timestamp begin, Timestamp end);
 
-    List<Vehicle> getVehicleByTime(Timestamp begin, Timestamp end);
+    List<Vehicle> getVehicleByTime(Long viid, Timestamp begin, Timestamp end);
 
     List<VehicleInfo> getVehicleInfosByTime(Timestamp begin, Timestamp end);
 

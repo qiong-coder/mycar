@@ -39,7 +39,7 @@
             <if test="manned!=null and manned != ''">
                 manned=#{manned},
             </if>
-            <if test="spare!=null and spare != ''">
+            <if test="spare!=null">
                 spare=#{spare},
             </if>
             <if test="description!=null and description != ''">

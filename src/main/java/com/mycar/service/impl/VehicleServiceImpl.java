@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.Part;
 import java.sql.Timestamp;
 import java.util.*;
-import java.util.function.Predicate;
 
 /**
  * Created by stupid-coder on 7/15/17.
@@ -117,9 +116,9 @@ public class VehicleServiceImpl implements VehicleService {
 
 
     @Override
-    public List<Vehicle> getVehicleByTime(Timestamp begin, Timestamp end) {
+    public List<Vehicle> getVehicleByTime(Long viid, Timestamp begin, Timestamp end) {
 
-        List<Vehicle> vehicles = getAllVehicles(0);
+        List<Vehicle> vehicles = getAllVehiclesByViid(viid,0);
 
         for ( Iterator<Vehicle> iter = vehicles.iterator(); iter.hasNext(); ) {
             Vehicle vehicle = iter.next();
@@ -135,7 +134,7 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public List<VehicleInfo> getVehicleInfosByTime(Timestamp begin, Timestamp end) {
 
-        List<Vehicle> vehicles = getVehicleByTime(begin, end);
+        List<Vehicle> vehicles = getVehicleByTime(null, begin, end);
 
         if ( vehicles == null || vehicles.isEmpty() ) return null;
 
