@@ -43,8 +43,7 @@ public class AccountAction {
     public HttpResponse logout(HttpSession session,
                                @RequestHeader(name = "token", required = true) String token)
     {
-        if ( accountService.check(session,token) != 0 )
-            return new HttpResponse(HttpStatus.LOGOUT_ERROR);
+        if ( accountService.check(session,token) != 0 ) return new HttpResponse(HttpStatus.LOGOUT_ERROR);
         accountService.logout(session);
         return new HttpResponse(HttpStatus.OK);
     }

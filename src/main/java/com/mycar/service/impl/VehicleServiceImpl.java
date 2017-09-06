@@ -119,13 +119,20 @@ public class VehicleServiceImpl implements VehicleService {
     public List<Vehicle> getVehicleByTime(Long viid, Timestamp begin, Timestamp end) {
 
         List<Vehicle> vehicles = getAllVehiclesByViid(viid,0);
+        VehicleInfo vehicleInfo = viid != null ? getVehicleInfoById(viid) : null;
+
+        if ( vehicleInfo != null && vehicleInfo.getIs_delete() == 1 ) return null;
 
         for ( Iterator<Vehicle> iter = vehicles.iterator(); iter.hasNext(); ) {
             Vehicle vehicle = iter.next();
             if ( (vehicle.getStatus() == VehicleStatus.FIXING.getStatus() || vehicle.getStatus() == VehicleStatus.RENTING.getStatus() )
                     && TimeUtils.TimeInteraction(begin,end,vehicle.getBegin(),vehicle.getEnd()) ) {
                 iter.remove();
+                continue;
             }
+            if ( vehicleInfo == null || vehicleInfo.getId().compareTo(vehicle.getViid()) != 0 )
+                vehicleInfo = getVehicleInfoById(vehicle.getViid());
+            if ( vehicleInfo == null || vehicleInfo.getIs_delete() == 1 ) iter.remove();
         }
 
         return vehicles;
