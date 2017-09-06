@@ -7,12 +7,10 @@ import com.mycar.service.VehicleInfoCostService;
 import com.mycar.service.VehicleService;
 import com.mycar.utils.HttpResponse;
 import com.mycar.utils.HttpStatus;
-import com.mycar.utils.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by stupid-coder on 7/15/17.
@@ -141,33 +138,39 @@ public class VehicleAction {
         return new HttpResponse(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/vehicle/info/{begin}/{end}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ResponseBody
-    public HttpResponse getAllInfosWithTime(HttpServletRequest request,
-                                            HttpServletResponse response,
-                                            @PathVariable("begin") long begin_s,
-                                            @PathVariable("end") long end_s)
-    {
-        Timestamp begin = new Timestamp(begin_s);
-        Timestamp end = new Timestamp(end_s);
+    @RequestMapping(value = "/vehicle/{viid}/{begin}/{end}/", method = RequestMethod.GET)
+    public HttpResponse getVehicleWithTime(@PathVariable Long viid,
+                                           @PathVariable Long begin,
+                                           @PathVariable Long end) {
+        Timestamp begin_stamp = new Timestamp(begin);
+        Timestamp end_stamp = new Timestamp(end);
 
-        List<VehicleInfo> vehicleInfos = vehicleService.getVehicleInfosByTime(begin,end);
+        List<Vehicle> vehicles = vehicleService.getVehicleByTime(viid,begin_stamp, end_stamp);
+        if ( vehicles == null ) return new HttpResponse(HttpStatus.NO_VEHICLE);
+        return new HttpResponse(vehicles);
+    }
+
+    @RequestMapping(value = "/vehicle/info/{begin}/{end}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public HttpResponse getAllInfosWithTime(@PathVariable Long begin,
+                                            @PathVariable Long end)
+    {
+        Timestamp begin_stamp = new Timestamp(begin);
+        Timestamp end_stamp = new Timestamp(end);
+
+        List<VehicleInfo> vehicleInfos = vehicleService.getVehicleInfosByTime(begin_stamp,end_stamp);
         if (vehicleInfos == null ) return new HttpResponse(HttpStatus.NO_VEHICLE_INFO);
 
         return new HttpResponse(vehicleInfos);
     }
 
     @RequestMapping(value = "/vehicle/info/{viid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ResponseBody
-    public HttpResponse getInfoByIdAndCost(HttpServletRequest request,
-                                           HttpServletResponse response,
-                                           @PathVariable("viid") long id)
+    public HttpResponse getInfoByIdAndCost(@PathVariable Long viid)
     {
-        VehicleInfo vehicleInfo = vehicleService.getVehicleInfoById(id);
+        VehicleInfo vehicleInfo = vehicleService.getVehicleInfoById(viid);
 
         if ( vehicleInfo == null )
         {
-            logger.warn("failure to get the vehicle info - id:{} begin:{} end:{}",id);
+            logger.warn("failure to get the vehicle info - id:{} begin:{} end:{}",viid);
             return new HttpResponse(HttpStatus.NO_VEHICLE_INFO);
         }
 

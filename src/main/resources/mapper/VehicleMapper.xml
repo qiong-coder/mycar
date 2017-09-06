@@ -8,10 +8,11 @@
     </select>
 
     <select id="getByViid" parameterType="long" resultType="com.mycar.model.Vehicle">
-        SELECT * FROM Vehicle WHERE viid=#{viid}
-        <if test="is_delete!=null">
-            AND is_delete=#{is_delete}
-        </if>
+        SELECT * FROM Vehicle
+        <where>
+                <if test="viid!=null">AND viid=#{viid}</if>
+        <if test="is_delete!=null">AND is_delete=#{is_delete}</if>
+        </where>
     </select>
 
     <select id="getByViidAndStatus" resultType="com.mycar.model.Vehicle">

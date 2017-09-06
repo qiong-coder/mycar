@@ -1,5 +1,6 @@
 package com.mycar.service.impl;
 
+import com.mycar.mapper.OrderMapper;
 import com.mycar.mapper.VehicleInfoMapper;
 import com.mycar.mapper.VehicleMapper;
 import com.mycar.model.Order;
@@ -35,6 +36,8 @@ public class VehicleServiceImpl implements VehicleService {
     private VehicleInfoMapper vehicleInfoMapper;
     @Autowired
     private VehicleInfoCostService vehicleInfoCostService;
+    @Autowired
+    private OrderMapper orderMapper;
 
     @Autowired
     private FileUploadUtils fileUploadUtils;
@@ -111,40 +114,60 @@ public class VehicleServiceImpl implements VehicleService {
 //        return vehicleInfo;
 //    }
 
+
     @Override
-    public List<VehicleInfo> getVehicleInfosByTime(Timestamp begin, Timestamp end) {
+    public List<Vehicle> getVehicleByTime(Long viid, Timestamp begin, Timestamp end) {
 
-        List<Vehicle> vehicles = getAllVehicles(0);
+        List<Vehicle> vehicles = getAllVehiclesByViid(viid,0);
 
-        if ( vehicles == null || vehicles.isEmpty() ) return null;
-
-        Set<Long> vidSet = new HashSet<>();
-        for ( Vehicle vehicle : vehicles )
-        {
-            long iid = vehicle.getViid();
-            if ( vidSet.contains(iid) ) continue;
-
-            VehicleStatus status = VehicleStatus.values()[vehicle.getStatus()];
-            switch ( status )
-            {
-                case OK: vidSet.add(iid); break;
-                case FIXING:
-                case RENTING:
-                    if ( !TimeUtils.TimeInteraction(begin,end,vehicle.getBegin(),vehicle.getEnd()) )
-                        vidSet.add(iid); break;
-                case VALIDATE: break;
+        for ( Iterator<Vehicle> iter = vehicles.iterator(); iter.hasNext(); ) {
+            Vehicle vehicle = iter.next();
+            if ( (vehicle.getStatus() == VehicleStatus.FIXING.getStatus() || vehicle.getStatus() == VehicleStatus.RENTING.getStatus() )
+                    && TimeUtils.TimeInteraction(begin,end,vehicle.getBegin(),vehicle.getEnd()) ) {
+                iter.remove();
             }
         }
 
-        // TODO: 未来的订单影响
+        return vehicles;
+    }
 
-        if ( vidSet.isEmpty() ) return null;
+    @Override
+    public List<VehicleInfo> getVehicleInfosByTime(Timestamp begin, Timestamp end) {
+
+<<<<<<< HEAD
+        List<Vehicle> vehicles = getAllVehicles(0);
+=======
+        List<Vehicle> vehicles = getVehicleByTime(null, begin, end);
+>>>>>>> c36339e911c253d226227fa3f40607e451d13ae6
+
+        if ( vehicles == null || vehicles.isEmpty() ) return null;
+
+        Map<Long, Integer> free_counts = new HashMap<>();
+        for ( Vehicle vehicle : vehicles ) {
+            Long viid = vehicle.getViid();
+            free_counts.put(viid,free_counts.getOrDefault(viid,0)+1);
+        }
+
+        List<Order> orders = orderMapper.getOrdersByScheduleInterval(null,begin,end);
+
+        Map<Long, Integer> use_counts = new HashMap<>();
+        if ( orders != null ) {
+            for( Order order : orders ) {
+                use_counts.put(order.getViid(), use_counts.getOrDefault(order.getViid(),0));
+            }
+        }
 
         List<VehicleInfo> vehicleInfos = new ArrayList<>();
-        for ( Long vid : vidSet )
+        for (Map.Entry<Long,Integer> entry : free_counts.entrySet() )
         {
-            VehicleInfo vehicleInfo = getVehicleInfoAndCostById(vid);
-            if ( vehicleInfo != null ) vehicleInfos.add(vehicleInfo);
+            Long viid = entry.getKey();
+            VehicleInfo vehicleInfo = getVehicleInfoAndCostById(viid);
+            if ( vehicleInfo != null ) {
+                if ( entry.getValue() - use_counts.getOrDefault(viid, 0) - vehicleInfo.getSpare() > 0 ) {
+                    vehicleInfo.setVehicle_count(entry.getValue() - use_counts.getOrDefault(viid, 0) - vehicleInfo.getSpare());
+                    vehicleInfos.add(vehicleInfo);
+                }
+            }
         }
 
         return vehicleInfos;
