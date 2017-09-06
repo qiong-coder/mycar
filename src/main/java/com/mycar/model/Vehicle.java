@@ -91,4 +91,5 @@ public class Vehicle {
     public void setCreate_time(Timestamp create_time) {
         this.create_time = create_time;
     }
+
 }

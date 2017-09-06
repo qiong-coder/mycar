@@ -8,6 +8,7 @@ import com.mycar.service.VehicleService;
 import com.mycar.utils.HttpResponse;
 import com.mycar.utils.HttpStatus;
 import com.mycar.utils.TimeUtils;
+import com.sun.tools.corba.se.idl.constExpr.Times;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -141,7 +142,18 @@ public class VehicleAction {
         return new HttpResponse(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/vehicle/info/{begin}/{end}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/vehicle/{begin}/{end}/", method = RequestMethod.GET)
+    public HttpResponse getVehicleWithTime(@PathVariable Long begin,
+                                           @PathVariable Long end) {
+        Timestamp begin_stamp = new Timestamp(begin);
+        Timestamp end_stamp = new Timestamp(end);
+
+        List<Vehicle> vehicles = vehicleService.getVehicleByTime(begin_stamp, end_stamp);
+        if ( vehicles == null ) return new HttpResponse(HttpStatus.NO_VEHICLE);
+        return new HttpResponse(vehicles);
+    }
+
+    @RequestMapping(value = "/vehicle/info/{begin}/{end}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public HttpResponse getAllInfosWithTime(HttpServletRequest request,
                                             HttpServletResponse response,
