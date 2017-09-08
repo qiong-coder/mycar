@@ -11,4 +11,9 @@ public interface FileUploadUtils extends ServletContextAware {
 
     String save(Part attachment);
 
+    void delete(String filename);
+
+    String getMediaPrefix();
+
+    String getCodePrefix();
 }

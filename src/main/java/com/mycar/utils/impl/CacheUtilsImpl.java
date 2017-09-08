@@ -24,6 +24,7 @@ public class CacheUtilsImpl implements CacheUtils {
     {
         try {
             Jedis client = jedisPool.getResource();
+            if ( client == null ) logger.warn("failure to get the jedis client");
             return client;
         } catch( Exception e ) {
             logger.warn("failure to get the jedis client - {}", e);
@@ -41,8 +42,11 @@ public class CacheUtilsImpl implements CacheUtils {
         Jedis client = getResource();
         if ( client == null ) return;
 
-        client.set(key,value);
-        client.expire(key,timeout);
+        if ( client.set(key,value).compareToIgnoreCase("ok") == 0 ) {
+            client.expire(key, timeout);
+        } else {
+            logger.warn("failure to set the redis key:{}\tvalue:{}",key,value);
+        }
         returnClient(client);
     }
 

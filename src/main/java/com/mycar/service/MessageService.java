@@ -11,4 +11,8 @@ public interface MessageService {
 
     boolean checkCode(String phone, String code);
 
+    String getPicture();
+
+    int checkPicture(String picture, String code);
+
 }
