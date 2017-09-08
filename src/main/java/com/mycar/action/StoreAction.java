@@ -1,6 +1,7 @@
 package com.mycar.action;
 
 import com.mycar.model.Store;
+import com.mycar.service.AccountService;
 import com.mycar.service.StoreService;
 import com.mycar.utils.HttpResponse;
 import com.mycar.utils.HttpStatus;
@@ -10,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -25,6 +28,9 @@ public class StoreAction {
 
     @Resource
     StoreService storeService;
+
+    @Resource
+    AccountService accountService;
 
     @RequestMapping(value = "/{id}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public HttpResponse getById(@PathVariable("id") Integer id)
@@ -43,24 +49,31 @@ public class StoreAction {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public HttpResponse insertStore(@RequestBody Store store)
+    public HttpResponse insertStore(HttpServletRequest request,
+                                    @RequestBody Store store)
     {
+        if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
+
         if ( storeService.insertStore(store) != 1 ) return new HttpResponse(HttpStatus.DUPLICATE_STORE);
         return new HttpResponse(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{oid}/", method = RequestMethod.PUT)
-    public HttpResponse updateStore(@PathVariable("oid") Integer oid,
+    public HttpResponse updateStore(HttpServletRequest request,
+                                    @PathVariable("oid") Integer oid,
                                     @RequestBody  Store store)
     {
+        if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         int count = storeService.updateStore(oid,store);
         if ( count != 1 ) return new HttpResponse(HttpStatus.NO_STORE);
         return new HttpResponse(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{oid}/", method = RequestMethod.DELETE)
-    public HttpResponse deleteStore(@PathVariable("oid") Integer oid)
+    public HttpResponse deleteStore(HttpServletRequest request,
+                                    @PathVariable("oid") Integer oid)
     {
+        if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         int count = storeService.updateStoreToDelete(oid);
         if ( count != 1 ) return new HttpResponse(HttpStatus.NO_STORE);
         else return new HttpResponse(HttpStatus.OK);

@@ -3,6 +3,7 @@ package com.mycar.action;
 
 import com.mycar.model.Vehicle;
 import com.mycar.model.VehicleInfo;
+import com.mycar.service.AccountService;
 import com.mycar.service.VehicleInfoCostService;
 import com.mycar.service.VehicleService;
 import com.mycar.utils.HttpResponse;
@@ -34,8 +35,10 @@ public class VehicleAction {
     @Resource
     private VehicleInfoCostService vehicleInfoCostService;
 
+    @Resource
+    AccountService accountService;
+
     @RequestMapping(value = "/vehicles/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ResponseBody
     public HttpResponse getVehiclesByStatus()
     {
         List<Vehicle> vehicles = vehicleService.getAllVehicles(0);
@@ -44,7 +47,6 @@ public class VehicleAction {
     }
 
     @RequestMapping(value = "/vehicles/{viid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ResponseBody
     public HttpResponse getVehiclesByStatus(@PathVariable("viid") long viid)
     {
         List<Vehicle> vehicles = vehicleService.getAllVehiclesByViid(viid,0);
@@ -53,7 +55,6 @@ public class VehicleAction {
     }
 
     @RequestMapping(value = "/vehicles/{viid}/{status}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ResponseBody
     public HttpResponse getVehiclesByStatus(@PathVariable("viid") long viid,
                                             @PathVariable("status") int status)
     {
@@ -63,7 +64,6 @@ public class VehicleAction {
     }
 
     @RequestMapping(value = "/vehicle/{vid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ResponseBody
     public HttpResponse getVehicleById(HttpServletRequest request,
                                        HttpServletResponse response,
                                        @PathVariable("vid") long vid)
@@ -75,9 +75,11 @@ public class VehicleAction {
     }
 
     @RequestMapping(value = "/vehicle/{viid}/", method = RequestMethod.POST)
-    public HttpResponse addVehicle(@PathVariable("viid") long viid,
+    public HttpResponse addVehicle(HttpServletRequest request,
+                                   @PathVariable("viid") long viid,
                                    @RequestBody Vehicle vehicle)
     {
+        if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         vehicle.setViid(viid);
         int id = vehicleService.insertVechile(vehicle);
         if ( id != 1 ) return new HttpResponse(HttpStatus.DUPLICATE_VEHICLE);
@@ -85,17 +87,21 @@ public class VehicleAction {
     }
 
     @RequestMapping(value = "/vehicle/{vid}/", method = RequestMethod.PUT )
-    public HttpResponse updateVehicleByVid(@PathVariable("vid") long vid,
+    public HttpResponse updateVehicleByVid(HttpServletRequest request,
+                                           @PathVariable("vid") long vid,
                                            @RequestParam("description") String description)
     {
+        if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         int id = vehicleService.updateVehicleDescription(vid, description);
         if ( id != 1 ) return new HttpResponse(HttpStatus.NO_VEHICLE);
         else return new HttpResponse(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/vehicle/{vid}/", method = RequestMethod.DELETE )
-    public HttpResponse deleteVehicleById(@PathVariable("vid") long vid)
+    public HttpResponse deleteVehicleById(HttpServletRequest request,
+                                          @PathVariable("vid") long vid)
     {
+        if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         int count = vehicleService.updateVehicleToDelete(vid);
         if ( count != 1 ) return new HttpResponse(HttpStatus.NO_VEHICLE);
         else return new HttpResponse(HttpStatus.OK);
@@ -114,8 +120,10 @@ public class VehicleAction {
     }
 
     @RequestMapping(value = "/vehicle/info/", method = RequestMethod.POST)
-    public HttpResponse insertVehicleInfo(VehicleInfo vehicleInfo,
+    public HttpResponse insertVehicleInfo(HttpServletRequest request,
+                                          VehicleInfo vehicleInfo,
                                           @RequestPart("attachment") Part attachment) {
+        if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         if ( vehicleInfo.getSpare() == null ) vehicleInfo.setSpare(0);
         int count = vehicleService.insertVehicleInfo(vehicleInfo, attachment);
         if ( count == 0 ) return new HttpResponse(HttpStatus.ERROR);
@@ -123,16 +131,20 @@ public class VehicleAction {
     }
 
     @RequestMapping(value = "/vehicle/info/{viid}/", method = RequestMethod.POST)
-    public HttpResponse updateVehicleInfo(@RequestPart("attachment") Part attachment,
+    public HttpResponse updateVehicleInfo(HttpServletRequest request,
+                                          @RequestPart("attachment") Part attachment,
                                           @PathVariable("viid") long viid,
                                           VehicleInfo vehicleInfo) {
+        if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         int count = vehicleService.updateVehicleInfo(viid,vehicleInfo,attachment);
         if (count != 1) return new HttpResponse(HttpStatus.NO_VEHICLE);
         return new HttpResponse(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/vehicle/info/{viid}/", method = RequestMethod.DELETE)
-    public HttpResponse deleteVehicleInfo(@PathVariable("viid") long viid) {
+    public HttpResponse deleteVehicleInfo(HttpServletRequest request,
+                                          @PathVariable("viid") long viid) {
+        if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         int count = vehicleService.updateVehicleInfoToDelete(viid);
         if ( count != 1 ) return new HttpResponse(HttpStatus.NO_VEHICLE_INFO);
         return new HttpResponse(HttpStatus.OK);

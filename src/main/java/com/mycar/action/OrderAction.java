@@ -5,6 +5,7 @@ import com.mycar.model.Order;
 import com.mycar.model.OrderStatusCount;
 import com.mycar.response.OrderHistory;
 import com.mycar.response.OrderSchedule;
+import com.mycar.service.AccountService;
 import com.mycar.service.OrderService;
 import com.mycar.service.VehicleService;
 import com.mycar.utils.HttpResponse;
@@ -34,21 +35,20 @@ public class OrderAction {
     OrderService orderService;
 
     @Resource
-    VehicleService vehicleService;
+    AccountService accountService;
 
     @RequestMapping(value = "/orders/{status}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public HttpResponse select(HttpServletRequest request,
                                HttpServletResponse response,
                                @PathVariable("status") int status)
     {
+        if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         JSONObject ret = orderService.getOrdersAndVehicleInfosByStatus(status);
         if ( ret == null ) return new HttpResponse(HttpStatus.NO_ORDER);
         else return new HttpResponse(ret);
     }
 
     @RequestMapping(value = "/orders/number/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public HttpResponse getOrdersNumberByStatus()
     {
         List<OrderStatusCount> ordersCounts = orderService.getOrdersNumberByStatus();
@@ -56,23 +56,23 @@ public class OrderAction {
     }
 
     @RequestMapping(value = "/order/{oid}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public HttpResponse getOrderById(HttpServletRequest request,
                                      HttpServletResponse response,
                                      @PathVariable("oid") long oid)
     {
+        if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         JSONObject ret = orderService.getOrderAndVehicleInfoByOrderId(oid);
         if ( ret == null ) return new HttpResponse(HttpStatus.NO_ORDER);
         else return new HttpResponse(ret);
     }
 
     @RequestMapping(value = "/order/{viid}/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public HttpResponse insert(HttpServletRequest request,
                                HttpServletResponse response,
                                @PathVariable("viid") long viid,
                                @RequestBody Order order)
     {
+        if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         int status = orderService.insertOrder(viid,order);
         if ( status < 0 ) {
             logger.error("failure to insert the order - viid:{}\torder:{}",viid, order);
@@ -84,62 +84,64 @@ public class OrderAction {
     }
 
     @RequestMapping(value = "/order/check/{oid}/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public HttpResponse check(HttpServletRequest request,
                               HttpServletResponse response,
                               @PathVariable("oid") long oid)
     {
+        if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         return new HttpResponse(orderService.checkOrder(oid));
     }
 
     @RequestMapping(value = "/order/renting/{oid}/{number}/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public HttpResponse rent(HttpServletRequest request,
                              HttpServletResponse response,
                              @PathVariable("oid") long id,
                              @PathVariable("number") String number,
                              @RequestBody Order order)
     {
+        if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         return new HttpResponse(orderService.rentOrder(id,order,number));
     }
 
 
     @RequestMapping(value = "/order/drawback/{oid}/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public HttpResponse drawback(HttpServletRequest request,
                                  HttpServletResponse response,
                                  @PathVariable("oid") long id,
                                  @RequestBody Order order)
     {
+        if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         return new HttpResponse(orderService.drawBackOrder(id,order));
     }
 
     @RequestMapping(value = "/order/finished/{oid}/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public HttpResponse finished(HttpServletRequest request,
                                  HttpServletResponse response,
                                  @PathVariable("oid") long id,
                                  @RequestBody(required = false) Order order)
     {
+        if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         return new HttpResponse(orderService.finishedOrder(id,order));
     }
 
     @RequestMapping(value = "/order/cancle/{oid}/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public HttpResponse cancle(HttpServletRequest request,
                                HttpServletResponse response,
                                @PathVariable("oid") long id,
                                @RequestBody Order order)
     {
+        if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         return new HttpResponse(orderService.cancleOrder(id, order));
     }
 
     @RequestMapping(value = "/order/history/{viid}/{number}/{begin}/{end}/", method = RequestMethod.GET)
-    public HttpResponse history(@PathVariable String viid,
+    public HttpResponse history(HttpServletRequest request,
+                                @PathVariable String viid,
                                 @PathVariable String number,
                                 @PathVariable Long begin,
                                 @PathVariable Long end)
     {
+        if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         Timestamp begin_stamp = new Timestamp(begin);
         Timestamp end_stamp = new Timestamp(end);
         OrderHistory history = orderService.orderHistory(viid.compareTo("null") == 0 ? null : Long.parseLong(viid),
@@ -150,10 +152,12 @@ public class OrderAction {
     }
 
     @RequestMapping(value = "/order/schedule/{viid}/{begin}/{end}/", method = RequestMethod.GET)
-    public HttpResponse schedule(@PathVariable String viid,
+    public HttpResponse schedule(HttpServletRequest request,
+                                 @PathVariable String viid,
                                  @PathVariable Long begin,
                                  @PathVariable Long end)
     {
+        if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         Timestamp begin_stamp = new Timestamp(begin);
         Timestamp end_stamp = new Timestamp(end);
         List<OrderSchedule> orderSchedules = orderService.orderSchedule(viid.compareTo("null") == 0 ? null : Long.parseLong(viid)

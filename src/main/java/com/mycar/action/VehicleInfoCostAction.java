@@ -2,6 +2,7 @@ package com.mycar.action;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mycar.model.VehicleInfoCost;
+import com.mycar.service.AccountService;
 import com.mycar.service.VehicleInfoCostService;
 import com.mycar.utils.HttpResponse;
 import com.mycar.utils.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 
 /**
@@ -26,9 +28,10 @@ public class VehicleInfoCostAction {
     @Resource
     VehicleInfoCostService vehicleInfoCostService;
 
+    @Resource
+    AccountService accountService;
 
     @RequestMapping(value = "/vehicle/info/cost/{viid}/{begin}/{end}/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ResponseBody
     public HttpResponse getVehicleInfoCostInfo(@PathVariable("viid") Long viid,
                                                @PathVariable("begin") Long begin,
                                                @PathVariable("end") Long end)
@@ -50,10 +53,11 @@ public class VehicleInfoCostAction {
     }
 
     @RequestMapping(value = "/vehicle/info/cost/{viid}/", method = RequestMethod.PUT)
-    @ResponseBody
-    public HttpResponse updateVehicleInfoCostByViid(@PathVariable("viid") long viid,
+    public HttpResponse updateVehicleInfoCostByViid(HttpServletRequest request,
+                                                    @PathVariable("viid") long viid,
                                                     @RequestBody VehicleInfoCost costInfo)
     {
+        if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         costInfo.setViid(viid);
         if ( vehicleInfoCostService.update(costInfo) == 1 ) return new HttpResponse(HttpStatus.OK);
         else return new HttpResponse(HttpStatus.ERROR);

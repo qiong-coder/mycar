@@ -24,6 +24,7 @@ public class HttpStatus {
     public static int LOGOUT_ERROR = -13;
     public static int CODE_ERROR = -14;
     public static int CODE_NOT_FOUND = -15;
+    public static int PERMISSION_DENY = -16;
 
     private static Map<Integer, String> statusInfos = new HashMap<Integer,String>() {{
        put(OK,"success");
@@ -42,6 +43,7 @@ public class HttpStatus {
        put(LOGOUT_ERROR, "failure to logout");
        put(CODE_ERROR, "failure to check the code");
        put(CODE_NOT_FOUND, "failure to find the code, maybe timeout, please get the new picture");
+       put(PERMISSION_DENY,"permission deny, must login");
     }};
 
     public static String getInfo(int status) {
