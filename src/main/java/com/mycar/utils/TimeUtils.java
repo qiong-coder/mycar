@@ -16,15 +16,19 @@ public class TimeUtils {
         return new Timestamp(System.currentTimeMillis());
     }
 
+    public static Long GetDayIndex(Timestamp timestamp)
+    {
+        return (timestamp.getTime()/(3600*MILLIS_PER_SECOND)-8)/24;
+    }
+
     public static boolean TimeInteraction(Timestamp begin, Timestamp end, Timestamp rbegin, Timestamp rend)
     {
-        Timestamp now = GetTimestamp();
-        if ( end.compareTo(now) <= 0 ) {
-            return false;
-        } else {
-            return begin.compareTo(rbegin) >= 0 && begin.compareTo(rend) <= 0 ||
-                    end.compareTo(rbegin) >= 0 && end.compareTo(rend) <= 0;
-        }
+        long begin_day = GetDayIndex(begin);
+        long end_day = GetDayIndex(end);
+        long rbegin_day = GetDayIndex(rbegin);
+        long rend_day = GetDayIndex(rend);
+
+        return  begin_day <= rend_day && end_day >= rbegin_day;
     }
 
     public static int TimeDiff(Timestamp begin, Timestamp end)
