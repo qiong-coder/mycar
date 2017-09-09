@@ -89,10 +89,10 @@ public class VehicleAction {
     @RequestMapping(value = "/vehicle/{vid}/", method = RequestMethod.PUT)
     public HttpResponse updateVehicleByVid(HttpServletRequest request,
                                            @PathVariable("vid") Long vid,
-                                           @RequestParam("description") String description)
+                                           @RequestBody Vehicle vehicle)
     {
         if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
-        int id = vehicleService.updateVehicleDescription(vid, description);
+        int id = vehicleService.updateVehicleDescription(vid, vehicle.getDescription());
         if ( id != 1 ) return new HttpResponse(HttpStatus.NO_VEHICLE);
         else return new HttpResponse(HttpStatus.OK);
     }
