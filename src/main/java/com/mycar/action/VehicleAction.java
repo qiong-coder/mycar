@@ -86,9 +86,9 @@ public class VehicleAction {
         else return new HttpResponse(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/vehicle/{vid}/", method = RequestMethod.PUT )
+    @RequestMapping(value = "/vehicle/{vid}/", method = RequestMethod.PUT)
     public HttpResponse updateVehicleByVid(HttpServletRequest request,
-                                           @PathVariable("vid") long vid,
+                                           @PathVariable("vid") Long vid,
                                            @RequestParam("description") String description)
     {
         if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);

@@ -41,7 +41,7 @@ public class AccountAction {
 
     @RequestMapping(value = "/logout/", method = RequestMethod.PUT)
     public HttpResponse logout(HttpSession session,
-                               @RequestHeader(name = "token", required = true) String token)
+                               @RequestHeader(name = "token") String token)
     {
         if ( accountService.check(session,token) != 0 ) return new HttpResponse(HttpStatus.LOGOUT_ERROR);
         accountService.logout(session);

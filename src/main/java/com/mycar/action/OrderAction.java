@@ -72,6 +72,7 @@ public class OrderAction {
                                @PathVariable("viid") long viid,
                                @RequestBody Order order)
     {
+        if ( request.getHeader("token") == null ) logger.warn("failure to insert order with no token");
         if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         int status = orderService.insertOrder(viid,order);
         if ( status < 0 ) {
