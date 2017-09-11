@@ -345,7 +345,9 @@ public class OrderServiceImpl implements OrderService {
                     begin.compareTo(vehicle.getCreate_time()) >= 0 ? begin : vehicle.getCreate_time(),
                     end);
         }
-        orderHistory.setIdle_day(total_days-use_days);
+        if ( total_days - use_days >= 0 )
+            orderHistory.setIdle_day(total_days-use_days);
+        else orderHistory.setIdle_day(0);
 
         return orderHistory;
     }
