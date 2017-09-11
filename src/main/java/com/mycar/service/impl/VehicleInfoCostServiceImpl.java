@@ -42,17 +42,21 @@ public class VehicleInfoCostServiceImpl implements VehicleInfoCostService {
 
         Calendar calendar_begin = Calendar.getInstance();
         calendar_begin.setTime(begin);
-        Calendar calendar_end = Calendar.getInstance();
-        calendar_end.setTime(end);
-
+        long bhours = TimeUtils.GetHours(begin);
+        long ehours = TimeUtils.GetHours(end);
+        long total = 0;
         JSONObject day_costs = new JSONObject();
-        int total = 0;
         do {
             int day_cost = vehicleInfoCost.getDay_cost(calendar_begin);
             day_costs.put(TimeUtils.GetDateFormat(calendar_begin),day_cost);
             total += day_cost + vehicleInfoCost.getBase_insurance() + vehicleInfoCost.getFree_insurance();
             calendar_begin.add(Calendar.DATE,1);
-        } while ( calendar_begin.compareTo(calendar_end) <= 0 );
+            bhours += 24;
+        } while ( ehours - bhours >= 6 );
+
+        if ( ehours - bhours >= 3 ) cost_info.put("overtime", 20000);
+        else if ( ehours - bhours >= 2 ) cost_info.put("overtime",10000);
+
         cost_info.put("day_costs", day_costs);
         cost_info.put("total_cost", total);
         return cost_info;

@@ -119,9 +119,12 @@ public class VehicleServiceImpl implements VehicleService {
     public List<Vehicle> getVehicleByTime(Long viid, Timestamp begin, Timestamp end) {
 
         List<Vehicle> vehicles = getAllVehiclesByViid(viid,0);
-        VehicleInfo vehicleInfo = viid != null ? getVehicleInfoById(viid) : null;
-
-        if ( vehicleInfo != null && vehicleInfo.getIs_delete() == 1 ) return null;
+        Map<Long,VehicleInfo> vehicleInfos = new HashMap<>();
+        if ( viid != null ) {
+            VehicleInfo vehicleInfo = vehicleInfoMapper.getById(viid);
+            if ( vehicleInfo != null && vehicleInfo.getIs_delete() == 1 ) return null;
+            vehicleInfos.put(viid, vehicleInfo);
+        }
 
         for ( Iterator<Vehicle> iter = vehicles.iterator(); iter.hasNext(); ) {
             Vehicle vehicle = iter.next();
@@ -130,9 +133,14 @@ public class VehicleServiceImpl implements VehicleService {
                 iter.remove();
                 continue;
             }
-            if ( vehicleInfo == null || vehicleInfo.getId().compareTo(vehicle.getViid()) != 0 )
+
+            VehicleInfo vehicleInfo;
+            if ( !vehicleInfos.containsKey(vehicle.getViid()) ) {
                 vehicleInfo = getVehicleInfoById(vehicle.getViid());
-            if ( vehicleInfo == null || vehicleInfo.getIs_delete() == 1 ) iter.remove();
+                vehicleInfos.put(vehicle.getViid(),vehicleInfo);
+            } else vehicleInfo = vehicleInfos.get(vehicle.getViid());
+
+            if (vehicleInfo == null || vehicleInfo.getIs_delete() == 1) iter.remove();
         }
 
         return vehicles;
@@ -156,7 +164,7 @@ public class VehicleServiceImpl implements VehicleService {
         Map<Long, Integer> use_counts = new HashMap<>();
         if ( orders != null ) {
             for( Order order : orders ) {
-                use_counts.put(order.getViid(), use_counts.getOrDefault(order.getViid(),0));
+                use_counts.put(order.getViid(), use_counts.getOrDefault(order.getViid(),0)+1);
             }
         }
 

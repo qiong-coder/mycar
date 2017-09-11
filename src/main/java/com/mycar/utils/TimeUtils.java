@@ -55,4 +55,8 @@ public class TimeUtils {
     {
         return dateFormat.format(calendar.getTime());
     }
+
+    public static long GetHours(Timestamp time) {
+         return time.getTime()/(3600*MILLIS_PER_SECOND) - 8;
+    }
 }
