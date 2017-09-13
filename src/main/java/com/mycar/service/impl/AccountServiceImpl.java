@@ -42,7 +42,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account login(String username, String password) {
         Account account = accountMapper.get(username);
-        if ( account == null ) return null;
+        if ( account == null || account.getStatus() == 1 ) return null;
         else if ( account.getPassword().compareTo(password) != 0 ) return null;
         account.setToken(Md5Utils.md5(username,Long.toString(System.currentTimeMillis())));
         return account;

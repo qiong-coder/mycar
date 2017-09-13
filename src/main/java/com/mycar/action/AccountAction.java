@@ -54,7 +54,7 @@ public class AccountAction {
     public HttpResponse register(@RequestBody Account account)
     {
         int uid = accountService.register(account);
-        if ( uid == -1 ) return new HttpResponse(HttpStatus.ERROR);
+        if ( uid == -1 ) return new HttpResponse(HttpStatus.DUPLICATE_ACCOUNT);
         return new HttpResponse(HttpStatus.OK);
     }
 
@@ -90,7 +90,10 @@ public class AccountAction {
     {
         if ( accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         if ( accountService.delete(username) == 0 ) return new HttpResponse(HttpStatus.NO_ACCOUNT);
-        else return new HttpResponse(HttpStatus.OK);
+        else {
+            accountService.logout(request.getSession());
+            return new HttpResponse(HttpStatus.OK);
+        }
     }
 
 }

@@ -26,6 +26,7 @@ public class HttpStatus {
     public static int CODE_NOT_FOUND = -15;
     public static int PERMISSION_DENY = -16;
     public static int NO_ACCOUNT = -17;
+    public static int DUPLICATE_ACCOUNT = -18;
 
     private static Map<Integer, String> statusInfos = new HashMap<Integer,String>() {{
        put(OK,"success");
@@ -46,6 +47,7 @@ public class HttpStatus {
        put(CODE_NOT_FOUND, "failure to find the code, maybe timeout, please get the new picture");
        put(PERMISSION_DENY,"permission deny, must login");
        put(NO_ACCOUNT, "failure to get the account");
+       put(DUPLICATE_ACCOUNT, "the account is duplicate");
     }};
 
     public static String getInfo(int status) {
