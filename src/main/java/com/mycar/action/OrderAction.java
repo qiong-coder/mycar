@@ -141,7 +141,7 @@ public class OrderAction {
                                 @PathVariable Long begin,
                                 @PathVariable Long end)
     {
-        if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
+        //if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         Timestamp begin_stamp = new Timestamp(begin);
         Timestamp end_stamp = new Timestamp(end);
         OrderHistory history = orderService.orderHistory(viid.compareTo("null") == 0 ? null : Long.parseLong(viid),
@@ -157,7 +157,7 @@ public class OrderAction {
                                  @PathVariable Long begin,
                                  @PathVariable Long end)
     {
-        if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
+        //if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         Timestamp begin_stamp = new Timestamp(begin);
         Timestamp end_stamp = new Timestamp(end);
         List<OrderSchedule> orderSchedules = orderService.orderSchedule(viid.compareTo("null") == 0 ? null : Long.parseLong(viid)

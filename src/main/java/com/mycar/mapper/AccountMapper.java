@@ -3,16 +3,20 @@ package com.mycar.mapper;
 import com.mycar.model.Account;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * Created by qixiang on 8/1/17.
  */
 public interface AccountMapper {
 
-    int insert(@Param("name") String name, @Param("password") String password);
+    int insert(Account account);
 
-    Account get(@Param("name") String name);
+    Account get(@Param("username") String username);
 
-    int update(@Param("name") String name, @Param("password") String password);
+    List<Account> list();
 
-    int delete(@Param("name") String name);
+    int update(Account account);
+
+    int delete(@Param("username") String username);
 }

@@ -354,10 +354,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderSchedule> orderSchedule(Long viid, Timestamp begin, Timestamp end) {
-        List<Order> orders = orderMapper.getOrdersByScheduleInterval(viid, begin, end);
+        List<Order> orders = orderMapper.getOrdersByScheduleInterval(viid, begin, end, null);
         Map<Long, VehicleInfoCount> vehicleInfoCounts = vehicleService.getVehicleCount(viid);
 
-        int total_days = TimeUtils.TimeDiffByDays(begin,end);
+        int total_days = TimeUtils.TimeDiff(begin,end);
 
         Map<Long,Long[]> use_vehicle = new HashMap<>();
 
@@ -380,8 +380,9 @@ public class OrderServiceImpl implements OrderService {
                 use_end = order.getRend().compareTo(end) >= 0 ? end : order.getRend();
             } else continue;
 
-            int begin_index = TimeUtils.TimeDiffByDays(begin,use_begin)-1;
-            int end_index = TimeUtils.TimeDiffByDays(begin,use_end)-1;
+            int begin_index = TimeUtils.TimeDiff(begin,use_begin);
+            int end_index = TimeUtils.TimeDiff(begin,use_end);
+            //if (end_index > total_days) end_index = total_days;
 
             for ( int i = begin_index; i < end_index; ++ i ) {
                 if ( viid_use_vehicle[i] == null ) viid_use_vehicle[i] = new Long(1);
@@ -406,12 +407,7 @@ public class OrderServiceImpl implements OrderService {
             int index = 0;
             while ( index++ < viid_use_vehicle.length ) {
 
-                if ( viid_use_vehicle[index-1] == null ) {
-                    calender.add(Calendar.DATE,1);
-                    continue;
-                }
-
-                long stock = vehicleInfoCount.getCount() - vehicleInfoCount.getSpare() - viid_use_vehicle[index-1];
+                long stock = vehicleInfoCount.getCount() - vehicleInfoCount.getSpare() - (viid_use_vehicle[index-1] == null?0:viid_use_vehicle[index-1]);
 
                 if ( orderSchedule.getStock() == stock ) {
                     calender.add(Calendar.DATE,1);

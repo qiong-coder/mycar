@@ -5,19 +5,32 @@
 <mapper namespace="com.mycar.mapper.AccountMapper">
 
     <insert id="insert">
-        INSERT INTO Account (`name`, `password`) VALUES (#{name}, #{password})
+        INSERT INTO Account (`username`, `password`, `name`, `phone`, `store`) VALUES (#{username}, #{password}, #{name}, #{phone}, #{store})
     </insert>
 
     <select id="get" resultType="com.mycar.model.Account">
-        SELECT * FROM Account WHERE `name`=#{name}
+        SELECT * FROM Account WHERE username=#{username}
+    </select>
+
+    <select id="list" resultType="com.mycar.model.Account">
+        SELECT * FROM Account WHERE status=0
     </select>
 
     <update id="update">
-        UPDATE Account SET password=#{password} WHERE name=#{name}
+        UPDATE Account
+        <set>
+            <if test="password!=null">password=#{password},</if>
+            <if test="name!=null">`name`=#{name},</if>
+            <if test="phone!=null">`phone`=#{phone},</if>
+        </set>
+        <where>
+            <if test="id!=null">id=#{id}</if>
+            <if test="username!=null">AND username=#{username}</if>
+        </where>
     </update>
 
     <update id="delete">
-        UPDATE Account SET status=1 WHERE name=#{name}
+        UPDATE Account SET status=1 WHERE `username`=#{username}
     </update>
 
 </mapper>

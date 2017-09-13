@@ -6,9 +6,38 @@ package com.mycar.model;
 public class Account {
 
     private Long id;
-    private String name;
+    private String username;
     private String password;
+    private String name;
+    private String phone;
+    private Integer store;
+    private String token;
     private Long status;
+
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Integer getStore() {
+        return store;
+    }
+
+    public void setStore(Integer store) {
+        this.store = store;
+    }
 
     public Long getId() {
         return id;
@@ -42,13 +71,11 @@ public class Account {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "Account{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                ", status=" + status +
-                '}';
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

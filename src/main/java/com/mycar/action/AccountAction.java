@@ -15,6 +15,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * Created by qiong-coder on 7/31/17.
@@ -33,10 +34,11 @@ public class AccountAction {
     public HttpResponse login(HttpSession session,
                               @RequestBody Account account)
     {
-        String token = accountService.login(account.getName(),account.getPassword());
-        if ( token == null ) return new HttpResponse(HttpStatus.LOGIN_ERROR);
-        session.setAttribute("token",token);
-        return new HttpResponse(token);
+        Account account1 = accountService.login(account.getUsername(),account.getPassword());
+        if ( account1 == null ) return new HttpResponse(HttpStatus.LOGIN_ERROR);
+
+        session.setAttribute("token",account1.getToken());
+        return new HttpResponse(account1);
     }
 
     @RequestMapping(value = "/logout/", method = RequestMethod.PUT)
@@ -51,9 +53,44 @@ public class AccountAction {
     @RequestMapping(value = "/register/", method = RequestMethod.POST)
     public HttpResponse register(@RequestBody Account account)
     {
-        int uid = accountService.register(account.getName(),account.getPassword());
+        int uid = accountService.register(account);
         if ( uid == -1 ) return new HttpResponse(HttpStatus.ERROR);
         return new HttpResponse(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public HttpResponse list(HttpServletRequest request) {
+        if ( accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
+        return new HttpResponse(accountService.list());
+    }
+
+    @RequestMapping(value = "/{username}/", method = RequestMethod.GET)
+    public HttpResponse getByUsername(HttpServletRequest request,
+                                      @PathVariable String username) {
+        if ( accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
+        Account account = accountService.get(username);
+        if ( account == null ) return new HttpResponse(HttpStatus.NO_ACCOUNT);
+        else return new HttpResponse(account);
+    }
+
+    @RequestMapping(value = "/{username}/", method = RequestMethod.PUT)
+    public HttpResponse updateByUsername(HttpServletRequest request,
+                                         @PathVariable String username,
+                                         @RequestBody Account account)
+    {
+        if ( accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
+        account.setUsername(username);
+        if ( accountService.update(account) == 0 ) return new HttpResponse(HttpStatus.NO_ACCOUNT);
+        else return new HttpResponse(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{username}/", method = RequestMethod.DELETE)
+    public HttpResponse deleteByUsername(HttpServletRequest request,
+                                         @PathVariable String username)
+    {
+        if ( accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
+        if ( accountService.delete(username) == 0 ) return new HttpResponse(HttpStatus.NO_ACCOUNT);
+        else return new HttpResponse(HttpStatus.OK);
     }
 
 }

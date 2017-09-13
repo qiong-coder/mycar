@@ -11,6 +11,7 @@ import com.mycar.response.VehicleInfoCount;
 import com.mycar.service.VehicleInfoCostService;
 import com.mycar.service.VehicleService;
 import com.mycar.utils.FileUploadUtils;
+import com.mycar.utils.OrderStatus;
 import com.mycar.utils.TimeUtils;
 import com.mycar.utils.VehicleStatus;
 import org.slf4j.Logger;
@@ -159,7 +160,7 @@ public class VehicleServiceImpl implements VehicleService {
             free_counts.put(viid,free_counts.getOrDefault(viid,0)+1);
         }
 
-        List<Order> orders = orderMapper.getOrdersByScheduleInterval(null,begin,end);
+        List<Order> orders = orderMapper.getOrdersByScheduleInterval(null,begin,end, OrderStatus.PENDING.getStatus());
 
         Map<Long, Integer> use_counts = new HashMap<>();
         if ( orders != null ) {

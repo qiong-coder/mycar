@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * Created by qixiang on 8/1/17.
@@ -18,24 +19,33 @@ public class AccountServiceImpl implements AccountService {
 
     private static Logger logger = LoggerFactory.getLogger(AccountService.class);
 
-    private static final String PREFIX="mycar-admin-";
-    private static final int TIMEOUT = 60*15;
-
     @Autowired
     AccountMapper accountMapper;
 
     @Override
-    public int register(String name, String password) {
-        if ( accountMapper.get(name) != null ) return -1;
-        return accountMapper.insert(name,password);
+    public int register(Account account)
+    {
+        if ( accountMapper.get(account.getUsername()) != null ) return -1;
+        return accountMapper.insert(account);
     }
 
     @Override
-    public String login(String name, String password) {
-        Account account = accountMapper.get(name);
+    public Account get(String username) {
+        return accountMapper.get(username);
+    }
+
+    @Override
+    public List<Account> list() {
+        return accountMapper.list();
+    }
+
+    @Override
+    public Account login(String username, String password) {
+        Account account = accountMapper.get(username);
         if ( account == null ) return null;
         else if ( account.getPassword().compareTo(password) != 0 ) return null;
-        else return Md5Utils.md5(name,Long.toString(System.currentTimeMillis()));
+        account.setToken(Md5Utils.md5(username,Long.toString(System.currentTimeMillis())));
+        return account;
     }
 
     @Override
@@ -44,8 +54,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public int update(String name, String password) {
-        return 0;
+    public int update(Account account) {
+        return accountMapper.update(account);
     }
 
     @Override
@@ -53,5 +63,10 @@ public class AccountServiceImpl implements AccountService {
         String session_token = (String)session.getAttribute("token");
         if ( session_token == null || session_token.compareTo(token) != 0 ) return -1;
         else return 0;
+    }
+
+    @Override
+    public int delete(String username) {
+        return accountMapper.delete(username);
     }
 }

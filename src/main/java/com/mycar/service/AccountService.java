@@ -1,19 +1,28 @@
 package com.mycar.service;
 
+import com.mycar.model.Account;
+
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * Created by qixiang on 8/1/17.
  */
 public interface AccountService {
 
-    int register(String name, String password);
+    int register(Account account);
 
-    String login(String name, String password);
+    Account get(String username);
+
+    List<Account> list();
+
+    Account login(String username, String password);
 
     void logout(HttpSession session);
 
-    int update(String name, String password);
+    int update(Account account);
 
     int check(HttpSession session, String token);
+
+    int delete(String username);
 }
