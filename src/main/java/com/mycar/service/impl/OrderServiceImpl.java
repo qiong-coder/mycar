@@ -125,6 +125,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public int deleteOrderById(Long id) {
+        return orderMapper.deleteOrderById(id);
+    }
+
+    @Override
     public int insertOrder(long viid, Order order) {
         VehicleInfo vehicleInfo = vehicleService.getVehicleInfoById(viid);
         if ( vehicleInfo == null ) {

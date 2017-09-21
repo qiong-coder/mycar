@@ -31,7 +31,19 @@
     </update>
 
     <update id="updateInfoAndStatus" parameterType="com.mycar.model.Order">
-        UPDATE `Order` SET distance=#{distance}, pay_info=#{pay_info}, cost_info=#{cost_info}, status=#{status} WHERE id=#{id}
+        UPDATE `Order`
+        <set>
+            <if test="rend!=null">rend=#{rend},</if>
+            <if test="distance!=null">distance=#{distance},</if>
+            <if test="pay_info!=null">pay_info=#{pay_info},</if>
+            <if test="cost_info!=null">cost_info=#{cost_info},</if>
+            <if test="status!=null">status=#{status},</if>
+        </set>
+        WHERE id=#{id}
+    </update>
+
+    <update id="deleteOrderById">
+        DELETE FROM `Order` WHERE id=#{id}
     </update>
 
     <select id="getOrdersByIdentityAndPhone" resultType="com.mycar.model.Order">

@@ -68,7 +68,6 @@ public class OrderAction {
 
     @RequestMapping(value = "/order/{viid}/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResponse insert(HttpServletRequest request,
-                               HttpServletResponse response,
                                @PathVariable("viid") long viid,
                                @RequestBody Order order)
     {
@@ -81,6 +80,15 @@ public class OrderAction {
             logger.info("[insert][order:{}]",order);
             return new HttpResponse(order.getId());
         }
+    }
+
+    @RequestMapping(value = "/order/{oid}/", method = RequestMethod.DELETE)
+    public HttpResponse delete(HttpServletRequest request,
+                               @PathVariable Long oid) {
+        if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
+        int status = orderService.deleteOrderById(oid);
+        if ( status == 0 ) return new HttpResponse(HttpStatus.NO_ORDER);
+        else return new HttpResponse(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/order/check/{oid}/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)

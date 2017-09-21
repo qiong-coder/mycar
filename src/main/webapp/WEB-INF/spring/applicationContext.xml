@@ -28,7 +28,7 @@
         <!-- 最小空闲连接  -->
         <property name="minIdle" value="10" />
         <!-- 超时等待时间以毫秒为单位  -->
-        <property name="maxWait" value="10000" />
+        <property name="maxWait" value="60000" />
         <!-- 是否自动回收超时连接  -->
         <property name="removeAbandoned" value="true"/>
         <!-- 自动回收超时连接时间 -->
@@ -39,6 +39,7 @@
         <property name="testWhileIdle" value="true"/>
         <!-- 取得是否进行Valiadte -->
         <property name="testOnBorrow" value="true"/>
+        <property name="defaultAutoCommit" value="true"/>
         <!-- 验证语句 -->
         <property name="validationQuery" value="select now()" />
     </bean>

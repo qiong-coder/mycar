@@ -58,7 +58,13 @@ public class VehicleCostLogic {
             bhours += 24;
         } while ( ehours - bhours >=6 );
 
-        if ( ehours - bhours >= 3 ) {
+        if ( ehours - bhours >= 5 ) {
+            sum += 400;
+            dayCostInfos.add(getCostInfoItem("超过5小时",400));
+        } else if ( ehours - bhours >= 4 ) {
+            sum += 300;
+            dayCostInfos.add(getCostInfoItem("超过4小时",300));
+        } else if ( ehours - bhours >= 3 ) {
             sum += 200;
             dayCostInfos.add(getCostInfoItem("超时3小时",200));
         } else if ( ehours - bhours >= 2 ) {

@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
+import static com.mycar.logic.VehicleCostLogic.getCostInfoItem;
+
 
 /**
  * Created by qixiang on 8/1/17.
@@ -54,9 +56,22 @@ public class VehicleInfoCostServiceImpl implements VehicleInfoCostService {
             bhours += 24;
         } while ( ehours - bhours >= 6 );
 
-        if ( ehours - bhours >= 3 ) cost_info.put("overtime", 20000);
-        else if ( ehours - bhours >= 2 ) cost_info.put("overtime",10000);
+        JSONObject overtime = new JSONObject();
+        if ( ehours - bhours >= 5 ) {
+            total += 40000;
+            overtime.put("5",40000);
+        } else if ( ehours - bhours >= 4 ) {
+            total += 30000;
+            overtime.put("4",30000);
+        } else if ( ehours - bhours >= 3 ) {
+            total += 20000;
+            overtime.put("3",20000);
+        } else if ( ehours - bhours >= 2 ) {
+            total += 10000;
+            overtime.put("2",10000);
+        }
 
+        if ( !overtime.isEmpty() ) cost_info.put("overtime",overtime);
         cost_info.put("day_costs", day_costs);
         cost_info.put("total_cost", total);
         return cost_info;

@@ -31,6 +31,8 @@ public interface OrderService {
 
     JSONObject getOrderAndVehicleInfoByOrderId(long id);
 
+    int deleteOrderById(Long id);
+
     int insertOrder(long viid, Order order); // 用户第一次提交订单
 
     int checkOrder(long id); // 检测用户的订单是否已经交钱

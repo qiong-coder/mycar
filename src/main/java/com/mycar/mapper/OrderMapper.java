@@ -27,6 +27,8 @@ public interface OrderMapper {
 
     int updateInfoAndStatus(Order order);
 
+    int deleteOrderById(Long id);
+
     List<Order> getOrdersByIdentityAndPhone(@Param("identity") String identity, @Param("phone") String phone);
 
     List<OrderStatusCount> getOrdersNumberByStatus();
