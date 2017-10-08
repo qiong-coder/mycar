@@ -28,10 +28,7 @@ public class VehicleInfoCostServiceImpl implements VehicleInfoCostService {
 
     @Override
     public VehicleInfoCost getVehicleInfoCostById(long viid) {
-        VehicleInfoCost vehicleInfoCost = vehicleInfoCostMapper.getVehicleInfoCostById(viid);
-        if ( vehicleInfoCost == null ) return null;
-        vehicleInfoCost.parseDay_costs_parse();
-        return vehicleInfoCost;
+        return vehicleInfoCostMapper.get(viid);
     }
 
     @Override
@@ -42,16 +39,24 @@ public class VehicleInfoCostServiceImpl implements VehicleInfoCostService {
         cost_info.put("base_insurance",vehicleInfoCost.getBase_insurance());
         cost_info.put("free_insurance",vehicleInfoCost.getFree_insurance());
 
+        JSONArray v_day_costs = JSONArray.parseArray(vehicleInfoCost.getDay_costs());
+        JSONArray v_discounts = JSONArray.parseArray(vehicleInfoCost.getDiscounts());
+
         Calendar calendar_begin = Calendar.getInstance();
         calendar_begin.setTime(begin);
         long bhours = TimeUtils.GetHours(begin);
         long ehours = TimeUtils.GetHours(end);
         long total = 0;
         JSONObject day_costs = new JSONObject();
+        JSONObject discounts = new JSONObject();
         do {
-            int day_cost = vehicleInfoCost.getDay_cost(calendar_begin);
+            int day_cost = VehicleInfoCost.getArrayValueByCalendar(v_day_costs, calendar_begin);
+            int discount = VehicleInfoCost.getArrayValueByCalendar(v_discounts, calendar_begin);
+
             day_costs.put(TimeUtils.GetDateFormat(calendar_begin),day_cost);
-            total += day_cost + vehicleInfoCost.getBase_insurance() + vehicleInfoCost.getFree_insurance();
+            discounts.put(TimeUtils.GetDateFormat(calendar_begin),discount);
+
+            total += day_cost*discount/100 + vehicleInfoCost.getBase_insurance() + vehicleInfoCost.getFree_insurance();
             calendar_begin.add(Calendar.DATE,1);
             bhours += 24;
         } while ( ehours - bhours >= 6 );
@@ -73,6 +78,7 @@ public class VehicleInfoCostServiceImpl implements VehicleInfoCostService {
 
         if ( !overtime.isEmpty() ) cost_info.put("overtime",overtime);
         cost_info.put("day_costs", day_costs);
+        cost_info.put("discounts", discounts);
         cost_info.put("total_cost", total);
         return cost_info;
     }
@@ -97,29 +103,30 @@ public class VehicleInfoCostServiceImpl implements VehicleInfoCostService {
 //        return vehicleInfoCostMapper.updateInsurance(vehicleInfoCost);
 //    }
 
-    private JSONArray createDefaultDayCosts(int day_cost)
+    private String createDefaultArray(int value)
     {
-        JSONArray day_costs = new JSONArray();
+        JSONArray values = new JSONArray();
         for ( int i = 0; i < 12; ++ i ) {
-            JSONArray month_costs = new JSONArray();
+            JSONArray month_values = new JSONArray();
             for ( int j = 0; j < 31; ++ j ) {
-                month_costs.add(day_cost);
+                month_values.add(value);
             }
-            day_costs.add(month_costs);
+            values.add(month_values);
         }
-        return day_costs;
+        return values.toJSONString();
     }
 
     @Override
-    public int insertDefaultVehicleInfoCost(long viid, int base_insurance, int free_insurance, int day_cost) {
-        if ( vehicleInfoCostMapper.getVehicleInfoCostById(viid) != null ) return -1;
+    public int insertDefaultVehicleInfoCost(long viid, int base_insurance, int free_insurance, int day_cost, int discount) {
+        if ( vehicleInfoCostMapper.get(viid) != null ) return -1;
 
         VehicleInfoCost vehicleInfoCost = new VehicleInfoCost();
         vehicleInfoCost.setViid(viid);
         vehicleInfoCost.setBase_insurance(base_insurance);
         vehicleInfoCost.setFree_insurance(free_insurance);
-        vehicleInfoCost.setDay_costs_parse(createDefaultDayCosts(day_cost));
+        vehicleInfoCost.setDay_costs(createDefaultArray(day_cost));
+        vehicleInfoCost.setDiscounts(createDefaultArray(discount));
 
-        return vehicleInfoCostMapper.insertDefaultVehicleInfoCost(vehicleInfoCost);
+        return vehicleInfoCostMapper.insert(vehicleInfoCost);
     }
 }

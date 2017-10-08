@@ -13,6 +13,7 @@ CREATE TABLE `Order` (
   `rent_sid`        INT(10) NOT NULL COMMENT '取车门店',
   `return_sid`      INT(10) NOT NULL COMMENT '还车门店',
   `name`            VARCHAR(50) NOT NULL COMMENT '租车人姓名',
+  `drivers`         VARCHAR(100) NOT NULL COMMENT '驾驶员信息',
   `identity`        VARCHAR(20) NOT NULL COMMENT '租车人身份证ID',
   `phone`           VARCHAR(20) NOT NULL COMMENT '租车人电话',
   `bill`            TEXT DEFAULT NULL COMMENT '支票信息',

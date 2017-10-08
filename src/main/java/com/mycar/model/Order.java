@@ -19,6 +19,7 @@ public class Order {
     private Long rent_sid; // 借车门店编号
     private Long return_sid; // 还车门店
     private String name; // 租车人名字
+    private String drivers; // 驾驶员信息
     private String identity; // 证件号码
     private String phone; // 手机号码
     private String bill; // 发票
@@ -216,5 +217,13 @@ public class Order {
 
     public void setDistance(Long distance) {
         this.distance = distance;
+    }
+
+    public String getDrivers() {
+        return drivers;
+    }
+
+    public void setDrivers(String drivers) {
+        this.drivers = drivers;
     }
 }

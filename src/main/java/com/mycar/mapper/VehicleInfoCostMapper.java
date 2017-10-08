@@ -9,16 +9,10 @@ import com.mycar.model.VehicleInfoCost;
  */
 public interface VehicleInfoCostMapper {
 
-    VehicleInfoCost getVehicleInfoCostById(long viid);
-
-    VehicleInfoCost getVehicleInfoCostByIdWithoutDayCost(long viid);
-
-//    int updateDayCost(VehicleInfoCost vehicleInfoCost);
-//
-//    int updateInsurance(VehicleInfoCost vehicleInfoCost);
+    VehicleInfoCost get(long viid);
 
     int update(VehicleInfoCost vehicleInfoCost);
 
-    int insertDefaultVehicleInfoCost(VehicleInfoCost vehicleInfoCost);
+    int insert(VehicleInfoCost vehicleInfoCost);
 
 }

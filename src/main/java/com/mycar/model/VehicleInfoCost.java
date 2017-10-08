@@ -16,8 +16,8 @@ public class VehicleInfoCost {
     private Long viid;
     private Integer base_insurance;
     private Integer free_insurance;
+    private String discounts;
     private String day_costs;
-    private JSONArray day_costs_parse;
 
     public Long getViid() {
         return viid;
@@ -51,29 +51,39 @@ public class VehicleInfoCost {
         this.day_costs = day_costs;
     }
 
-    public JSONArray getDay_costs_parse() {
-        return day_costs_parse;
+    public String getDiscounts() {
+        return discounts;
     }
 
-    public void setDay_costs_parse(JSONArray day_costs_parse) {
-        this.day_costs_parse = day_costs_parse;
-        dumpDay_costs_parse();
+    public void setDiscounts(String discounts) {
+        this.discounts = discounts;
     }
 
-    public int getDay_cost(Calendar calendar) {
-        return day_costs_parse.getJSONArray(calendar.get(Calendar.MONTH)).getInteger(calendar.get(Calendar.DATE)-1);
+//    public JSONArray getDay_costs_parse() {
+//        return day_costs_parse;
+//    }
+//
+//    public void setDay_costs_parse(JSONArray day_costs_parse) {
+//        this.day_costs_parse = day_costs_parse;
+//        dumpDay_costs_parse();
+//    }
+//
+    public static int getArrayValueByCalendar(JSONArray ja, Calendar calendar) {
+        return ja.getJSONArray(calendar.get(Calendar.MONTH)).getInteger(calendar.get(Calendar.DATE)-1);
     }
 
-    public void setDay_cost(Calendar calendar, int cost) {
-        day_costs_parse.getJSONArray(calendar.get(Calendar.MONTH)).set(calendar.get(Calendar.DATE)-1,cost);
+    public static void setDay_cost(JSONArray ja, Calendar calendar, int cost) {
+        ja.getJSONArray(calendar.get(Calendar.MONTH)).set(calendar.get(Calendar.DATE)-1,cost);
     }
+//
+//    public void parseDay_costs_parse() {
+//        this.day_costs_parse = JSONArray.parseArray(day_costs);
+//        this.day_costs = null;
+//    }
+//    public void dumpDay_costs_parse() {
+//        this.day_costs = this.day_costs_parse.toJSONString();
+//        this.day_costs_parse = null;
+//    }
 
-    public void parseDay_costs_parse() {
-        this.day_costs_parse = JSONArray.parseArray(day_costs);
-        this.day_costs = null;
-    }
-    public void dumpDay_costs_parse() {
-        this.day_costs = this.day_costs_parse.toJSONString();
-        this.day_costs_parse = null;
-    }
+
 }

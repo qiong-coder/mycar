@@ -48,12 +48,17 @@ public class VehicleCostLogic {
         preCostInfo.put("base_insurance",base_insurance);
         preCostInfo.put("free_insurance",free_insurance);
 
-        JSONArray dayCostInfos = new JSONArray();
+        JSONArray day_costs = JSONArray.parseArray(vehicleInfoCostInfo.getDay_costs());
+        JSONArray discounts = JSONArray.parseArray(vehicleInfoCostInfo.getDiscounts());
 
+        JSONArray dayCostInfos = new JSONArray();
+        JSONArray discountsInfos = new JSONArray();
         do {
-            int cost = vehicleInfoCostInfo.getDay_cost(bcalender);
+            int cost = VehicleInfoCost.getArrayValueByCalendar(day_costs, bcalender);
+            int discount = VehicleInfoCost.getArrayValueByCalendar(discounts, bcalender);
             dayCostInfos.add(getCostInfoItem(TimeUtils.GetDateFormat(bcalender),cost));
-            sum += cost + base_insurance + free_insurance;
+            discountsInfos.add(getCostInfoItem(TimeUtils.GetDateFormat(bcalender),discount));
+            sum += cost*discount/100 + base_insurance + free_insurance;
             bcalender.add(Calendar.DATE,1);
             bhours += 24;
         } while ( ehours - bhours >=6 );
@@ -73,6 +78,7 @@ public class VehicleCostLogic {
         }
 
         preCostInfo.put("day_costs", dayCostInfos);
+        preCostInfo.put("discounts", discountsInfos);
 
         order.setPre_cost(preCostInfo.toJSONString());
 

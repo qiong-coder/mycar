@@ -13,8 +13,8 @@
     </select>
 
     <insert id="insertOrder" parameterType="com.mycar.model.Order" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO `Order` (`viid`, `oid`, `begin`, `end`, `rent_sid`, `return_sid`, `name`, `identity`, `phone`, `bill`, `is_free_insurance`, `pre_cost`, `pay_info`, `cost_info`)
-        VALUES (#{viid}, #{oid}, #{begin}, #{end}, #{rent_sid}, #{return_sid}, #{name}, #{identity}, #{phone}, #{bill}, #{is_free_insurance}, #{pre_cost}, #{pay_info}, #{cost_info})
+        INSERT INTO `Order` (`viid`, `oid`, `begin`, `end`, `rent_sid`, `return_sid`, `name`, `drivers`, `identity`, `phone`, `bill`, `is_free_insurance`, `pre_cost`, `pay_info`, `cost_info`)
+        VALUES (#{viid}, #{oid}, #{begin}, #{end}, #{rent_sid}, #{return_sid}, #{name}, #{drivers}, #{identity}, #{phone}, #{bill}, #{is_free_insurance}, #{pre_cost}, #{pay_info}, #{cost_info})
     </insert>
 
     <update id="updateRentingOrder" parameterType="com.mycar.model.Order">
