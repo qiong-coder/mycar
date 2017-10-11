@@ -8,7 +8,9 @@ import com.mycar.utils.TelVerificationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Created by qixiang on 7/18/17.

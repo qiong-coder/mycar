@@ -16,6 +16,7 @@ public class FileUploadUtilsImpl implements FileUploadUtils {
 
     private String media_path;
     private String code_path;
+    private String id_path;
 
     public void setServletContext(ServletContext servletContext) {
         media_path = servletContext.getRealPath("/")+"../images";
@@ -25,6 +26,10 @@ public class FileUploadUtilsImpl implements FileUploadUtils {
         code_path = media_path+"/codes";
         file = new File(code_path);
         if ( !file.exists() ) file.mkdirs();
+
+        id_path = media_path+"/ids";
+        file = new File(id_path);
+        if( !file.exists() ) file.mkdirs();
     }
 
     @Override
@@ -38,14 +43,32 @@ public class FileUploadUtilsImpl implements FileUploadUtils {
     }
 
     @Override
+    public String getIdPrefix() {
+        return id_path;
+    }
+
+    @Override
     public String save(Part attachment) {
+        return save(media_path+"/"+attachment.getSubmittedFileName(),attachment);
+    }
+
+    @Override
+    public String save(String filename, Part attachment) {
+
         if ( attachment.getSize() == 0 ) return null;
         try {
-            attachment.write(media_path + "/" + attachment.getSubmittedFileName());
+            attachment.write(filename);
         } catch ( IOException e ) {
             return null;
         }
-        return attachment.getSubmittedFileName();
+        return filename;
+
+    }
+
+    @Override
+    public boolean check(String filename) {
+        File file = new File(filename);
+        return file.exists();
     }
 
     @Override
