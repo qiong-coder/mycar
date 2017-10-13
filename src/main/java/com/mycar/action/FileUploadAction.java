@@ -27,9 +27,9 @@ public class FileUploadAction {
     private String tranform(String id)
     {
         String id_prefix = id.substring(0,6);
-        String birth_year = id.substring(6,4);
-        String birth_month_days = id.substring(10,4);
-        return fileUploadUtils.getIdPrefix()+"/"+id_prefix+"/"+birth_year+"/"+birth_month_days+"/"+id.substring(14);
+        String birth_year = id.substring(6,10);
+        String birth_month_days = id.substring(10,14);
+        return "/"+id_prefix+"/"+birth_year+"/"+birth_month_days+"/"+id.substring(14);
     }
 
     @RequestMapping(value = "/id/{id}/", method = RequestMethod.GET)
@@ -39,7 +39,8 @@ public class FileUploadAction {
         if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         else {
             String id_filename = tranform(id);
-            if ( fileUploadUtils.check(id_filename) ) return new HttpResponse(id_filename);
+            String full_filename = fileUploadUtils.check("/ids"+id_filename);
+            if ( full_filename != null ) return new HttpResponse(full_filename);
             else return new HttpResponse(HttpStatus.ERROR);
         }
     }
@@ -49,7 +50,8 @@ public class FileUploadAction {
                                      @PathVariable("id") String id)
     {
         String id_filename = tranform(id);
-        if ( fileUploadUtils.save(id_filename, attachment) != null ) return new HttpResponse(id_filename);
+        String upload_filename = fileUploadUtils.save("/ids"+id_filename, attachment);
+        if (  upload_filename != null ) return new HttpResponse(upload_filename);
         else return new HttpResponse(HttpStatus.ERROR);
     }
 

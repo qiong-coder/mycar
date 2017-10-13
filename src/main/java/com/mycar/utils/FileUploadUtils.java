@@ -13,7 +13,7 @@ public interface FileUploadUtils extends ServletContextAware {
 
     String save(String filename, Part attachment);
 
-    boolean check(String filename);
+    String check(String filename);
 
     void delete(String filename);
 

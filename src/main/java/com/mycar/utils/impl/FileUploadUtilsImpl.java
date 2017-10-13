@@ -47,28 +47,55 @@ public class FileUploadUtilsImpl implements FileUploadUtils {
         return id_path;
     }
 
+    private void mkPrefixPath(String filename)
+    {
+        String prefix_path = filename.substring(0,filename.lastIndexOf('/'));
+        File dir = new File(prefix_path);
+        if ( !dir.exists() ) dir.mkdirs();
+    }
+
+    private String getSuffix(Part attachment) {
+        if ( attachment.getSubmittedFileName().lastIndexOf('.') == -1 ) return null;
+        else return attachment.getSubmittedFileName().substring(attachment.getSubmittedFileName().lastIndexOf('.'));
+    }
+
+
+
     @Override
     public String save(Part attachment) {
-        return save(media_path+"/"+attachment.getSubmittedFileName(),attachment);
+        return save("/"+attachment.getSubmittedFileName(),attachment);
     }
 
     @Override
     public String save(String filename, Part attachment) {
+        mkPrefixPath(filename);
+
+        String suffix = getSuffix(attachment);
+
+        if ( suffix == null ) return null;
 
         if ( attachment.getSize() == 0 ) return null;
         try {
-            attachment.write(filename);
+            attachment.write(media_path+filename+suffix);
         } catch ( IOException e ) {
             return null;
         }
-        return filename;
 
+        return filename+suffix;
     }
 
     @Override
-    public boolean check(String filename) {
-        File file = new File(filename);
-        return file.exists();
+    public String check(String id_filename) {
+
+        File id_file = new File(media_path+id_filename+".jpg");
+
+        if ( id_file.exists() ) return id_filename+".jpg";
+
+        id_file = new File(media_path+id_filename+".png");
+
+        if ( id_file.exists() ) return id_filename+".png";
+
+        return null;
     }
 
     @Override
