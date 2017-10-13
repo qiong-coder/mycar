@@ -16,7 +16,6 @@ public class FileUploadUtilsImpl implements FileUploadUtils {
 
     private String media_path;
     private String code_path;
-    private String id_path;
 
     public void setServletContext(ServletContext servletContext) {
         media_path = servletContext.getRealPath("/")+"../images";
@@ -26,25 +25,11 @@ public class FileUploadUtilsImpl implements FileUploadUtils {
         code_path = media_path+"/codes";
         file = new File(code_path);
         if ( !file.exists() ) file.mkdirs();
-
-        id_path = media_path+"/ids";
-        file = new File(id_path);
-        if( !file.exists() ) file.mkdirs();
-    }
-
-    @Override
-    public String getMediaPrefix() {
-        return media_path;
     }
 
     @Override
     public String getCodePrefix() {
         return code_path;
-    }
-
-    @Override
-    public String getIdPrefix() {
-        return id_path;
     }
 
     private void mkPrefixPath(String filename)
@@ -68,7 +53,8 @@ public class FileUploadUtilsImpl implements FileUploadUtils {
 
     @Override
     public String save(String filename, Part attachment) {
-        mkPrefixPath(filename);
+
+        mkPrefixPath(media_path+filename);
 
         String suffix = getSuffix(attachment);
 
@@ -85,15 +71,15 @@ public class FileUploadUtilsImpl implements FileUploadUtils {
     }
 
     @Override
-    public String check(String id_filename) {
+    public String check(String filename) {
 
-        File id_file = new File(media_path+id_filename+".jpg");
+        File id_file = new File(media_path+filename+".jpg");
 
-        if ( id_file.exists() ) return id_filename+".jpg";
+        if ( id_file.exists() ) return filename+".jpg";
 
-        id_file = new File(media_path+id_filename+".png");
+        id_file = new File(media_path+filename+".png");
 
-        if ( id_file.exists() ) return id_filename+".png";
+        if ( id_file.exists() ) return filename+".png";
 
         return null;
     }

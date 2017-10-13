@@ -32,25 +32,27 @@ public class FileUploadAction {
         return "/"+id_prefix+"/"+birth_year+"/"+birth_month_days+"/"+id.substring(14);
     }
 
-    @RequestMapping(value = "/id/{id}/", method = RequestMethod.GET)
+    @RequestMapping(value = "/{type}/{id}/", method = RequestMethod.GET)
     public HttpResponse getIdFile(HttpServletRequest request,
-                                  @PathVariable("id") String id)
+                                  @PathVariable("id") String id,
+                                  @PathVariable("type") String type)
     {
         if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         else {
             String id_filename = tranform(id);
-            String full_filename = fileUploadUtils.check("/ids"+id_filename);
+            String full_filename = fileUploadUtils.check("/"+type+id_filename);
             if ( full_filename != null ) return new HttpResponse(full_filename);
             else return new HttpResponse(HttpStatus.ERROR);
         }
     }
 
-    @RequestMapping(value = "/id/{id}/", method = RequestMethod.POST)
+    @RequestMapping(value = "/{type}/{id}/", method = RequestMethod.POST)
     public HttpResponse updateIdFile(@RequestPart("attachment") Part attachment,
-                                     @PathVariable("id") String id)
+                                     @PathVariable("id") String id,
+                                     @PathVariable("type") String type)
     {
         String id_filename = tranform(id);
-        String upload_filename = fileUploadUtils.save("/ids"+id_filename, attachment);
+        String upload_filename = fileUploadUtils.save("/"+type+id_filename, attachment);
         if (  upload_filename != null ) return new HttpResponse(upload_filename);
         else return new HttpResponse(HttpStatus.ERROR);
     }
