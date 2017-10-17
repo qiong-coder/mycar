@@ -141,11 +141,12 @@ public class OrderServiceImpl implements OrderService {
         order.setOid(OrderUtils.getOrderId(order.getViid(),order.getRent_sid()));
         VehicleInfoCost vehicleInfoCost = vehicleInfoCostService.getVehicleInfoCostById(viid);
 
-        int pay = VehicleCostLogic.getPreCostInfo(vehicleInfoCost,order);
+//        int pay =
 
-        order.setPay_info(VehicleCostLogic.getPayInfo(pay, order.getName()));
+        VehicleCostLogic.getPreCostInfo(vehicleInfoCost,order);
 
-        order.setCost_info("[]");
+        //order.setPay_info(VehicleCostLogic.getPayInfo(pay, order.getName()));
+        //order.setCost_info("[]");
         if ( orderMapper.insertOrder(order) != 1 ) return HttpStatus.ERROR;
 
         return HttpStatus.OK;
