@@ -194,7 +194,7 @@ public class OrderServiceImpl implements OrderService {
             return HttpStatus.ORDER_STATUS_ERROR;
         }
 
-        o.setDrivers(order.getDrivers());
+        if (order.getDrivers() != null && order.getDrivers().compareTo("") != 0 ) o.setDrivers(order.getDrivers());
         o.setVid(vehicle.getId());
         o.setRbegin(order.getRbegin());
         if ( order.getRend() != null ) o.setRend(order.getRend());
