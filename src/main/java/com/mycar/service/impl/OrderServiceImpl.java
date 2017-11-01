@@ -240,8 +240,6 @@ public class OrderServiceImpl implements OrderService {
 
         o.setStatus(OrderStatus.DRAWBACK.getStatus());
 
-
-
         Vehicle vehicle = vehicleService.getVehicleById(o.getVid());
         vehicle.setStatus(VehicleStatus.OK.getStatus());
         vehicleService.updateVehicleById(vehicle);

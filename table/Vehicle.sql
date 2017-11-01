@@ -16,4 +16,4 @@ CREATE TABLE `Vehicle` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
-INSERT `Vehicle` (viid,number,description,status) VALUES(1,"京A10001","车辆描述",0);
+-- INSERT `Vehicle` (viid,number,description,status) VALUES(1,"京A10001","车辆描述",0);
