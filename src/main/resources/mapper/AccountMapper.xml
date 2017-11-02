@@ -5,7 +5,7 @@
 <mapper namespace="com.mycar.mapper.AccountMapper">
 
     <insert id="insert">
-        INSERT INTO Account (`username`, `password`, `name`, `phone`, `store`) VALUES (#{username}, #{password}, #{name}, #{phone}, #{store})
+        INSERT INTO Account (`username`, `password`, `name`, `phone`, `roles`, ``store`) VALUES (#{username}, #{password}, #{name}, #{phone}, #{roles}, #{store})
     </insert>
 
     <select id="get" resultType="com.mycar.model.Account">
@@ -23,6 +23,7 @@
             <if test="name!=null">`name`=#{name},</if>
             <if test="phone!=null">`phone`=#{phone},</if>
             <if test="store!=null">`store`=#{store},</if>
+            <if test="status!=null">`status`=#{status},</if>
         </set>
         <where>
             <if test="id!=null">id=#{id}</if>

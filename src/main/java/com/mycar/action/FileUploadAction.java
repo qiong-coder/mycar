@@ -1,6 +1,7 @@
 package com.mycar.action;
 
 import com.mycar.service.AccountService;
+import com.mycar.utils.AccountRoles;
 import com.mycar.utils.FileUploadUtils;
 import com.mycar.utils.HttpResponse;
 import com.mycar.utils.HttpStatus;
@@ -37,7 +38,7 @@ public class FileUploadAction {
                                   @PathVariable("id") String id,
                                   @PathVariable("type") String type)
     {
-        if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
+        if (  accountService.check(request.getSession(),request.getHeader("token"), AccountRoles.STAFF) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         else {
             String id_filename = tranform(id);
             String full_filename = fileUploadUtils.check("/"+type+id_filename);

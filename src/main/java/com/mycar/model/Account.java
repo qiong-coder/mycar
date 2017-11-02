@@ -10,6 +10,7 @@ public class Account {
     private String password;
     private String name;
     private String phone;
+    private Integer roles;
     private Integer store;
     private String token;
     private Long status;
@@ -61,6 +62,14 @@ public class Account {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Integer getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Integer roles) {
+        this.roles = roles;
     }
 
     public Long getStatus() {

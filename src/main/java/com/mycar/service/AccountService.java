@@ -22,7 +22,7 @@ public interface AccountService {
 
     int update(Account account);
 
-    int check(HttpSession session, String token);
+    int check(HttpSession session, String token, Integer roles);
 
     int delete(String username);
 }

@@ -50,7 +50,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void logout(HttpSession session) {
-        session.removeAttribute("token");
+        session.invalidate();
+        //session.removeAttribute("token");
     }
 
     @Override
@@ -59,12 +60,18 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public int check(HttpSession session, String token) {
+    public int check(HttpSession session, String token, Integer roles) {
         if ( token == null ) return -1;
+
         if ( token.compareTo("test") == 0 ) return 0;
         String session_token = (String)session.getAttribute("token");
         if ( session_token == null || session_token.compareTo(token) != 0 ) return -1;
-        else return 0;
+        else if ( roles != null ) {
+            Integer session_roles = (Integer)session.getAttribute("roles");
+            if ( session_roles == null || (session_roles & roles) == 0 ) return -1;
+        }
+
+        return 0;
     }
 
     @Override

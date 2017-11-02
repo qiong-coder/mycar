@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.mycar.model.VehicleInfoCost;
 import com.mycar.service.AccountService;
 import com.mycar.service.VehicleInfoCostService;
+import com.mycar.utils.AccountRoles;
 import com.mycar.utils.HttpResponse;
 import com.mycar.utils.HttpStatus;
 import org.slf4j.Logger;
@@ -57,7 +58,7 @@ public class VehicleInfoCostAction {
                                                     @PathVariable("viid") long viid,
                                                     @RequestBody VehicleInfoCost costInfo)
     {
-        if (  accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
+        if (  accountService.check(request.getSession(),request.getHeader("token"), AccountRoles.STAFF) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         costInfo.setViid(viid);
         if ( vehicleInfoCostService.update(costInfo) == 1 ) return new HttpResponse(HttpStatus.OK);
         else return new HttpResponse(HttpStatus.ERROR);

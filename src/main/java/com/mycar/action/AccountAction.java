@@ -2,6 +2,7 @@ package com.mycar.action;
 
 import com.mycar.model.Account;
 import com.mycar.service.AccountService;
+import com.mycar.utils.AccountRoles;
 import com.mycar.utils.HttpResponse;
 import com.mycar.utils.HttpStatus;
 import org.slf4j.Logger;
@@ -38,6 +39,7 @@ public class AccountAction {
         if ( account1 == null ) return new HttpResponse(HttpStatus.LOGIN_ERROR);
 
         session.setAttribute("token",account1.getToken());
+        session.setAttribute("roles",account1.getRoles());
         return new HttpResponse(account1);
     }
 
@@ -45,14 +47,17 @@ public class AccountAction {
     public HttpResponse logout(HttpSession session,
                                @RequestHeader(name = "token") String token)
     {
-        if ( accountService.check(session,token) != 0 ) return new HttpResponse(HttpStatus.LOGOUT_ERROR);
+        if ( accountService.check(session,token,null) != 0 ) return new HttpResponse(HttpStatus.LOGOUT_ERROR);
         accountService.logout(session);
         return new HttpResponse(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/register/", method = RequestMethod.POST)
-    public HttpResponse register(@RequestBody Account account)
+    public HttpResponse register(HttpSession session,
+                                 @RequestHeader(name = "token") String token,
+                                 @RequestBody Account account)
     {
+        if ( accountService.check(session, token, AccountRoles.ADMINISTRATOR) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         int uid = accountService.register(account);
         if ( uid == -1 ) return new HttpResponse(HttpStatus.DUPLICATE_ACCOUNT);
         return new HttpResponse(HttpStatus.OK);
@@ -60,14 +65,14 @@ public class AccountAction {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public HttpResponse list(HttpServletRequest request) {
-        if ( accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
+        if ( accountService.check(request.getSession(),request.getHeader("token"),AccountRoles.STAFF) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         return new HttpResponse(accountService.list());
     }
 
     @RequestMapping(value = "/{username}/", method = RequestMethod.GET)
     public HttpResponse getByUsername(HttpServletRequest request,
                                       @PathVariable String username) {
-        if ( accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
+        if ( accountService.check(request.getSession(),request.getHeader("token"), AccountRoles.STAFF) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         Account account = accountService.get(username);
         if ( account == null ) return new HttpResponse(HttpStatus.NO_ACCOUNT);
         else return new HttpResponse(account);
@@ -78,7 +83,10 @@ public class AccountAction {
                                          @PathVariable String username,
                                          @RequestBody Account account)
     {
-        if ( accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
+        if ( accountService.check(request.getSession(),request.getHeader("token"), AccountRoles.ADMINISTRATOR) != 0 ) {
+            Account account1 = accountService.login(username,account.getPassword());
+            if (account1 == null) return new HttpResponse(HttpStatus.NO_ACCOUNT);
+        }
         account.setUsername(username);
         if ( accountService.update(account) == 0 ) return new HttpResponse(HttpStatus.NO_ACCOUNT);
         else return new HttpResponse(HttpStatus.OK);
@@ -88,7 +96,7 @@ public class AccountAction {
     public HttpResponse deleteByUsername(HttpServletRequest request,
                                          @PathVariable String username)
     {
-        if ( accountService.check(request.getSession(),request.getHeader("token")) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
+        if ( accountService.check(request.getSession(),request.getHeader("token"), AccountRoles.ADMINISTRATOR) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         if ( accountService.delete(username) == 0 ) return new HttpResponse(HttpStatus.NO_ACCOUNT);
         else {
             accountService.logout(request.getSession());
