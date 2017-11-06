@@ -25,8 +25,17 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public int register(Account account)
     {
-        if ( accountMapper.get(account.getUsername()) != null ) return -1;
-        return accountMapper.insert(account);
+        Account account1 = accountMapper.get(account.getUsername());
+        if ( account1 != null && account1.getStatus() != 1 ) {
+            return -1;
+        } else {
+            if ( account1 != null ) {
+                account.setStatus(0L);
+                return accountMapper.update(account);
+            } else {
+                return accountMapper.insert(account);
+            }
+        }
     }
 
     @Override

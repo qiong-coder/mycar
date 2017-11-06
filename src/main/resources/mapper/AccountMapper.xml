@@ -5,7 +5,7 @@
 <mapper namespace="com.mycar.mapper.AccountMapper">
 
     <insert id="insert">
-        INSERT INTO Account (`username`, `password`, `name`, `phone`, `roles`, ``store`) VALUES (#{username}, #{password}, #{name}, #{phone}, #{roles}, #{store})
+        INSERT INTO Account (`username`, `password`, `name`, `phone`, `roles`, `store`) VALUES (#{username}, #{password}, #{name}, #{phone}, #{roles}, #{store})
     </insert>
 
     <select id="get" resultType="com.mycar.model.Account">
@@ -13,7 +13,7 @@
     </select>
 
     <select id="list" resultType="com.mycar.model.Account">
-        SELECT * FROM Account WHERE status=0
+        SELECT * FROM Account
     </select>
 
     <update id="update">

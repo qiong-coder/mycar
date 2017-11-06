@@ -16,4 +16,4 @@ CREATE TABLE `Account` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
-INSERT Account (username,password,name,phone,roles,store) VALUES("admin","administrator","超级管理员","",0, 0);
+INSERT Account (username,password,name,phone,roles,store) VALUES("admin","administrator","超级管理员","",1, 0);

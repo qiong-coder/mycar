@@ -65,7 +65,7 @@ public class AccountAction {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public HttpResponse list(HttpServletRequest request) {
-        if ( accountService.check(request.getSession(),request.getHeader("token"),AccountRoles.STAFF) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
+        if ( accountService.check(request.getSession(),request.getHeader("token"),AccountRoles.ADMINISTRATOR) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         return new HttpResponse(accountService.list());
     }
 
@@ -84,8 +84,7 @@ public class AccountAction {
                                          @RequestBody Account account)
     {
         if ( accountService.check(request.getSession(),request.getHeader("token"), AccountRoles.ADMINISTRATOR) != 0 ) {
-            Account account1 = accountService.login(username,account.getPassword());
-            if (account1 == null) return new HttpResponse(HttpStatus.NO_ACCOUNT);
+            if (accountService.get(username) == null) return new HttpResponse(HttpStatus.NO_ACCOUNT);
         }
         account.setUsername(username);
         if ( accountService.update(account) == 0 ) return new HttpResponse(HttpStatus.NO_ACCOUNT);
