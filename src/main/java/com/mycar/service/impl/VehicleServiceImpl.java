@@ -6,6 +6,7 @@ import com.mycar.mapper.VehicleMapper;
 import com.mycar.model.Order;
 import com.mycar.model.Vehicle;
 import com.mycar.model.VehicleInfo;
+import com.mycar.model.VehicleInfoCost;
 import com.mycar.response.VehicleCount;
 import com.mycar.response.VehicleInfoCount;
 import com.mycar.service.VehicleInfoCostService;
@@ -242,13 +243,14 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public int insertVehicleInfo(VehicleInfo vehicleInfo, Part attachment) {
+
         String filename = fileUploadUtils.save(attachment);
         if ( filename == null ) return 0;
 
         vehicleInfo.setPicture(filename);
         if ( vehicleInfoMapper.insertVehicleInfo(vehicleInfo) != 1 ) return 0;
         //TODO: defualt vehicle info cost
-        return vehicleInfoCostService.insertDefaultVehicleInfoCost(vehicleInfo.getId(),10000,10000,10000, 100);
+        return vehicleInfoCostService.insert(vehicleInfo.getId(), vehicleInfo.getCost());
 
     }
 

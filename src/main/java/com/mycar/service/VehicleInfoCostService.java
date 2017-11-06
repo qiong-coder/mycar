@@ -18,6 +18,6 @@ public interface VehicleInfoCostService {
 
     int update(VehicleInfoCost vehicleInfoCost);
 
-    int insertDefaultVehicleInfoCost(long viid, int base_insurance, int free_insurance, int day_cost, int discount);
+    int insert(long viid, VehicleInfoCost vehicleInfoCost);
 
 }

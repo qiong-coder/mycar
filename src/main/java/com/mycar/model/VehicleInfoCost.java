@@ -18,6 +18,9 @@ public class VehicleInfoCost {
     private Integer free_insurance;
     private String discounts;
     private String day_costs;
+    private String final_day_costs;
+    private Integer discount;
+    private Integer day_cost;
 
     public Long getViid() {
         return viid;
@@ -72,10 +75,19 @@ public class VehicleInfoCost {
         return ja.getJSONArray(calendar.get(Calendar.MONTH)).getInteger(calendar.get(Calendar.DATE)-1);
     }
 
-    public static void setDay_cost(JSONArray ja, Calendar calendar, int cost) {
+    public static void setArrayValueByCalendar(JSONArray ja, Calendar calendar, int cost) {
         ja.getJSONArray(calendar.get(Calendar.MONTH)).set(calendar.get(Calendar.DATE)-1,cost);
     }
-//
+
+    public String getFinal_day_costs() {
+        return final_day_costs;
+    }
+
+    public void setFinal_day_costs(String final_day_costs) {
+        this.final_day_costs = final_day_costs;
+    }
+
+    //
 //    public void parseDay_costs_parse() {
 //        this.day_costs_parse = JSONArray.parseArray(day_costs);
 //        this.day_costs = null;
@@ -86,4 +98,19 @@ public class VehicleInfoCost {
 //    }
 
 
+    public Integer getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Integer discount) {
+        this.discount = discount;
+    }
+
+    public Integer getDay_cost() {
+        return day_cost;
+    }
+
+    public void setDay_cost(Integer day_cost) {
+        this.day_cost = day_cost;
+    }
 }

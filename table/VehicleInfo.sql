@@ -10,6 +10,7 @@ CREATE TABLE `VehicleInfo` (
   `gearbox`         VARCHAR(50) NOT NULL,
   `boxes`           VARCHAR(50) NOT NULL,
   `manned`          VARCHAR(50) NOT NULL,
+  `oil`             VARCHAR(50) NOT NULL,
   `spare`           INT(10) NOT NULL DEFAULT 0 COMMENT '预留备用车数量',
   `description`     TEXT NOT NULL,
   `picture`         VARCHAR(100) NOT NULL,

@@ -26,9 +26,29 @@ public class VehicleInfoCostServiceImpl implements VehicleInfoCostService {
     @Autowired
     private VehicleInfoCostMapper vehicleInfoCostMapper;
 
+
+
     @Override
     public VehicleInfoCost getVehicleInfoCostById(long viid) {
-        return vehicleInfoCostMapper.get(viid);
+        VehicleInfoCost cost = vehicleInfoCostMapper.get(viid);
+        if ( cost == null ) return null;
+
+        JSONArray day_costs = JSONArray.parseArray(cost.getDay_costs());
+        JSONArray discounts = JSONArray.parseArray(cost.getDiscounts());
+        JSONArray final_day_costs = new JSONArray();
+
+        for ( int i = 0; i < 12; ++ i ) {
+            JSONArray month_day_costs = day_costs.getJSONArray(i);
+            JSONArray month_discounts = discounts.getJSONArray(i);
+            JSONArray month_final_costs = new JSONArray();
+            for ( int j = 0; j < 31; ++ j ) {
+                month_final_costs.add(j,month_day_costs.getIntValue(i)*month_discounts.getIntValue(i)/100);
+            }
+            final_day_costs.add(month_final_costs);
+        }
+
+        cost.setFinal_day_costs(final_day_costs.toJSONString());
+        return cost;
     }
 
     @Override
@@ -103,7 +123,8 @@ public class VehicleInfoCostServiceImpl implements VehicleInfoCostService {
 //        return vehicleInfoCostMapper.updateInsurance(vehicleInfoCost);
 //    }
 
-    private String createDefaultArray(int value)
+
+    private JSONArray createDefaultArray(int value)
     {
         JSONArray values = new JSONArray();
         for ( int i = 0; i < 12; ++ i ) {
@@ -113,20 +134,29 @@ public class VehicleInfoCostServiceImpl implements VehicleInfoCostService {
             }
             values.add(month_values);
         }
-        return values.toJSONString();
+        return values;
+    }
+
+    private String createDefaultString(int value)
+    {
+        return createDefaultArray(value).toJSONString();
     }
 
     @Override
-    public int insertDefaultVehicleInfoCost(long viid, int base_insurance, int free_insurance, int day_cost, int discount) {
+    public int insert(long viid, VehicleInfoCost vehicleInfoCost) {
         if ( vehicleInfoCostMapper.get(viid) != null ) return -1;
 
-        VehicleInfoCost vehicleInfoCost = new VehicleInfoCost();
-        vehicleInfoCost.setViid(viid);
-        vehicleInfoCost.setBase_insurance(base_insurance);
-        vehicleInfoCost.setFree_insurance(free_insurance);
-        vehicleInfoCost.setDay_costs(createDefaultArray(day_cost));
-        vehicleInfoCost.setDiscounts(createDefaultArray(discount));
-
+        if ( vehicleInfoCost == null ) {
+            vehicleInfoCost = new VehicleInfoCost();
+            vehicleInfoCost.setViid(viid);
+            vehicleInfoCost.setBase_insurance(10000);
+            vehicleInfoCost.setFree_insurance(10000);
+            vehicleInfoCost.setDay_costs(createDefaultString(10000));
+            vehicleInfoCost.setDiscounts(createDefaultString(100));
+        } else {
+            vehicleInfoCost.setDay_costs(createDefaultString(vehicleInfoCost.getDay_cost()));
+            vehicleInfoCost.setDiscounts(createDefaultString(vehicleInfoCost.getDiscount()));
+        }
         return vehicleInfoCostMapper.insert(vehicleInfoCost);
     }
 }

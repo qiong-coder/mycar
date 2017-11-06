@@ -18,6 +18,7 @@ public class VehicleInfo {
     private String description;
     private String picture;
     private VehicleInfoCost cost;
+    private Integer oil;
     private Integer is_delete;
     private Integer vehicle_count;
 
@@ -107,6 +108,14 @@ public class VehicleInfo {
 
     public void setIs_delete(Integer is_delete) {
         this.is_delete = is_delete;
+    }
+
+    public Integer getOil() {
+        return oil;
+    }
+
+    public void setOil(Integer oil) {
+        this.oil = oil;
     }
 
     public Integer getVehicle_count() {
