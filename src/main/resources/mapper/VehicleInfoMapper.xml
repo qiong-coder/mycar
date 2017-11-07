@@ -17,8 +17,8 @@
     </select>
 
     <insert id="insertVehicleInfo" parameterType="com.mycar.model.VehicleInfo" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO VehicleInfo(`name`,`displacement`, `gearbox`, `boxes`, `manned`, `spare`, `description`, `picture`)
-        VALUES (#{name}, #{displacement}, #{gearbox}, #{boxes}, #{manned}, #{spare}, #{description}, #{picture})
+        INSERT INTO VehicleInfo(`name`,`displacement`, `gearbox`, `boxes`, `manned`, `spare`, `description`, `picture`, `oil`)
+        VALUES (#{name}, #{displacement}, #{gearbox}, #{boxes}, #{manned}, #{spare}, #{description}, #{picture}, #{oil})
     </insert>
 
     <update id="updateVehicleInfo" parameterType="com.mycar.model.VehicleInfo">
@@ -47,6 +47,9 @@
             </if>
             <if test="picture != null and picture != ''">
                 picture=#{picture}
+            </if>
+            <if test="oil != null">
+                oil=#{oil}
             </if>
         </set>
          WHERE id=#{id}
