@@ -33,6 +33,8 @@ public interface OrderService {
 
     int deleteOrderById(Long id);
 
+    int updateOrder(Order order);
+
     int insertOrder(long viid, Order order); // 用户第一次提交订单
 
     int checkOrder(long id); // 检测用户的订单是否已经交钱

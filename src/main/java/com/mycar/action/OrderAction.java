@@ -83,6 +83,17 @@ public class OrderAction {
         }
     }
 
+    @RequestMapping(value = "/order/{oid}/", method = RequestMethod.PUT)
+    public HttpResponse update(HttpServletRequest request,
+                               @PathVariable Long oid,
+                               @RequestBody Order order) {
+        if (  accountService.check(request.getSession(),request.getHeader("token"), AccountRoles.STAFF) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
+        order.setId(oid);
+        int status = orderService.updateOrder(order);
+        if ( status == 0 ) return new HttpResponse(HttpStatus.NO_ORDER);
+        else return new HttpResponse(HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/order/{oid}/", method = RequestMethod.DELETE)
     public HttpResponse delete(HttpServletRequest request,
                                @PathVariable Long oid) {

@@ -17,6 +17,34 @@
         VALUES (#{viid}, #{oid}, #{begin}, #{end}, #{rent_sid}, #{return_sid}, #{name}, #{drivers}, #{identity}, #{phone}, #{bill}, #{is_free_insurance}, #{pre_cost}, #{pay_info}, #{cost_info})
     </insert>
 
+    <insert id="updateOrder" parameterType="com.mycar.model.Order">
+        UPDATE `Order`
+        <set>
+            <if test="viid != null">`viid`=#{viid},</if>
+            <if test="vid  != null">`vid`=#{vid},</if>
+            <if test="begin != null">`begin`=#{begin},</if>
+            <if test="end != null">`end`=#{end},</if>
+            <if test="rent_sid != null">`rent_sid`=#{rent_sid},</if>
+            <if test="return_sid != null">`return_sid`=#{return_sid},</if>
+            <if test="name != null">`name`=#{name},</if>
+            <if test="drivers != null">`drivers`=#{drivers},</if>
+            <if test="identity != null">`identity`=#{identity},</if>
+            <if test="phone != null">`phone`=#{phone},</if>
+            <if test="bill != null">`bill`=#{bill},</if>
+            <if test="is_free_insurance != null">`is_free_insurance`=#{is_free_insurance},</if>
+            <if test="pre_cost != null">`pre_cost`=#{pre_cost},</if>
+            <if test="pay_info != null">`pay_info`=#{pay_info},</if>
+            <if test="rbegin != null">`rbegin`=#{rbegin},</if>
+            <if test="rend != null">`rend`=#{rend},</if>
+            <if test="rrent_sid != null">`rrent_sid`=#{rrent_sid},</if>
+            <if test="rreturn_sid != null">`rreturn_sid`=#{rreturn_sid},</if>
+            <if test="distance != null">`distance`=#{distance},</if>
+            <if test="cost_info != null">`cost_info`=#{cost_info},</if>
+            <if test="status != null">`status`=#{status},</if>
+        </set>
+        WHERE id=#{id}
+    </insert>
+
     <update id="updateRentingOrder" parameterType="com.mycar.model.Order">
         UPDATE `Order` SET vid=#{vid}, drivers=#{drivers}, rbegin=#{rbegin}, rend=#{rend}, rrent_sid=#{rrent_sid}, rreturn_sid=#{rreturn_sid}, cost_info=#{cost_info}, pay_info=#{pay_info}, status=#{status}
         WHERE id=#{id}
