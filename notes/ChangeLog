@@ -9,7 +9,7 @@
 	8.证件号码可以为非身份证
 
 	--------------------------------------------------
-	1. 在添加VehicleInfo结构体的时候，增加一个cost字段，该字段为JSON结构体，必须包含一下字段，{base_insurance:基础保险，free_insurance:免责保险，day_cost:日用车费用，discount:打折}
+	1. 在添加VehicleInfo结构体的时候，增加一个可选cost字段，该字段为JSON结构体，必须包含如下字段，{base_insurance:基础保险，free_insurance:免责保险，day_cost:日用车费用，discount:打折}
 	2. VehicleInfo请求添加车型信息时候，在请求结果体增加一个字段oil，表示油品标号
 	3. 在获取车型信息接口，会返回对应的字段
 	4. 增加接口(http://ip:port/mycar/order/{oid}/ ,method=PUT),满足修改信息，但是不会改变订单状态
