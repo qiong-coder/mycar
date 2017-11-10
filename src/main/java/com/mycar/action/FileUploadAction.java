@@ -27,10 +27,14 @@ public class FileUploadAction {
 
     private String tranform(String id)
     {
-        String id_prefix = id.substring(0,6);
-        String birth_year = id.substring(6,10);
-        String birth_month_days = id.substring(10,14);
-        return "/"+id_prefix+"/"+birth_year+"/"+birth_month_days+"/"+id.substring(14);
+        if ( id.length() == 18 ) {
+            String id_prefix = id.substring(0, 6);
+            String birth_year = id.substring(6, 10);
+            String birth_month_days = id.substring(10, 14);
+            return "/" + id_prefix + "/" + birth_year + "/" + birth_month_days + "/" + id.substring(14);
+        } else {
+            return "/" + id;
+        }
     }
 
     @RequestMapping(value = "/{type}/{id}/", method = RequestMethod.GET)

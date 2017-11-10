@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.mycar.model.Order;
 import com.mycar.model.OrderStatusCount;
 import com.mycar.model.Vehicle;
+import com.mycar.response.OrderConflict;
 import com.mycar.response.OrderHistory;
 import com.mycar.response.OrderSchedule;
 import com.mycar.utils.OrderStatus;
@@ -50,4 +51,6 @@ public interface OrderService {
     OrderHistory orderHistory(Long viid, String number, Timestamp begin,Timestamp end);
 
     List<OrderSchedule> orderSchedule(Long viid, Timestamp begin, Timestamp end);
+
+    OrderConflict orderConflict(Long viid, Timestamp begin, Timestamp end);
 }

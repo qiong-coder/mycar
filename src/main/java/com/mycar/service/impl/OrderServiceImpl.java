@@ -6,6 +6,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.mycar.logic.VehicleCostLogic;
 import com.mycar.mapper.OrderMapper;
 import com.mycar.model.*;
+import com.mycar.model.Order;
+import com.mycar.response.OrderConflict;
 import com.mycar.response.OrderHistory;
 import com.mycar.response.OrderSchedule;
 import com.mycar.response.VehicleInfoCount;
@@ -14,9 +16,11 @@ import com.mycar.service.VehicleInfoCostService;
 import com.mycar.service.VehicleService;
 import com.mycar.service.WeiXinPayService;
 import com.mycar.utils.*;
+import com.mycar.utils.OrderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.async.TimeoutDeferredResultProcessingInterceptor;
 
@@ -201,6 +205,9 @@ public class OrderServiceImpl implements OrderService {
 
         if (order.getDrivers() != null && order.getDrivers().compareTo("") != 0 ) o.setDrivers(order.getDrivers());
         o.setVid(vehicle.getId());
+
+        if (order.getViid().compareTo(vehicle.getViid()) != 0 ) order.setViid(vehicle.getViid());
+
         o.setRbegin(order.getRbegin());
         if ( order.getRend() != null ) o.setRend(order.getRend());
         else o.setRend(o.getEnd());
@@ -436,5 +443,32 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return orderSchedules;
+    }
+
+    @Override
+    public OrderConflict orderConflict(Long viid, Timestamp begin, Timestamp end) {
+        OrderConflict orderConflict = new OrderConflict();
+        // 获取所有当前车型下车的总数量
+        Map<Long, VehicleInfoCount> vehicleInfoCounts = vehicleService.getVehicleCount(viid);
+
+        VehicleInfoCount vehicleInfoCount = vehicleInfoCounts.get(viid);
+
+        if ( vehicleInfoCount == null ) return null;
+
+        orderConflict.setTotal(vehicleInfoCount.getCount()+vehicleInfoCount.getSpare());
+
+        // 获取未来的订单
+        List<Order> orders = orderMapper.getOrdersByScheduleInterval(viid, begin, end, null);
+        List<Order> pending_orders = new ArrayList<>();
+        for ( Order order : orders ) {
+            if ( order.getStatus() == OrderStatus.PENDING.getStatus() ) {
+                pending_orders.add(order);
+            }
+        }
+
+        orderConflict.setUsed(new Long(orders.size()-pending_orders.size()));
+        orderConflict.setTo_used(new Long(orders.size()));
+        orderConflict.setOrders(pending_orders);
+        return orderConflict;
     }
 }

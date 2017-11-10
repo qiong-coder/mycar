@@ -46,7 +46,7 @@
     </insert>
 
     <update id="updateRentingOrder" parameterType="com.mycar.model.Order">
-        UPDATE `Order` SET vid=#{vid}, drivers=#{drivers}, rbegin=#{rbegin}, rend=#{rend}, rrent_sid=#{rrent_sid}, rreturn_sid=#{rreturn_sid}, cost_info=#{cost_info}, pay_info=#{pay_info}, status=#{status}
+        UPDATE `Order` SET viid=#{viid}, vid=#{vid}, drivers=#{drivers}, rbegin=#{rbegin}, rend=#{rend}, rrent_sid=#{rrent_sid}, rreturn_sid=#{rreturn_sid}, cost_info=#{cost_info}, pay_info=#{pay_info}, status=#{status}
         WHERE id=#{id}
     </update>
 

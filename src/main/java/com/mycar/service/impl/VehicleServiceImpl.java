@@ -243,7 +243,6 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public int insertVehicleInfo(VehicleInfo vehicleInfo, Part attachment) {
-
         String filename = fileUploadUtils.save(attachment);
         if ( filename == null ) return 0;
 

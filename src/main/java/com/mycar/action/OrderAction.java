@@ -3,6 +3,7 @@ package com.mycar.action;
 import com.alibaba.fastjson.JSONObject;
 import com.mycar.model.Order;
 import com.mycar.model.OrderStatusCount;
+import com.mycar.response.OrderConflict;
 import com.mycar.response.OrderHistory;
 import com.mycar.response.OrderSchedule;
 import com.mycar.service.AccountService;
@@ -185,5 +186,19 @@ public class OrderAction {
         if ( orderSchedules == null ) return new HttpResponse(HttpStatus.ERROR);
         else return new HttpResponse(orderSchedules);
 
+    }
+
+    @RequestMapping(value = "/order/conflict/{viid}/{begin}/{end}/", method = RequestMethod.GET)
+    public HttpResponse conflict(HttpServletRequest request,
+                                 @PathVariable Long viid,
+                                 @PathVariable Long begin,
+                                 @PathVariable Long end)
+    {
+        if (  accountService.check(request.getSession(),request.getHeader("token"), AccountRoles.STAFF) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
+        Timestamp begin_stamp = new Timestamp(begin);
+        Timestamp end_stamp = new Timestamp(end);
+        OrderConflict orderConflict = orderService.orderConflict(viid, begin_stamp, end_stamp);
+        if ( orderConflict != null ) return new HttpResponse(HttpStatus.ERROR);
+        else return new HttpResponse(orderConflict);
     }
 }
