@@ -3,6 +3,7 @@ package com.mycar.action;
 
 import com.mycar.model.Vehicle;
 import com.mycar.model.VehicleInfo;
+import com.mycar.model.VehicleInfoCost;
 import com.mycar.service.AccountService;
 import com.mycar.service.VehicleInfoCostService;
 import com.mycar.service.VehicleService;
@@ -123,8 +124,11 @@ public class VehicleAction {
     @RequestMapping(value = "/vehicle/info/", method = RequestMethod.POST)
     public HttpResponse insertVehicleInfo(HttpServletRequest request,
                                           VehicleInfo vehicleInfo,
+                                          VehicleInfoCost vehicleInfoCost,
                                           @RequestPart("attachment") Part attachment) {
         if (  accountService.check(request.getSession(),request.getHeader("token"), AccountRoles.STAFF) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
+
+        vehicleInfo.setCost(vehicleInfoCost);
         if ( vehicleInfo.getSpare() == null ) vehicleInfo.setSpare(0);
         int count = vehicleService.insertVehicleInfo(vehicleInfo, attachment);
         if ( count == 0 ) return new HttpResponse(HttpStatus.ERROR);

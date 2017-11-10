@@ -9,10 +9,11 @@
 	8.证件号码可以为非身份证
 
 	--------------------------------------------------
-	1. 在添加VehicleInfo结构体的时候，增加一个可选cost字段，该字段为JSON结构体，必须包含如下字段，{base_insurance:基础保险，free_insurance:免责保险，day_cost:日用车费用，discount:打折}
+	1. 在添加车型信息接口上，提交的结构体，增加如下4个对象{base_insurance:基础保险，free_insurance:免责保险，day_cost:日用车费用，discount:打折}，都是一级的
 	2. VehicleInfo请求添加车型信息时候，在请求结果体增加一个字段oil，表示油品标号
 	3. 在获取车型信息接口，会返回对应的字段
 	4. 增加接口(http://ip:port/mycar/order/{oid}/ ,method=PUT),满足修改信息，但是不会改变订单状态
 	5. 取车接口，可以提交非订单约定的车型的车牌号，后台自动更新订单的车型ID
 	6-7. 增加接口(http://ip:port/mycar/order/conflict/{viid}/{begin}/{end}/, method=GET)接口，用来计算车型viid的车辆，未来的使用情况。其中返回结构中会包含：total总共该车型有多少辆车，used：已经租出去多少（这里是提车了多少），to_used：表示还有多少辆车需要在时间段内被租出去，orders包含了未来时间段内需要提车的租车订单情况。
 	8. 在原有接口增加逻辑，如果输入为身份证号，则采取非层存储的方法，否则直接存储
+

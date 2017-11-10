@@ -149,14 +149,19 @@ public class VehicleInfoCostServiceImpl implements VehicleInfoCostService {
         if ( vehicleInfoCost == null ) {
             vehicleInfoCost = new VehicleInfoCost();
             vehicleInfoCost.setViid(viid);
-            vehicleInfoCost.setBase_insurance(10000);
-            vehicleInfoCost.setFree_insurance(10000);
-            vehicleInfoCost.setDay_costs(createDefaultString(10000));
-            vehicleInfoCost.setDiscounts(createDefaultString(100));
-        } else {
-            vehicleInfoCost.setDay_costs(createDefaultString(vehicleInfoCost.getDay_cost()));
-            vehicleInfoCost.setDiscounts(createDefaultString(vehicleInfoCost.getDiscount()));
         }
+        if ( vehicleInfoCost.getBase_insurance() == null )
+            vehicleInfoCost.setBase_insurance(10000);
+        if ( vehicleInfoCost.getFree_insurance() == null )
+            vehicleInfoCost.setFree_insurance(10000);
+        if ( vehicleInfoCost.getDay_cost() == null )
+            vehicleInfoCost.setDay_costs(createDefaultString(10000));
+        else
+            vehicleInfoCost.setDay_costs(createDefaultString(vehicleInfoCost.getDay_cost()));
+        if ( vehicleInfoCost.getDiscount() == null )
+            vehicleInfoCost.setDiscounts(createDefaultString(100));
+        else vehicleInfoCost.setDiscounts(createDefaultString(vehicleInfoCost.getDiscount()));
+
         return vehicleInfoCostMapper.insert(vehicleInfoCost);
     }
 }
