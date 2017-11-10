@@ -39,9 +39,9 @@ public class FileUploadUtilsImpl implements FileUploadUtils {
         if ( !dir.exists() ) dir.mkdirs();
     }
 
-    private String getSuffix(Part attachment) {
-        if ( attachment.getSubmittedFileName().lastIndexOf('.') == -1 ) return null;
-        else return attachment.getSubmittedFileName().substring(attachment.getSubmittedFileName().lastIndexOf('.'));
+    private String getSuffix(String filename) {
+        if ( filename.lastIndexOf('.') == -1 ) return null;
+        else return filename.substring(filename.lastIndexOf('.'));
     }
 
 
@@ -56,18 +56,21 @@ public class FileUploadUtilsImpl implements FileUploadUtils {
 
         mkPrefixPath(media_path+filename);
 
-        String suffix = getSuffix(attachment);
+        String asuffix = getSuffix(attachment.getSubmittedFileName());
 
-        if ( suffix == null ) return null;
+        if ( asuffix == null ) return null;
+
+        String filename_with_suffix = filename + (getSuffix(filename) == null ? asuffix:"");
 
         if ( attachment.getSize() == 0 ) return null;
         try {
-            attachment.write(media_path+filename+suffix);
+            attachment.write(media_path+filename_with_suffix);
         } catch ( IOException e ) {
             return null;
         }
 
-        return filename+suffix;
+
+        return filename_with_suffix;
     }
 
     @Override
