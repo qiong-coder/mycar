@@ -148,8 +148,10 @@ public class VehicleInfoCostServiceImpl implements VehicleInfoCostService {
 
         if ( vehicleInfoCost == null ) {
             vehicleInfoCost = new VehicleInfoCost();
-            vehicleInfoCost.setViid(viid);
         }
+
+        vehicleInfoCost.setViid(viid);
+
         if ( vehicleInfoCost.getBase_insurance() == null )
             vehicleInfoCost.setBase_insurance(10000);
         if ( vehicleInfoCost.getFree_insurance() == null )
