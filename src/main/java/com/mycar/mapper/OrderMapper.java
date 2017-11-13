@@ -15,9 +15,9 @@ public interface OrderMapper {
 
     Order getOrderById(Long id);
 
-    List<Order> getOrdersByStatus(int status);
-
     int insertOrder(Order order);
+
+    List<Order> getOrdersByStatus(@Param("viid") Long viid, @Param("status") Integer status);
 
     int updateOrder(Order order);
 

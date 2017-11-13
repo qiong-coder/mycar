@@ -237,8 +237,22 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public int updateVehicleToDelete(long vid) {
-        return vehicleMapper.updateVehicleToDelete(vid);
+    public int delete(long vid, long delete) {
+        Vehicle vehicle = vehicleMapper.getById(vid);
+
+        if ( vehicle == null ) return 0;
+        if ( vehicle.getStatus() == VehicleStatus.RENTING.getStatus() ) return -1;
+
+        if ( delete == 1L ) return vehicleMapper.updateVehicleToDelete(vid);
+
+        List<Order> orders = orderMapper.getOrdersByStatus(vehicle.getViid(),OrderStatus.PENDING.getStatus());
+        if ( orders == null || orders.size() == 0 ) return vehicleMapper.updateVehicleToDelete(vid);
+        else {
+            List<VehicleCount> vehicleCount = vehicleMapper.getVehicleCount(vehicle.getViid(), 1);
+            int vcount = vehicleCount.contains(vehicle.getViid())?vehicleCount.get(vehicle.getViid().intValue()).getCount().intValue():0;
+            if ( vcount < orders.size() ) return vehicleMapper.updateVehicleToDelete(vid);
+            else return -1;
+        }
     }
 
     @Override

@@ -47,7 +47,7 @@ public interface VehicleService {
 
     int insertVechile(Vehicle vehicle);
 
-    int updateVehicleToDelete(long vid);
+    int delete(long vid, long force);
 
     int insertVehicleInfo(VehicleInfo vehicleInfo, Part attachment);
 

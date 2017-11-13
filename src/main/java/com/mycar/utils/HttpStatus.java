@@ -27,6 +27,7 @@ public class HttpStatus {
     public static int PERMISSION_DENY = -16;
     public static int NO_ACCOUNT = -17;
     public static int DUPLICATE_ACCOUNT = -18;
+    public static int VEHICLE_STATUS_ERROR = 19;
 
     private static Map<Integer, String> statusInfos = new HashMap<Integer,String>() {{
        put(OK,"success");
@@ -48,6 +49,7 @@ public class HttpStatus {
        put(PERMISSION_DENY,"permission deny, must login");
        put(NO_ACCOUNT, "failure to get the account");
        put(DUPLICATE_ACCOUNT, "the account is duplicate");
+       put(VEHICLE_STATUS_ERROR, "the vehicle's status is error");
     }};
 
     public static String getInfo(int status) {

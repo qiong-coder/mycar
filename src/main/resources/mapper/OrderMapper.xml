@@ -8,10 +8,6 @@
         SELECT * FROM `Order` WHERE id=#{id}
     </select>
 
-    <select id="getOrdersByStatus" parameterType="int" resultType="com.mycar.model.Order">
-        SELECT * FROM `Order` WHERE status=#{status}
-    </select>
-
     <insert id="insertOrder" parameterType="com.mycar.model.Order" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `Order` (`viid`, `oid`, `begin`, `end`, `rent_sid`, `return_sid`, `name`, `drivers`, `identity`, `phone`, `bill`, `is_free_insurance`, `pre_cost`, `pay_info`, `cost_info`)
         VALUES (#{viid}, #{oid}, #{begin}, #{end}, #{rent_sid}, #{return_sid}, #{name}, #{drivers}, #{identity}, #{phone}, #{bill}, #{is_free_insurance}, #{pre_cost}, #{pay_info}, #{cost_info})
@@ -82,8 +78,16 @@
         SELECT status, COUNT(1) as count FROM `Order` GROUP BY status;
     </select>
 
+    <select id="getOrdersByStatus" resultType="com.mycar.model.Order">
+        SELECT * FROM `Order`
+        <where>
+            <if test="viid!=null">viid=#{viid}</if>
+            <if test="status!=null">AND status=#{status}</if>
+        </where>
+    </select>
+
     <select id="getOrdersByViidInInterval" resultType="com.mycar.model.Order">
-        SELECT oid,viid,vid,rbegin,rend FROM `Order`
+        SELECT id,oid,viid,vid,rbegin,rend FROM `Order`
         WHERE status BETWEEN 2 AND 4 AND
         ( rbegin &lt;= #{end} AND rend &gt;= #{begin} )
         <if test="viid != null">
@@ -92,13 +96,13 @@
     </select>
 
     <select id="getOrdersByVidInInterval" resultType="com.mycar.model.Order">
-        SELECT oid,viid,vid,rbegin,rend FROM `Order`
+        SELECT id,oid,viid,vid,rbegin,rend FROM `Order`
         WHERE status BETWEEN 2 AND 4 AND vid=#{vid}
         AND ( rbegin &lt;= #{end} AND rend &gt;= #{begin} )
     </select>
 
     <select id="getOrdersByScheduleInterval" resultType="com.mycar.model.Order">
-        SELECT oid,viid,vid,`begin`,`end`,rbegin,rend,status FROM `Order`
+        SELECT id,oid,viid,vid,`begin`,`end`,rbegin,rend,status FROM `Order`
         <if test="status!=null">
         WHERE (status = ${status} AND `begin` &lt;= #{end} AND `end` &gt;= #{begin})
         </if>

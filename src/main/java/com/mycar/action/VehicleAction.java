@@ -99,13 +99,15 @@ public class VehicleAction {
         else return new HttpResponse(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/vehicle/{vid}/", method = RequestMethod.DELETE )
+    @RequestMapping(value = "/vehicle/{vid}/{force}/", method = RequestMethod.DELETE )
     public HttpResponse deleteVehicleById(HttpServletRequest request,
-                                          @PathVariable("vid") long vid)
+                                          @PathVariable long vid,
+                                          @PathVariable long force)
     {
         if (  accountService.check(request.getSession(),request.getHeader("token"), AccountRoles.STAFF) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
-        int count = vehicleService.updateVehicleToDelete(vid);
-        if ( count != 1 ) return new HttpResponse(HttpStatus.NO_VEHICLE);
+        int count = vehicleService.delete(vid,force);
+        if ( count == 0 ) return new HttpResponse(HttpStatus.NO_VEHICLE);
+        else if ( count == -1 ) return new HttpResponse(HttpStatus.VEHICLE_STATUS_ERROR);
         else return new HttpResponse(HttpStatus.OK);
     }
 
