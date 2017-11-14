@@ -40,6 +40,7 @@ public class FileUploadUtilsImpl implements FileUploadUtils {
     }
 
     private String getSuffix(String filename) {
+        if ( filename == null ) return null;
         if ( filename.lastIndexOf('.') == -1 ) return null;
         else return filename.substring(filename.lastIndexOf('.'));
     }
