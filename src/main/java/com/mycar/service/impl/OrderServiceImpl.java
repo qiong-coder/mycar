@@ -206,7 +206,7 @@ public class OrderServiceImpl implements OrderService {
         if (order.getDrivers() != null && order.getDrivers().compareTo("") != 0 ) o.setDrivers(order.getDrivers());
         o.setVid(vehicle.getId());
 
-        if (order.getViid().compareTo(vehicle.getViid()) != 0 ) order.setViid(vehicle.getViid());
+        if ( o.getViid() == null || o.getViid().compareTo(vehicle.getViid()) != 0 ) o.setViid(vehicle.getViid());
 
         o.setRbegin(order.getRbegin());
         if ( order.getRend() != null ) o.setRend(order.getRend());
