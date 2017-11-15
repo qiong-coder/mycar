@@ -15,7 +15,17 @@ public class OrderConflict {
 
     private Long to_used;
 
+    private Long sparse;
+
     List<Order> orders;
+
+    public Long getSparse() {
+        return sparse;
+    }
+
+    public void setSparse(Long sparse) {
+        this.sparse = sparse;
+    }
 
     public Long getTotal() {
         return total;

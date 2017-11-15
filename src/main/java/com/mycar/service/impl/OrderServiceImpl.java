@@ -456,6 +456,7 @@ public class OrderServiceImpl implements OrderService {
         if ( vehicleInfoCount == null ) return null;
 
         orderConflict.setTotal(vehicleInfoCount.getCount()+vehicleInfoCount.getSpare());
+        orderConflict.setSparse(vehicleInfoCount.getSpare().longValue());
 
         // 获取未来的订单
         List<Order> orders = orderMapper.getOrdersByScheduleInterval(viid, begin, end, null);
