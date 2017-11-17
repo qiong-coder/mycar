@@ -24,6 +24,7 @@
             <if test="phone!=null">`phone`=#{phone},</if>
             <if test="store!=null">`store`=#{store},</if>
             <if test="status!=null">`status`=#{status},</if>
+            <if test="roles!=null">`roles`=#{roles},</if>
         </set>
         <where>
             <if test="id!=null">id=#{id}</if>

@@ -40,6 +40,7 @@ public class AccountAction {
 
         session.setAttribute("token",account1.getToken());
         session.setAttribute("roles",account1.getRoles());
+        session.setAttribute("username",account.getUsername());
         return new HttpResponse(account1);
     }
 
@@ -98,9 +99,10 @@ public class AccountAction {
         if ( accountService.check(request.getSession(),request.getHeader("token"), AccountRoles.ADMINISTRATOR) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         if ( accountService.delete(username) == 0 ) return new HttpResponse(HttpStatus.NO_ACCOUNT);
         else {
-            accountService.logout(request.getSession());
-            return new HttpResponse(HttpStatus.OK);
+            String login_username = (String)request.getSession().getAttribute("username");
+            if ( login_username != null && login_username.compareTo(username) == 0 ) accountService.logout(request.getSession());
         }
+        return new HttpResponse(HttpStatus.OK);
     }
 
 }
