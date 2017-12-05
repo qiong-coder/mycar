@@ -198,7 +198,7 @@ public class OrderAction {
         Timestamp begin_stamp = new Timestamp(begin);
         Timestamp end_stamp = new Timestamp(end);
         OrderConflict orderConflict = orderService.orderConflict(viid, begin_stamp, end_stamp);
-        if ( orderConflict != null ) return new HttpResponse(HttpStatus.ERROR);
+        if ( orderConflict == null ) return new HttpResponse(HttpStatus.ERROR);
         else return new HttpResponse(orderConflict);
     }
 }
