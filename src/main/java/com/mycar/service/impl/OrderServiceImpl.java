@@ -372,7 +372,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderSchedule> orderSchedule(Long viid, Timestamp begin, Timestamp end) {
         List<Order> orders = orderMapper.getOrdersByScheduleInterval(viid, begin, end, null);
-        Map<Long, VehicleInfoCount> vehicleInfoCounts = vehicleService.getVehicleCount(viid);
+        Map<Long, VehicleInfoCount> vehicleInfoCounts = vehicleService.getVehicleCount(viid, 0);
 
         int total_days = TimeUtils.TimeDiff(begin,end);
 
@@ -449,7 +449,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderConflict orderConflict(Long viid, Timestamp begin, Timestamp end) {
         OrderConflict orderConflict = new OrderConflict();
         // 获取所有当前车型下车的总数量
-        Map<Long, VehicleInfoCount> vehicleInfoCounts = vehicleService.getVehicleCount(viid);
+        Map<Long, VehicleInfoCount> vehicleInfoCounts = vehicleService.getVehicleCount(viid, 0);
 
         VehicleInfoCount vehicleInfoCount = vehicleInfoCounts.get(viid);
 

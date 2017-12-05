@@ -55,5 +55,5 @@ public interface VehicleService {
 
     int updateVehicleInfoToDelete(long viid);
 
-    Map<Long, VehicleInfoCount> getVehicleCount(Long viid);
+    Map<Long, VehicleInfoCount> getVehicleCount(Long viid, Integer is_delete);
 }

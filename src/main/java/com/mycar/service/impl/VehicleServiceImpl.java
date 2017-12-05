@@ -282,8 +282,8 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public Map<Long, VehicleInfoCount> getVehicleCount(Long viid) {
-        List<VehicleCount> vehicleCounts = vehicleMapper.getVehicleCount(viid,null);
+    public Map<Long, VehicleInfoCount> getVehicleCount(Long viid, Integer is_delete) {
+        List<VehicleCount> vehicleCounts = vehicleMapper.getVehicleCount(viid,is_delete);
         Map<Long, VehicleInfoCount> vehicleInfoCounts = new HashMap<>();
         for ( VehicleCount vehicleCount : vehicleCounts ) {
             VehicleInfoCount vehicleInfoCount = new VehicleInfoCount();
