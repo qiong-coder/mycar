@@ -5,7 +5,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mycar.model.Order;
 import com.mycar.model.VehicleInfoCost;
+import com.mycar.service.OrderService;
 import com.mycar.utils.TimeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Calendar;
 
@@ -14,6 +17,7 @@ import java.util.Calendar;
  */
 public class VehicleCostLogic {
 
+    private static Logger logger = LoggerFactory.getLogger(VehicleCostLogic.class);
     public static String getPayInfo(int total_pay, String username) {
         JSONArray infos = new JSONArray();
         JSONObject info = new JSONObject();
@@ -90,8 +94,12 @@ public class VehicleCostLogic {
         JSONArray sourceInfo = JSONArray.parseArray(sinfo);
         JSONArray newInfo = JSONArray.parseArray(ninfo);
 
-        sourceInfo.addAll(newInfo);
+        if (sourceInfo != null ){
+            sourceInfo.addAll(newInfo);
+            return sourceInfo.toJSONString();
+        } else {
+            return newInfo.toJSONString();
+        }
 
-        return sourceInfo.toJSONString();
     }
 }

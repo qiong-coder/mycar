@@ -73,7 +73,7 @@ public class OrderAction {
                                @PathVariable("viid") long viid,
                                @RequestBody Order order)
     {
-        if (  accountService.check(request.getSession(),request.getHeader("token"), AccountRoles.STAFF) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
+//        if (  accountService.check(request.getSession(),request.getHeader("token"), AccountRoles.STAFF) != 0 ) return new HttpResponse(HttpStatus.PERMISSION_DENY);
         int status = orderService.insertOrder(viid,order);
         if ( status < 0 ) {
             logger.error("failure to insert the order - viid:{}\torder:{}",viid, order);

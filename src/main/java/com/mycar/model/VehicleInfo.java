@@ -21,6 +21,15 @@ public class VehicleInfo {
     private Integer oil;
     private Integer is_delete;
     private Integer vehicle_count;
+    private  boolean can_rent ; //是否可租车
+
+    public boolean isCan_rent() {
+        return can_rent;
+    }
+
+    public void setCan_rent(boolean can_rent) {
+        this.can_rent = can_rent;
+    }
 
     public Long getId() {
         return id;

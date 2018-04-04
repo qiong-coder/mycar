@@ -178,6 +178,11 @@ public class VehicleServiceImpl implements VehicleService {
             if ( vehicleInfo != null ) {
                 if ( entry.getValue() - use_counts.getOrDefault(viid, 0) - vehicleInfo.getSpare() > 0 ) {
                     vehicleInfo.setVehicle_count(entry.getValue() - use_counts.getOrDefault(viid, 0) - vehicleInfo.getSpare());
+                    vehicleInfo.setCan_rent(true);
+                    vehicleInfos.add(vehicleInfo);
+                } else  {
+                    vehicleInfo.setVehicle_count(entry.getValue() - use_counts.getOrDefault(viid, 0) - vehicleInfo.getSpare());
+                    vehicleInfo.setCan_rent(false);
                     vehicleInfos.add(vehicleInfo);
                 }
             }
